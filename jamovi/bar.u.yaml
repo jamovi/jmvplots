@@ -1,0 +1,161 @@
+title: Barplot
+name: bar
+jus: '3.0'
+stage: 0
+compilerMode: tame
+children:
+  - type: ModeSelector
+    name: mode
+    stretchFactor: 1
+    children:
+      - type: Content
+        name: categorical
+        children:
+          - type: VariableSupplier
+            persistentItems: false
+            stretchFactor: 1
+            children:
+              - type: TargetLayoutBox
+                label: Categorical Variable
+                children:
+                  - type: VariablesListBox
+                    name: catvar
+                    maxItemCount: 1
+                    isTarget: true
+      - type: Content
+        name: continuous
+        children:
+          - type: VariableSupplier
+            persistentItems: false
+            stretchFactor: 1
+            children:
+              - type: TargetLayoutBox
+                label: Continuous Variable
+                children:
+                  - type: VariablesListBox
+                    name: convar
+                    maxItemCount: 1
+                    isTarget: true
+              - type: TargetLayoutBox
+                label: Grouping Variable
+                children:
+                  - type: VariablesListBox
+                    name: congroup
+                    maxItemCount: 1
+                    isTarget: true
+          - type: CollapseBox
+            label: Continuous Options
+            collapsed: true
+            stretchFactor: 1
+            children:
+              - type: LayoutBox
+                margin: large
+                stretchFactor: 1
+                children:
+                  - type: CheckBox
+                    name: se
+                    enable: (mode:continuous)
+      - type: Content
+        name: counts
+        children:
+          - type: VariableSupplier
+            persistentItems: false
+            stretchFactor: 1
+            children:
+              - type: TargetLayoutBox
+                label: Counts
+                children:
+                  - type: VariablesListBox
+                    name: counts
+                    maxItemCount: 1
+                    isTarget: true
+              - type: TargetLayoutBox
+                label: Labels
+                children:
+                  - type: VariablesListBox
+                    name: countsLabels
+                    maxItemCount: 1
+                    isTarget: true
+  - type: CollapseBox
+    label: General Options
+    collapsed: true
+    stretchFactor: 1
+    children:
+      - type: LayoutBox
+        margin: large
+        stretchFactor: 1
+        children:
+          - type: LayoutBox
+            cell:
+              column: 0
+              row: 0
+            stretchFactor: 1
+            children:
+              - type: Label
+                label: Plot Size
+                children:
+                  - type: TextBox
+                    name: width
+                    format: number
+                  - type: TextBox
+                    name: height
+                    format: number
+          - type: LayoutBox
+            cell:
+              column: 1
+              row: 0
+            stretchFactor: 1
+            children:
+              - type: Label
+                label: Axes
+                children:
+                  - type: CheckBox
+                    name: flipAxes
+
+  - type: CollapseBox
+    label: Labels
+    collapsed: true
+    stretchFactor: 1
+    children:
+      - type: LayoutBox
+        margin: large
+        stretchFactor: 1
+        children:
+          - type: LayoutBox
+            cell:
+              column: 0
+              row: 0
+            stretchFactor: 1
+            children:
+              - type: Label
+                label: Titles
+                children:
+                  - type: TextBox
+                    name: title
+                    format: string
+                    width: largest
+                  - type: TextBox
+                    name: subtitle
+                    format: string
+                    width: largest
+                  - type: TextBox
+                    name: caption
+                    format: string
+                    width: largest
+          - type: LayoutBox
+            cell:
+              column: 1
+              row: 0
+            stretchFactor: 1
+            children:
+              - type: Label
+                label: Axes
+                children:
+                  - type: TextBox
+                    name: xLabel
+                    format: string
+                    width: largest
+                  - type: TextBox
+                    name: yLabel
+                    format: string
+                    width: largest

@@ -1,0 +1,11 @@
+---
+name:  box
+title: Boxplot
+jrs:   '1.1'
+
+items:
+    - name:  text
+      title: Boxplot
+      type:  Preformatted
+
+...

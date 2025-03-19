@@ -1,0 +1,11 @@
+---
+name:  scatter
+title: Scatterplot
+jrs:   '1.1'
+
+items:
+    - name:  text
+      title: Scatterplot
+      type:  Preformatted
+
+...

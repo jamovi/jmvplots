@@ -1,0 +1,31 @@
+---
+name:  bar
+title: Barplot
+jrs:   '1.1'
+
+items:
+    - name: plot
+      title: ''
+      type: Image
+      description: an image containing the bar plot
+      width: 500
+      height: 500
+      renderFun: .barPlot
+      clearWith:
+        - mode
+        - catvar
+        - catgroup
+        - convar
+        - congroup
+        - counts
+        - countsLabels
+        - se
+        - width
+        - height
+        - flipAxes
+        - title
+        - subtitle
+        - caption
+        - xLabel
+        - yLabel
+...

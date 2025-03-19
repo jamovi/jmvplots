@@ -1,0 +1,109 @@
+---
+name:  bar
+title: Barplot
+menuGroup: jmvplot
+version: '1.0.0'
+jas: '1.2'
+
+options:
+    - name: mode
+      title: "Variable type"
+      type: List
+      options:
+        - name: categorical
+          title: Categorical
+        - name: continuous
+          title: Continuous
+        - name: counts
+          title: Counts
+      default: categorical
+
+    - name: data
+      type: Data
+
+    - name: catvar
+      title: Categorical Variable
+      type: Variable
+      suggested:
+        - nominal
+      permitted:
+        - factor
+
+    - name: convar
+      title: Continuous Variable
+      type: Variable
+      suggested:
+        - continuous
+      permitted:
+        - numeric
+
+    - name: counts
+      title: Counts
+      type: Variable
+      suggested:
+        - continuous
+      permitted:
+        - numeric
+
+    - name: congroup
+      title: Grouping Variable
+      type: Variable
+      suggested:
+        - nominal
+      permitted:
+        - factor
+
+    - name: countsLabels
+      title: Labels
+      type: Variable
+      suggested:
+        - nominal
+      permitted:
+        - factor
+
+    - name: flipAxes
+      title: Flip Axes
+      type: Bool
+      default: false
+
+    - name: width
+      title: Width
+      type: Number
+      default: 500
+
+    - name: height
+      title: Height
+      type: Number
+      default: 500
+
+    - name: se
+      title: Standard Errors
+      type: Bool
+      default: false
+
+    - name: title
+      title: Title
+      type: String
+      default: ''
+
+    - name: subtitle
+      title: Subtitle
+      type: String
+      default: ''
+
+
+    - name: caption
+      title: Caption
+      type: String
+      default: ''
+
+    - name: xLabel
+      title: X-axis
+      type: String
+      default: ''
+
+    - name: yLabel
+      title: Y-axis
+      type: String
+      default: ''
+...
