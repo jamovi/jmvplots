@@ -2,17 +2,17 @@ title: Boxplot
 name: box
 jus: '3.0'
 stage: 0
-compilerMode: aggressive
+compilerMode: tame
 children:
   - type: VariableSupplier
     persistentItems: false
     stretchFactor: 1
     children:
       - type: TargetLayoutBox
-        label: Dependent Variable
+        label: Variable
         children:
           - type: VariablesListBox
-            name: dep
+            name: var
             maxItemCount: 1
             isTarget: true
       - type: TargetLayoutBox
@@ -22,13 +22,97 @@ children:
             name: group
             maxItemCount: 1
             isTarget: true
-  - type: LayoutBox
-    margin: large
+  - type: CollapseBox
+    label: Options
+    collapsed: true
+    stretchFactor: 1
     children:
-      - type: ComboBox
-        name: alt
-  - type: LayoutBox
-    margin: large
+      - type: LayoutBox
+        margin: large
+        stretchFactor: 1
+        children:
+          - type: LayoutBox
+            cell:
+              column: 0
+              row: 0
+            stretchFactor: 1
+            children:
+              - type: Label
+                label: Plot Size
+                children:
+                  - type: TextBox
+                    name: width
+                    format: number
+                  - type: TextBox
+                    name: height
+                    format: number
+          - type: LayoutBox
+            cell:
+              column: 1
+              row: 0
+            stretchFactor: 1
+            children:
+              - type: Label
+                label: Other
+                children:
+                  - type: CheckBox
+                    name: flipAxes
+                  - type: CheckBox
+                    name: notch
+  - type: CollapseBox
+    label: Labels
+    collapsed: true
+    stretchFactor: 1
     children:
-      - type: CheckBox
-        name: varEq
+      - type: LayoutBox
+        margin: large
+        stretchFactor: 1
+        children:
+          - type: LayoutBox
+            cell:
+              column: 0
+              row: 0
+            stretchFactor: 1
+            children:
+              - type: Label
+                label: Labels
+                children:
+                  - type: TextBox
+                    name: title
+                    format: string
+                    width: largest
+                  - type: TextBox
+                    name: subtitle
+                    format: string
+                    width: largest
+                  - type: TextBox
+                    name: caption
+                    format: string
+                    width: largest
+                  - type: TextBox
+                    name: xLabel
+                    format: string
+                    width: largest
+                  - type: TextBox
+                    name: yLabel
+                    format: string
+                    width: largest
+          - type: LayoutBox
+            cell:
+              column: 1
+              row: 0
+            stretchFactor: 1
+            children:
+              - type: Label
+                label: Align
+                children:
+                  - type: ComboBox
+                    name: titleAlign
+                  - type: ComboBox
+                    name: subtitleAlign
+                  - type: ComboBox
+                    name: captionAlign
+                  - type: ComboBox
+                    name: xLabelAlign
+                  - type: ComboBox
+                    name: yLabelAlign

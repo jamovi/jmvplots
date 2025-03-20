@@ -6,10 +6,22 @@ boxOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
     inherit = jmvcore::Options,
     public = list(
         initialize = function(
-            dep = NULL,
+            var = NULL,
             group = NULL,
-            alt = "notequal",
-            varEq = TRUE, ...) {
+            flipAxes = FALSE,
+            notch = FALSE,
+            width = 500,
+            height = 500,
+            title = "",
+            titleAlign = "center",
+            subtitle = "",
+            subtitleAlign = "left",
+            caption = "",
+            captionAlign = "right",
+            xLabel = "",
+            xLabelAlign = "center",
+            yLabel = "",
+            yLabelAlign = "center", ...) {
 
             super$initialize(
                 package="jmvplot",
@@ -17,47 +29,155 @@ boxOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 requiresData=TRUE,
                 ...)
 
-            private$..dep <- jmvcore::OptionVariable$new(
-                "dep",
-                dep)
+            private$..var <- jmvcore::OptionVariable$new(
+                "var",
+                var,
+                suggested=list(
+                    "continuous"),
+                permitted=list(
+                    "numeric"))
             private$..group <- jmvcore::OptionVariable$new(
                 "group",
-                group)
-            private$..alt <- jmvcore::OptionList$new(
-                "alt",
-                alt,
+                group,
+                suggested=list(
+                    "nominal"),
+                permitted=list(
+                    "factor"))
+            private$..flipAxes <- jmvcore::OptionBool$new(
+                "flipAxes",
+                flipAxes,
+                default=FALSE)
+            private$..notch <- jmvcore::OptionBool$new(
+                "notch",
+                notch,
+                default=FALSE)
+            private$..width <- jmvcore::OptionNumber$new(
+                "width",
+                width,
+                default=500)
+            private$..height <- jmvcore::OptionNumber$new(
+                "height",
+                height,
+                default=500)
+            private$..title <- jmvcore::OptionString$new(
+                "title",
+                title,
+                default="")
+            private$..titleAlign <- jmvcore::OptionList$new(
+                "titleAlign",
+                titleAlign,
                 options=list(
-                    "notequal",
-                    "onegreater",
-                    "twogreater"),
-                default="notequal")
-            private$..varEq <- jmvcore::OptionBool$new(
-                "varEq",
-                varEq,
-                default=TRUE)
+                    "left",
+                    "center",
+                    "right"),
+                default="center")
+            private$..subtitle <- jmvcore::OptionString$new(
+                "subtitle",
+                subtitle,
+                default="")
+            private$..subtitleAlign <- jmvcore::OptionList$new(
+                "subtitleAlign",
+                subtitleAlign,
+                options=list(
+                    "left",
+                    "center",
+                    "right"),
+                default="left")
+            private$..caption <- jmvcore::OptionString$new(
+                "caption",
+                caption,
+                default="")
+            private$..captionAlign <- jmvcore::OptionList$new(
+                "captionAlign",
+                captionAlign,
+                options=list(
+                    "left",
+                    "center",
+                    "right"),
+                default="right")
+            private$..xLabel <- jmvcore::OptionString$new(
+                "xLabel",
+                xLabel,
+                default="")
+            private$..xLabelAlign <- jmvcore::OptionList$new(
+                "xLabelAlign",
+                xLabelAlign,
+                options=list(
+                    "left",
+                    "center",
+                    "right"),
+                default="center")
+            private$..yLabel <- jmvcore::OptionString$new(
+                "yLabel",
+                yLabel,
+                default="")
+            private$..yLabelAlign <- jmvcore::OptionList$new(
+                "yLabelAlign",
+                yLabelAlign,
+                options=list(
+                    "left",
+                    "center",
+                    "right"),
+                default="center")
 
-            self$.addOption(private$..dep)
+            self$.addOption(private$..var)
             self$.addOption(private$..group)
-            self$.addOption(private$..alt)
-            self$.addOption(private$..varEq)
+            self$.addOption(private$..flipAxes)
+            self$.addOption(private$..notch)
+            self$.addOption(private$..width)
+            self$.addOption(private$..height)
+            self$.addOption(private$..title)
+            self$.addOption(private$..titleAlign)
+            self$.addOption(private$..subtitle)
+            self$.addOption(private$..subtitleAlign)
+            self$.addOption(private$..caption)
+            self$.addOption(private$..captionAlign)
+            self$.addOption(private$..xLabel)
+            self$.addOption(private$..xLabelAlign)
+            self$.addOption(private$..yLabel)
+            self$.addOption(private$..yLabelAlign)
         }),
     active = list(
-        dep = function() private$..dep$value,
+        var = function() private$..var$value,
         group = function() private$..group$value,
-        alt = function() private$..alt$value,
-        varEq = function() private$..varEq$value),
+        flipAxes = function() private$..flipAxes$value,
+        notch = function() private$..notch$value,
+        width = function() private$..width$value,
+        height = function() private$..height$value,
+        title = function() private$..title$value,
+        titleAlign = function() private$..titleAlign$value,
+        subtitle = function() private$..subtitle$value,
+        subtitleAlign = function() private$..subtitleAlign$value,
+        caption = function() private$..caption$value,
+        captionAlign = function() private$..captionAlign$value,
+        xLabel = function() private$..xLabel$value,
+        xLabelAlign = function() private$..xLabelAlign$value,
+        yLabel = function() private$..yLabel$value,
+        yLabelAlign = function() private$..yLabelAlign$value),
     private = list(
-        ..dep = NA,
+        ..var = NA,
         ..group = NA,
-        ..alt = NA,
-        ..varEq = NA)
+        ..flipAxes = NA,
+        ..notch = NA,
+        ..width = NA,
+        ..height = NA,
+        ..title = NA,
+        ..titleAlign = NA,
+        ..subtitle = NA,
+        ..subtitleAlign = NA,
+        ..caption = NA,
+        ..captionAlign = NA,
+        ..xLabel = NA,
+        ..xLabelAlign = NA,
+        ..yLabel = NA,
+        ..yLabelAlign = NA)
 )
 
 boxResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
     "boxResults",
     inherit = jmvcore::Group,
     active = list(
-        text = function() private$.items[["text"]]),
+        plot = function() private$.items[["plot"]]),
     private = list(),
     public=list(
         initialize=function(options) {
@@ -65,10 +185,13 @@ boxResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 options=options,
                 name="",
                 title="Boxplot")
-            self$add(jmvcore::Preformatted$new(
+            self$add(jmvcore::Image$new(
                 options=options,
-                name="text",
-                title="Boxplot"))}))
+                name="plot",
+                title="",
+                width=500,
+                height=500,
+                renderFun=".boxPlot"))}))
 
 boxBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
     "boxBase",
@@ -95,40 +218,77 @@ boxBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 #'
 #' 
 #' @param data .
-#' @param dep .
+#' @param var .
 #' @param group .
-#' @param alt .
-#' @param varEq .
+#' @param flipAxes .
+#' @param notch .
+#' @param width .
+#' @param height .
+#' @param title .
+#' @param titleAlign .
+#' @param subtitle .
+#' @param subtitleAlign .
+#' @param caption .
+#' @param captionAlign .
+#' @param xLabel .
+#' @param xLabelAlign .
+#' @param yLabel .
+#' @param yLabelAlign .
 #' @return A results object containing:
 #' \tabular{llllll}{
-#'   \code{results$text} \tab \tab \tab \tab \tab a preformatted \cr
+#'   \code{results$plot} \tab \tab \tab \tab \tab an image containing the box plot \cr
 #' }
 #'
 #' @export
 box <- function(
     data,
-    dep,
+    var,
     group,
-    alt = "notequal",
-    varEq = TRUE) {
+    flipAxes = FALSE,
+    notch = FALSE,
+    width = 500,
+    height = 500,
+    title = "",
+    titleAlign = "center",
+    subtitle = "",
+    subtitleAlign = "left",
+    caption = "",
+    captionAlign = "right",
+    xLabel = "",
+    xLabelAlign = "center",
+    yLabel = "",
+    yLabelAlign = "center") {
 
     if ( ! requireNamespace("jmvcore", quietly=TRUE))
         stop("box requires jmvcore to be installed (restart may be required)")
 
-    if ( ! missing(dep)) dep <- jmvcore::resolveQuo(jmvcore::enquo(dep))
+    if ( ! missing(var)) var <- jmvcore::resolveQuo(jmvcore::enquo(var))
     if ( ! missing(group)) group <- jmvcore::resolveQuo(jmvcore::enquo(group))
     if (missing(data))
         data <- jmvcore::marshalData(
             parent.frame(),
-            `if`( ! missing(dep), dep, NULL),
+            `if`( ! missing(var), var, NULL),
             `if`( ! missing(group), group, NULL))
 
+    for (v in group) if (v %in% names(data)) data[[v]] <- as.factor(data[[v]])
 
     options <- boxOptions$new(
-        dep = dep,
+        var = var,
         group = group,
-        alt = alt,
-        varEq = varEq)
+        flipAxes = flipAxes,
+        notch = notch,
+        width = width,
+        height = height,
+        title = title,
+        titleAlign = titleAlign,
+        subtitle = subtitle,
+        subtitleAlign = subtitleAlign,
+        caption = caption,
+        captionAlign = captionAlign,
+        xLabel = xLabel,
+        xLabelAlign = xLabelAlign,
+        yLabel = yLabel,
+        yLabelAlign = yLabelAlign)
 
     analysis <- boxClass$new(
         options = options,

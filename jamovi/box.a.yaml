@@ -9,28 +9,124 @@ options:
     - name: data
       type: Data
 
-    - name: dep
-      title: Dependent Variable
+    - name: var
+      title: Variable
       type: Variable
+      suggested:
+        - continuous
+      permitted:
+        - numeric
 
     - name: group
       title: Grouping Variable
       type: Variable
+      suggested:
+        - nominal
+      permitted:
+        - factor
 
-    - name: alt
-      title: Alternative hypothesis
+    - name: flipAxes
+      title: Flip Axes
+      type: Bool
+      default: false
+
+    - name: notch
+      title: Notch
+      type: Bool
+      default: false
+
+    - name: width
+      title: Width
+      type: Number
+      default: 500
+
+    - name: height
+      title: Height
+      type: Number
+      default: 500
+
+    - name: title
+      title: Title
+      type: String
+      default: ''
+
+    - name: titleAlign
+      title: ''
       type: List
       options:
-        - title: Not equal
-          name:  notequal
-        - title: One greater
-          name:  onegreater
-        - title: Two greater
-          name:  twogreater
-      default: notequal
+        - name: left
+          title: Left
+        - name: center
+          title: Center
+        - name: right
+          title: Right
+      default: center
 
-    - name: varEq
-      title: Assume equal variances
-      type: Bool
-      default: true
+    - name: subtitle
+      title: Subtitle
+      type: String
+      default: ''
+
+    - name: subtitleAlign
+      title: ''
+      type: List
+      options:
+        - name: left
+          title: Left
+        - name: center
+          title: Center
+        - name: right
+          title: Right
+      default: left
+
+    - name: caption
+      title: Caption
+      type: String
+      default: ''
+
+    - name: captionAlign
+      title: ''
+      type: List
+      options:
+        - name: left
+          title: Left
+        - name: center
+          title: Center
+        - name: right
+          title: Right
+      default: right
+
+    - name: xLabel
+      title: X-axis
+      type: String
+      default: ''
+
+    - name: xLabelAlign
+      title: ''
+      type: List
+      options:
+        - name: left
+          title: Left
+        - name: center
+          title: Center
+        - name: right
+          title: Right
+      default: center
+
+    - name: yLabel
+      title: Y-axis
+      type: String
+      default: ''
+
+    - name: yLabelAlign
+      title: ''
+      type: List
+      options:
+        - name: left
+          title: Left
+        - name: center
+          title: Center
+        - name: right
+          title: Right
+      default: center
 ...

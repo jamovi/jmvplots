@@ -165,7 +165,8 @@ children:
                   - type: ComboBox
                     name: captionAlign
                   - type: ComboBox
-                    name: yLabelAlign
-                  - type: ComboBox
                     name: xLabelAlign
+                  - type: ComboBox
+                    name: yLabelAlign
+
 
