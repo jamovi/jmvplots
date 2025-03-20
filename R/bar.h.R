@@ -17,10 +17,15 @@ barOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             height = 500,
             se = FALSE,
             title = "",
+            titleAlign = "center",
             subtitle = "",
+            subtitleAlign = "left",
             caption = "",
+            captionAlign = "right",
             xLabel = "",
-            yLabel = "", ...) {
+            xLabelAlign = "center",
+            yLabel = "",
+            yLabelAlign = "center", ...) {
 
             super$initialize(
                 package="jmvplot",
@@ -91,22 +96,62 @@ barOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 "title",
                 title,
                 default="")
+            private$..titleAlign <- jmvcore::OptionList$new(
+                "titleAlign",
+                titleAlign,
+                options=list(
+                    "left",
+                    "center",
+                    "right"),
+                default="center")
             private$..subtitle <- jmvcore::OptionString$new(
                 "subtitle",
                 subtitle,
                 default="")
+            private$..subtitleAlign <- jmvcore::OptionList$new(
+                "subtitleAlign",
+                subtitleAlign,
+                options=list(
+                    "left",
+                    "center",
+                    "right"),
+                default="left")
             private$..caption <- jmvcore::OptionString$new(
                 "caption",
                 caption,
                 default="")
+            private$..captionAlign <- jmvcore::OptionList$new(
+                "captionAlign",
+                captionAlign,
+                options=list(
+                    "left",
+                    "center",
+                    "right"),
+                default="right")
             private$..xLabel <- jmvcore::OptionString$new(
                 "xLabel",
                 xLabel,
                 default="")
+            private$..xLabelAlign <- jmvcore::OptionList$new(
+                "xLabelAlign",
+                xLabelAlign,
+                options=list(
+                    "left",
+                    "center",
+                    "right"),
+                default="center")
             private$..yLabel <- jmvcore::OptionString$new(
                 "yLabel",
                 yLabel,
                 default="")
+            private$..yLabelAlign <- jmvcore::OptionList$new(
+                "yLabelAlign",
+                yLabelAlign,
+                options=list(
+                    "left",
+                    "center",
+                    "right"),
+                default="center")
 
             self$.addOption(private$..mode)
             self$.addOption(private$..catvar)
@@ -119,10 +164,15 @@ barOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             self$.addOption(private$..height)
             self$.addOption(private$..se)
             self$.addOption(private$..title)
+            self$.addOption(private$..titleAlign)
             self$.addOption(private$..subtitle)
+            self$.addOption(private$..subtitleAlign)
             self$.addOption(private$..caption)
+            self$.addOption(private$..captionAlign)
             self$.addOption(private$..xLabel)
+            self$.addOption(private$..xLabelAlign)
             self$.addOption(private$..yLabel)
+            self$.addOption(private$..yLabelAlign)
         }),
     active = list(
         mode = function() private$..mode$value,
@@ -136,10 +186,15 @@ barOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
         height = function() private$..height$value,
         se = function() private$..se$value,
         title = function() private$..title$value,
+        titleAlign = function() private$..titleAlign$value,
         subtitle = function() private$..subtitle$value,
+        subtitleAlign = function() private$..subtitleAlign$value,
         caption = function() private$..caption$value,
+        captionAlign = function() private$..captionAlign$value,
         xLabel = function() private$..xLabel$value,
-        yLabel = function() private$..yLabel$value),
+        xLabelAlign = function() private$..xLabelAlign$value,
+        yLabel = function() private$..yLabel$value,
+        yLabelAlign = function() private$..yLabelAlign$value),
     private = list(
         ..mode = NA,
         ..catvar = NA,
@@ -152,10 +207,15 @@ barOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
         ..height = NA,
         ..se = NA,
         ..title = NA,
+        ..titleAlign = NA,
         ..subtitle = NA,
+        ..subtitleAlign = NA,
         ..caption = NA,
+        ..captionAlign = NA,
         ..xLabel = NA,
-        ..yLabel = NA)
+        ..xLabelAlign = NA,
+        ..yLabel = NA,
+        ..yLabelAlign = NA)
 )
 
 barResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
@@ -176,24 +236,7 @@ barResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 title="",
                 width=500,
                 height=500,
-                renderFun=".barPlot",
-                clearWith=list(
-                    "mode",
-                    "catvar",
-                    "catgroup",
-                    "convar",
-                    "congroup",
-                    "counts",
-                    "countsLabels",
-                    "se",
-                    "width",
-                    "height",
-                    "flipAxes",
-                    "title",
-                    "subtitle",
-                    "caption",
-                    "xLabel",
-                    "yLabel")))}))
+                renderFun=".barPlot"))}))
 
 barBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
     "barBase",
@@ -231,10 +274,15 @@ barBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 #' @param height .
 #' @param se .
 #' @param title .
+#' @param titleAlign .
 #' @param subtitle .
+#' @param subtitleAlign .
 #' @param caption .
+#' @param captionAlign .
 #' @param xLabel .
+#' @param xLabelAlign .
 #' @param yLabel .
+#' @param yLabelAlign .
 #' @return A results object containing:
 #' \tabular{llllll}{
 #'   \code{results$plot} \tab \tab \tab \tab \tab an image containing the bar plot \cr
@@ -254,10 +302,15 @@ bar <- function(
     height = 500,
     se = FALSE,
     title = "",
+    titleAlign = "center",
     subtitle = "",
+    subtitleAlign = "left",
     caption = "",
+    captionAlign = "right",
     xLabel = "",
-    yLabel = "") {
+    xLabelAlign = "center",
+    yLabel = "",
+    yLabelAlign = "center") {
 
     if ( ! requireNamespace("jmvcore", quietly=TRUE))
         stop("bar requires jmvcore to be installed (restart may be required)")
@@ -292,10 +345,15 @@ bar <- function(
         height = height,
         se = se,
         title = title,
+        titleAlign = titleAlign,
         subtitle = subtitle,
+        subtitleAlign = subtitleAlign,
         caption = caption,
+        captionAlign = captionAlign,
         xLabel = xLabel,
-        yLabel = yLabel)
+        xLabelAlign = xLabelAlign,
+        yLabel = yLabel,
+        yLabelAlign = yLabelAlign)
 
     analysis <- barClass$new(
         options = options,

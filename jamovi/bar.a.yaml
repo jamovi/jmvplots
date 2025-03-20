@@ -86,24 +86,83 @@ options:
       type: String
       default: ''
 
+    - name: titleAlign
+      title: ''
+      type: List
+      options:
+        - name: left
+          title: Left
+        - name: center
+          title: Center
+        - name: right
+          title: Right
+      default: center
+
     - name: subtitle
       title: Subtitle
       type: String
       default: ''
 
+    - name: subtitleAlign
+      title: ''
+      type: List
+      options:
+        - name: left
+          title: Left
+        - name: center
+          title: Center
+        - name: right
+          title: Right
+      default: left
 
     - name: caption
       title: Caption
       type: String
       default: ''
 
+    - name: captionAlign
+      title: ''
+      type: List
+      options:
+        - name: left
+          title: Left
+        - name: center
+          title: Center
+        - name: right
+          title: Right
+      default: right
+
     - name: xLabel
       title: X-axis
       type: String
       default: ''
 
+    - name: xLabelAlign
+      title: ''
+      type: List
+      options:
+        - name: left
+          title: Left
+        - name: center
+          title: Center
+        - name: right
+          title: Right
+      default: center
+
     - name: yLabel
       title: Y-axis
       type: String
       default: ''
+
+    - name: yLabelAlign
+      title: ''
+      type: List
+      options:
+        - name: left
+          title: Left
+        - name: center
+          title: Center
+        - name: right
+          title: Right
+      default: center
 ...

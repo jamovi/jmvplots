@@ -111,7 +111,6 @@ children:
                 children:
                   - type: CheckBox
                     name: flipAxes
-
   - type: CollapseBox
     label: Labels
     collapsed: true
@@ -128,7 +127,7 @@ children:
             stretchFactor: 1
             children:
               - type: Label
-                label: Titles
+                label: Labels
                 children:
                   - type: TextBox
                     name: title
@@ -142,15 +141,6 @@ children:
                     name: caption
                     format: string
                     width: largest
-          - type: LayoutBox
-            cell:
-              column: 1
-              row: 0
-            stretchFactor: 1
-            children:
-              - type: Label
-                label: Axes
-                children:
                   - type: TextBox
                     name: xLabel
                     format: string
@@ -159,3 +149,23 @@ children:
                     name: yLabel
                     format: string
                     width: largest
+          - type: LayoutBox
+            cell:
+              column: 1
+              row: 0
+            stretchFactor: 1
+            children:
+              - type: Label
+                label: Align
+                children:
+                  - type: ComboBox
+                    name: titleAlign
+                  - type: ComboBox
+                    name: subtitleAlign
+                  - type: ComboBox
+                    name: captionAlign
+                  - type: ComboBox
+                    name: yLabelAlign
+                  - type: ComboBox
+                    name: xLabelAlign
+

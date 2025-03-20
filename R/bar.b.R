@@ -1,4 +1,4 @@
-#' @importFrom ggplot2 ggplot aes geom_bar labs coord_flip geom_errorbar theme element_blank
+#' @importFrom ggplot2 ggplot aes geom_bar labs coord_flip geom_errorbar theme element_blank element_text
 #' @importFrom rlang sym
 barClass <- if (requireNamespace('jmvcore', quietly = TRUE))
     R6::R6Class(
@@ -142,7 +142,31 @@ barClass <- if (requireNamespace('jmvcore', quietly = TRUE))
                         y = yLabel
                     )
 
+                p <- p +
+                    theme(
+                        plot.title = element_text(
+                            hjust = private$.alignText2Number(self$options$titleAlign)
+                        ),
+                        plot.subtitle = element_text(
+                            hjust = private$.alignText2Number(self$options$subtitleAlign)
+                        ),
+                        plot.caption = element_text(
+                            hjust = private$.alignText2Number(self$options$captionAlign)
+                        ),
+                        axis.title.x = element_text(
+                            hjust = private$.alignText2Number(self$options$xLabelAlign)
+                        ),
+                        axis.title.y = element_text(
+                            hjust = private$.alignText2Number(self$options$yLabelAlign)
+                        )
+                    )
+
                 return(p)
+            },
+            .alignText2Number = function(text) {
+                if (text == "left") return(0)
+                if (text == "center") return(0.5)
+                if (text == "right") return(1)
             }
         )
     )
