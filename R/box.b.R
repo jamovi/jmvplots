@@ -14,10 +14,17 @@ boxClass <- if (requireNamespace('jmvcore', quietly = TRUE))
                 image <- self$results$plot
                 image$setSize(self$options$width, self$options$height)
 
-                df <- data.frame(
-                    x = self$data[[self$options$group]],
-                    y = self$data[[self$options$var]]
-                )
+                group <- self$options$group
+                var <- self$options$var
+
+                if (is.null(group)) {
+                    df <- self$data |>
+                        dplyr::select(y = !!sym(var)) |>
+                        dplyr::mutate(x = "1")
+                } else {
+                    df <- self$data |>
+                        dplyr::select(x = !!sym(group), y = !!sym(var))
+                }
 
                 image$setState(df)
             },
@@ -33,6 +40,12 @@ boxClass <- if (requireNamespace('jmvcore', quietly = TRUE))
                     ggtheme
 
                 if (self$options$flipAxes) p <- p + coord_flip()
+
+                if (self$options$yAxisRangeType == "manual")
+                    p <- p + ylim(self$options$yAxisRangeMin, self$options$yAxisRangeMax)
+
+                if (self$options$xAxisLabelFontSizeRevLabels)
+                    p <- p + scale_x_discrete(limits = rev)
 
                 title <- self$options$title
                 subtitle <- self$options$subtitle
@@ -55,31 +68,49 @@ boxClass <- if (requireNamespace('jmvcore', quietly = TRUE))
                         y = yLabel
                     )
 
+                if (self$options$flipAxes) {
+                    xLabelFontSize <- self$options$yLabelFontSize
+                    xLabelAlign <- self$options$yLabelAlign
+                    yLabelFontSize <- self$options$xLabelFontSize
+                    yLabelAlign <- self$options$xLabelAlign
+                    xAxisLabelFontSize <- self$options$yAxisLabelFontSize
+                    yAxisLabelFontSize <- self$options$xAxisLabelFontSize
+                } else {
+                    xLabelFontSize <- self$options$xLabelFontSize
+                    xLabelAlign <- self$options$xLabelAlign
+                    yLabelFontSize <- self$options$yLabelFontSize
+                    yLabelAlign <- self$options$yLabelAlign
+                    xAxisLabelFontSize <- self$options$xAxisLabelFontSize
+                    yAxisLabelFontSize <- self$options$yAxisLabelFontSize
+                }
+
                 p <- p +
                     theme(
                         plot.title = element_text(
-                            hjust = private$.alignText2Number(self$options$titleAlign)
+                            size = self$options$titleFontSize,
+                            hjust = alignText2Number(self$options$titleAlign)
                         ),
                         plot.subtitle = element_text(
-                            hjust = private$.alignText2Number(self$options$subtitleAlign)
+                            size = self$options$subtitleFontSize,
+                            hjust = alignText2Number(self$options$subtitleAlign)
                         ),
                         plot.caption = element_text(
-                            hjust = private$.alignText2Number(self$options$captionAlign)
+                            size = self$options$captionFontSize,
+                            hjust = alignText2Number(self$options$captionAlign)
                         ),
                         axis.title.x = element_text(
-                            hjust = private$.alignText2Number(self$options$xLabelAlign)
+                            size = xLabelFontSize,
+                            hjust = alignText2Number(xLabelAlign)
                         ),
                         axis.title.y = element_text(
-                            hjust = private$.alignText2Number(self$options$yLabelAlign)
-                        )
+                            size = yLabelFontSize,
+                            hjust = alignText2Number(yLabelAlign)
+                        ),
+                        axis.text.x = element_text(size = xAxisLabelFontSize),
+                        axis.text.y = element_text(size = yAxisLabelFontSize)
                     )
 
                 return(p)
-            },
-            .alignText2Number = function(text) {
-                if (text == "left") return(0)
-                if (text == "center") return(0.5)
-                if (text == "right") return(1)
             }
         )
     )

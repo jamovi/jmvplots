@@ -9,28 +9,201 @@ options:
     - name: data
       type: Data
 
-    - name: dep
-      title: Dependent Variable
+    - name: var
+      title: Variable
       type: Variable
+      suggested:
+        - continuous
+      permitted:
+        - numeric
 
-    - name: group
-      title: Grouping Variable
-      type: Variable
+    - name: flipAxes
+      title: Flip axes
+      type: Bool
+      default: false
 
-    - name: alt
-      title: Alternative hypothesis
+    - name: nBins
+      title: Number of bins
+      type: Number
+      default: 30
+
+    - name: width
+      title: Width
+      type: Number
+      default: 500
+
+    - name: height
+      title: Height
+      type: Number
+      default: 500
+
+    - name: title
+      title: Title text
+      type: String
+      default: ''
+
+    - name: titleAlign
+      title: Align
       type: List
       options:
-        - title: Not equal
-          name:  notequal
-        - title: One greater
-          name:  onegreater
-        - title: Two greater
-          name:  twogreater
-      default: notequal
+        - name: left
+          title: Left
+        - name: center
+          title: Center
+        - name: right
+          title: Right
+      default: center
 
-    - name: varEq
-      title: Assume equal variances
-      type: Bool
-      default: true
+    - name: titleFontSize
+      title: Font size
+      type: Number
+      default: 16
+
+    - name: subtitle
+      title: Title text
+      type: String
+      default: ''
+
+    - name: subtitleAlign
+      title: Align
+      type: List
+      options:
+        - name: left
+          title: Left
+        - name: center
+          title: Center
+        - name: right
+          title: Right
+      default: left
+
+    - name: subtitleFontSize
+      title: Font size
+      type: Number
+      default: 16
+
+    - name: caption
+      title: Title text
+      type: String
+      default: ''
+
+    - name: captionAlign
+      title: Align
+      type: List
+      options:
+        - name: left
+          title: Left
+        - name: center
+          title: Center
+        - name: right
+          title: Right
+      default: right
+
+    - name: captionFontSize
+      title: Font size
+      type: Number
+      default: 12
+
+    - name: xLabel
+      title: Title text
+      type: String
+      default: ''
+
+    - name: xLabelAlign
+      title: Align
+      type: List
+      options:
+        - name: left
+          title: Left
+        - name: center
+          title: Center
+        - name: right
+          title: Right
+      default: center
+
+    - name: xLabelFontSize
+      title: Font size
+      type: Number
+      default: 16
+
+    - name: yLabel
+      title: Title text
+      type: String
+      default: ''
+
+    - name: yLabelAlign
+      title: Align
+      type: List
+      options:
+        - name: left
+          title: Left
+        - name: center
+          title: Center
+        - name: right
+          title: Right
+      default: center
+
+    - name: yLabelFontSize
+      title: Font size
+      type: Number
+      default: 16
+
+    - name: titleType
+      title: ""
+      type: List
+      options:
+        - name: title
+          title: Plot Title
+        - name: subtitle
+          title: Plot Subtitle
+        - name: caption
+          title: Plot Caption
+        - name: xTitle
+          title: X-Axis Title
+        - name: yTitle
+          title: Y-Axis Title
+      default: title
+
+    - name: yAxisLabelFontSize
+      title: Label font size
+      type: Number
+      default: 12
+
+    - name: yAxisRangeType
+      title: Y-Axis Range
+      type: List
+      options:
+        - name: auto
+          title: Auto
+        - name: manual
+          title: Manual
+
+    - name: yAxisRangeMin
+      title: Min
+      type: Number
+
+    - name: yAxisRangeMax
+      title: Max
+      type: Number
+
+    - name: xAxisLabelFontSize
+      title: Label font size
+      type: Number
+      default: 12
+
+    - name: xAxisRangeType
+      title: X-Axis Range
+      type: List
+      options:
+        - name: auto
+          title: Auto
+        - name: manual
+          title: Manual
+
+    - name: xAxisRangeMin
+      title: Min
+      type: Number
+
+    - name: xAxisRangeMax
+      title: Max
+      type: Number
 ...

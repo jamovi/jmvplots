@@ -1,4 +1,5 @@
-#' @importFrom ggplot2 ggplot aes geom_bar labs coord_flip geom_errorbar theme element_blank element_text
+#' @importFrom ggplot2 ggplot aes geom_bar labs coord_flip geom_errorbar theme element_blank
+#' element_text ylim scale_x_discrete
 #' @importFrom rlang sym
 barClass <- if (requireNamespace('jmvcore', quietly = TRUE))
     R6::R6Class(
@@ -40,16 +41,22 @@ barClass <- if (requireNamespace('jmvcore', quietly = TRUE))
                     df <- self$data |>
                         dplyr::summarize(
                             y = mean(!!sym(var), na.rm = TRUE),
-                            se = sd(!!sym(var), na.rm = TRUE) / sqrt(dplyr::n())
+                            n = dplyr::n(),
+                            sd = sd(!!sym(var), na.rm = TRUE),
                         ) |>
+                        dplyr::mutate(se = sd / sqrt(n)) |>
+                        dplyr::mutate(ci = se * qt((self$options$ciWidth) / 2 + .5, n - 1)) |>
                         dplyr::mutate(x = "1")
                 } else {
                     df <- self$data |>
                         dplyr::group_by(!!sym(group)) |>
                         dplyr::summarize(
                             y = mean(!!sym(var), na.rm = TRUE),
-                            se = sd(!!sym(var), na.rm = TRUE) / sqrt(dplyr::n())
+                            n = dplyr::n(),
+                            sd = sd(!!sym(var), na.rm = TRUE),
                         ) |>
+                        dplyr::mutate(se = sd / sqrt(n)) |>
+                        dplyr::mutate(ci = se * qt((self$options$ciWidth) / 2 + .5, n - 1)) |>
                         dplyr::ungroup() |>
                         dplyr::rename(x = !!sym(group))
                 }
@@ -77,7 +84,7 @@ barClass <- if (requireNamespace('jmvcore', quietly = TRUE))
                         dplyr::rename(y = !!sym(var)) |>
                         dplyr::filter(!is.na(y)) |>
                         dplyr::mutate(y = jmvcore::toNumeric(y)) |>
-                        dplyr::mutate(x = 1:dplyr::n())
+                        dplyr::mutate(x = factor(1:dplyr::n()))
                 } else {
                     df <- self$data |>
                         dplyr::select(!!sym(var), !!sym(labels)) |>
@@ -94,7 +101,12 @@ barClass <- if (requireNamespace('jmvcore', quietly = TRUE))
                 mode <- self$options$mode
 
                 p <- ggplot(image$state, aes(x = x, y = y)) +
-                    geom_bar(stat = "identity", color = theme$color[1], fill = theme$fill[2]) +
+                    geom_bar(
+                        stat = "identity",
+                        width = self$options$barWidth,
+                        color = theme$color[1],
+                        fill = theme$fill[2]
+                    ) +
                     ggtheme
 
                 if (self$options$flipAxes) p <- p + coord_flip()
@@ -116,22 +128,37 @@ barClass <- if (requireNamespace('jmvcore', quietly = TRUE))
                     if (xLabel == "") xLabel <- self$options$congroup
                     if (yLabel == "") yLabel <- self$options$convar
 
-                    if (self$options$se)
-                        p <- p + geom_errorbar(aes(ymin = y - se, ymax = y + se), width = 0.1)
+                    errorBars <- self$options$errorBars
+                    if (errorBars == "se")
+                        p <- p +
+                            geom_errorbar(aes(ymin = y - se, ymax = y + se), width = 0.1) else if (
+                        errorBars == "sd"
+                    )
+                        p <- p +
+                            geom_errorbar(aes(ymin = y - sd, ymax = y + sd), width = 0.1) else if (
+                        errorBars == "ci"
+                    )
+                        p <- p + geom_errorbar(aes(ymin = y - ci, ymax = y + ci), width = 0.1)
 
                     if (is.null(self$options$congroup)) {
                         p <- p +
                             theme(axis.text.x = element_blank(), axis.ticks.x = element_blank())
                     }
                 } else if (mode == "counts") {
-                    if (xLabel == "") xLabel <- self$options$counts
-                    if (yLabel == "") yLabel <- "Count"
+                    if (xLabel == "") xLabel <- self$options$countsLabels
+                    if (yLabel == "") yLabel <- self$options$counts
 
                     if (is.null(self$options$countsLabels)) {
                         p <- p +
                             theme(axis.text.x = element_blank(), axis.ticks.x = element_blank())
                     }
                 }
+
+                if (self$options$yAxisRangeType == "manual")
+                    p <- p + ylim(self$options$yAxisRangeMin, self$options$yAxisRangeMax)
+
+                if (self$options$xAxisLabelFontSizeRevLabels)
+                    p <- p + scale_x_discrete(limits = rev)
 
                 p <- p +
                     labs(
@@ -142,31 +169,49 @@ barClass <- if (requireNamespace('jmvcore', quietly = TRUE))
                         y = yLabel
                     )
 
+                if (self$options$flipAxes) {
+                    xLabelFontSize <- self$options$yLabelFontSize
+                    xLabelAlign <- self$options$yLabelAlign
+                    yLabelFontSize <- self$options$xLabelFontSize
+                    yLabelAlign <- self$options$xLabelAlign
+                    xAxisLabelFontSize <- self$options$yAxisLabelFontSize
+                    yAxisLabelFontSize <- self$options$xAxisLabelFontSize
+                } else {
+                    xLabelFontSize <- self$options$xLabelFontSize
+                    xLabelAlign <- self$options$xLabelAlign
+                    yLabelFontSize <- self$options$yLabelFontSize
+                    yLabelAlign <- self$options$yLabelAlign
+                    xAxisLabelFontSize <- self$options$xAxisLabelFontSize
+                    yAxisLabelFontSize <- self$options$yAxisLabelFontSize
+                }
+
                 p <- p +
                     theme(
                         plot.title = element_text(
-                            hjust = private$.alignText2Number(self$options$titleAlign)
+                            size = self$options$titleFontSize,
+                            hjust = alignText2Number(self$options$titleAlign)
                         ),
                         plot.subtitle = element_text(
-                            hjust = private$.alignText2Number(self$options$subtitleAlign)
+                            size = self$options$subtitleFontSize,
+                            hjust = alignText2Number(self$options$subtitleAlign)
                         ),
                         plot.caption = element_text(
-                            hjust = private$.alignText2Number(self$options$captionAlign)
+                            size = self$options$captionFontSize,
+                            hjust = alignText2Number(self$options$captionAlign)
                         ),
                         axis.title.x = element_text(
-                            hjust = private$.alignText2Number(self$options$xLabelAlign)
+                            size = xLabelFontSize,
+                            hjust = alignText2Number(xLabelAlign)
                         ),
                         axis.title.y = element_text(
-                            hjust = private$.alignText2Number(self$options$yLabelAlign)
-                        )
+                            size = yLabelFontSize,
+                            hjust = alignText2Number(yLabelAlign)
+                        ),
+                        axis.text.x = element_text(size = xAxisLabelFontSize),
+                        axis.text.y = element_text(size = yAxisLabelFontSize)
                     )
 
                 return(p)
-            },
-            .alignText2Number = function(text) {
-                if (text == "left") return(0)
-                if (text == "center") return(0.5)
-                if (text == "right") return(1)
             }
         )
     )

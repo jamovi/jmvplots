@@ -6,10 +6,35 @@ histOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
     inherit = jmvcore::Options,
     public = list(
         initialize = function(
-            dep = NULL,
-            group = NULL,
-            alt = "notequal",
-            varEq = TRUE, ...) {
+            var = NULL,
+            flipAxes = FALSE,
+            nBins = 30,
+            width = 500,
+            height = 500,
+            title = "",
+            titleAlign = "center",
+            titleFontSize = 16,
+            subtitle = "",
+            subtitleAlign = "left",
+            subtitleFontSize = 16,
+            caption = "",
+            captionAlign = "right",
+            captionFontSize = 12,
+            xLabel = "",
+            xLabelAlign = "center",
+            xLabelFontSize = 16,
+            yLabel = "",
+            yLabelAlign = "center",
+            yLabelFontSize = 16,
+            titleType = "title",
+            yAxisLabelFontSize = 12,
+            yAxisRangeType = NULL,
+            yAxisRangeMin = NULL,
+            yAxisRangeMax = NULL,
+            xAxisLabelFontSize = 12,
+            xAxisRangeType = NULL,
+            xAxisRangeMin = NULL,
+            xAxisRangeMax = NULL, ...) {
 
             super$initialize(
                 package="jmvplot",
@@ -17,47 +42,249 @@ histOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 requiresData=TRUE,
                 ...)
 
-            private$..dep <- jmvcore::OptionVariable$new(
-                "dep",
-                dep)
-            private$..group <- jmvcore::OptionVariable$new(
-                "group",
-                group)
-            private$..alt <- jmvcore::OptionList$new(
-                "alt",
-                alt,
+            private$..var <- jmvcore::OptionVariable$new(
+                "var",
+                var,
+                suggested=list(
+                    "continuous"),
+                permitted=list(
+                    "numeric"))
+            private$..flipAxes <- jmvcore::OptionBool$new(
+                "flipAxes",
+                flipAxes,
+                default=FALSE)
+            private$..nBins <- jmvcore::OptionNumber$new(
+                "nBins",
+                nBins,
+                default=30)
+            private$..width <- jmvcore::OptionNumber$new(
+                "width",
+                width,
+                default=500)
+            private$..height <- jmvcore::OptionNumber$new(
+                "height",
+                height,
+                default=500)
+            private$..title <- jmvcore::OptionString$new(
+                "title",
+                title,
+                default="")
+            private$..titleAlign <- jmvcore::OptionList$new(
+                "titleAlign",
+                titleAlign,
                 options=list(
-                    "notequal",
-                    "onegreater",
-                    "twogreater"),
-                default="notequal")
-            private$..varEq <- jmvcore::OptionBool$new(
-                "varEq",
-                varEq,
-                default=TRUE)
+                    "left",
+                    "center",
+                    "right"),
+                default="center")
+            private$..titleFontSize <- jmvcore::OptionNumber$new(
+                "titleFontSize",
+                titleFontSize,
+                default=16)
+            private$..subtitle <- jmvcore::OptionString$new(
+                "subtitle",
+                subtitle,
+                default="")
+            private$..subtitleAlign <- jmvcore::OptionList$new(
+                "subtitleAlign",
+                subtitleAlign,
+                options=list(
+                    "left",
+                    "center",
+                    "right"),
+                default="left")
+            private$..subtitleFontSize <- jmvcore::OptionNumber$new(
+                "subtitleFontSize",
+                subtitleFontSize,
+                default=16)
+            private$..caption <- jmvcore::OptionString$new(
+                "caption",
+                caption,
+                default="")
+            private$..captionAlign <- jmvcore::OptionList$new(
+                "captionAlign",
+                captionAlign,
+                options=list(
+                    "left",
+                    "center",
+                    "right"),
+                default="right")
+            private$..captionFontSize <- jmvcore::OptionNumber$new(
+                "captionFontSize",
+                captionFontSize,
+                default=12)
+            private$..xLabel <- jmvcore::OptionString$new(
+                "xLabel",
+                xLabel,
+                default="")
+            private$..xLabelAlign <- jmvcore::OptionList$new(
+                "xLabelAlign",
+                xLabelAlign,
+                options=list(
+                    "left",
+                    "center",
+                    "right"),
+                default="center")
+            private$..xLabelFontSize <- jmvcore::OptionNumber$new(
+                "xLabelFontSize",
+                xLabelFontSize,
+                default=16)
+            private$..yLabel <- jmvcore::OptionString$new(
+                "yLabel",
+                yLabel,
+                default="")
+            private$..yLabelAlign <- jmvcore::OptionList$new(
+                "yLabelAlign",
+                yLabelAlign,
+                options=list(
+                    "left",
+                    "center",
+                    "right"),
+                default="center")
+            private$..yLabelFontSize <- jmvcore::OptionNumber$new(
+                "yLabelFontSize",
+                yLabelFontSize,
+                default=16)
+            private$..titleType <- jmvcore::OptionList$new(
+                "titleType",
+                titleType,
+                options=list(
+                    "title",
+                    "subtitle",
+                    "caption",
+                    "xTitle",
+                    "yTitle"),
+                default="title")
+            private$..yAxisLabelFontSize <- jmvcore::OptionNumber$new(
+                "yAxisLabelFontSize",
+                yAxisLabelFontSize,
+                default=12)
+            private$..yAxisRangeType <- jmvcore::OptionList$new(
+                "yAxisRangeType",
+                yAxisRangeType,
+                options=list(
+                    "auto",
+                    "manual"))
+            private$..yAxisRangeMin <- jmvcore::OptionNumber$new(
+                "yAxisRangeMin",
+                yAxisRangeMin)
+            private$..yAxisRangeMax <- jmvcore::OptionNumber$new(
+                "yAxisRangeMax",
+                yAxisRangeMax)
+            private$..xAxisLabelFontSize <- jmvcore::OptionNumber$new(
+                "xAxisLabelFontSize",
+                xAxisLabelFontSize,
+                default=12)
+            private$..xAxisRangeType <- jmvcore::OptionList$new(
+                "xAxisRangeType",
+                xAxisRangeType,
+                options=list(
+                    "auto",
+                    "manual"))
+            private$..xAxisRangeMin <- jmvcore::OptionNumber$new(
+                "xAxisRangeMin",
+                xAxisRangeMin)
+            private$..xAxisRangeMax <- jmvcore::OptionNumber$new(
+                "xAxisRangeMax",
+                xAxisRangeMax)
 
-            self$.addOption(private$..dep)
-            self$.addOption(private$..group)
-            self$.addOption(private$..alt)
-            self$.addOption(private$..varEq)
+            self$.addOption(private$..var)
+            self$.addOption(private$..flipAxes)
+            self$.addOption(private$..nBins)
+            self$.addOption(private$..width)
+            self$.addOption(private$..height)
+            self$.addOption(private$..title)
+            self$.addOption(private$..titleAlign)
+            self$.addOption(private$..titleFontSize)
+            self$.addOption(private$..subtitle)
+            self$.addOption(private$..subtitleAlign)
+            self$.addOption(private$..subtitleFontSize)
+            self$.addOption(private$..caption)
+            self$.addOption(private$..captionAlign)
+            self$.addOption(private$..captionFontSize)
+            self$.addOption(private$..xLabel)
+            self$.addOption(private$..xLabelAlign)
+            self$.addOption(private$..xLabelFontSize)
+            self$.addOption(private$..yLabel)
+            self$.addOption(private$..yLabelAlign)
+            self$.addOption(private$..yLabelFontSize)
+            self$.addOption(private$..titleType)
+            self$.addOption(private$..yAxisLabelFontSize)
+            self$.addOption(private$..yAxisRangeType)
+            self$.addOption(private$..yAxisRangeMin)
+            self$.addOption(private$..yAxisRangeMax)
+            self$.addOption(private$..xAxisLabelFontSize)
+            self$.addOption(private$..xAxisRangeType)
+            self$.addOption(private$..xAxisRangeMin)
+            self$.addOption(private$..xAxisRangeMax)
         }),
     active = list(
-        dep = function() private$..dep$value,
-        group = function() private$..group$value,
-        alt = function() private$..alt$value,
-        varEq = function() private$..varEq$value),
+        var = function() private$..var$value,
+        flipAxes = function() private$..flipAxes$value,
+        nBins = function() private$..nBins$value,
+        width = function() private$..width$value,
+        height = function() private$..height$value,
+        title = function() private$..title$value,
+        titleAlign = function() private$..titleAlign$value,
+        titleFontSize = function() private$..titleFontSize$value,
+        subtitle = function() private$..subtitle$value,
+        subtitleAlign = function() private$..subtitleAlign$value,
+        subtitleFontSize = function() private$..subtitleFontSize$value,
+        caption = function() private$..caption$value,
+        captionAlign = function() private$..captionAlign$value,
+        captionFontSize = function() private$..captionFontSize$value,
+        xLabel = function() private$..xLabel$value,
+        xLabelAlign = function() private$..xLabelAlign$value,
+        xLabelFontSize = function() private$..xLabelFontSize$value,
+        yLabel = function() private$..yLabel$value,
+        yLabelAlign = function() private$..yLabelAlign$value,
+        yLabelFontSize = function() private$..yLabelFontSize$value,
+        titleType = function() private$..titleType$value,
+        yAxisLabelFontSize = function() private$..yAxisLabelFontSize$value,
+        yAxisRangeType = function() private$..yAxisRangeType$value,
+        yAxisRangeMin = function() private$..yAxisRangeMin$value,
+        yAxisRangeMax = function() private$..yAxisRangeMax$value,
+        xAxisLabelFontSize = function() private$..xAxisLabelFontSize$value,
+        xAxisRangeType = function() private$..xAxisRangeType$value,
+        xAxisRangeMin = function() private$..xAxisRangeMin$value,
+        xAxisRangeMax = function() private$..xAxisRangeMax$value),
     private = list(
-        ..dep = NA,
-        ..group = NA,
-        ..alt = NA,
-        ..varEq = NA)
+        ..var = NA,
+        ..flipAxes = NA,
+        ..nBins = NA,
+        ..width = NA,
+        ..height = NA,
+        ..title = NA,
+        ..titleAlign = NA,
+        ..titleFontSize = NA,
+        ..subtitle = NA,
+        ..subtitleAlign = NA,
+        ..subtitleFontSize = NA,
+        ..caption = NA,
+        ..captionAlign = NA,
+        ..captionFontSize = NA,
+        ..xLabel = NA,
+        ..xLabelAlign = NA,
+        ..xLabelFontSize = NA,
+        ..yLabel = NA,
+        ..yLabelAlign = NA,
+        ..yLabelFontSize = NA,
+        ..titleType = NA,
+        ..yAxisLabelFontSize = NA,
+        ..yAxisRangeType = NA,
+        ..yAxisRangeMin = NA,
+        ..yAxisRangeMax = NA,
+        ..xAxisLabelFontSize = NA,
+        ..xAxisRangeType = NA,
+        ..xAxisRangeMin = NA,
+        ..xAxisRangeMax = NA)
 )
 
 histResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
     "histResults",
     inherit = jmvcore::Group,
     active = list(
-        text = function() private$.items[["text"]]),
+        plot = function() private$.items[["plot"]]),
     private = list(),
     public=list(
         initialize=function(options) {
@@ -65,10 +292,13 @@ histResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 options=options,
                 name="",
                 title="Histogram")
-            self$add(jmvcore::Preformatted$new(
+            self$add(jmvcore::Image$new(
                 options=options,
-                name="text",
-                title="Histogram"))}))
+                name="plot",
+                title="",
+                width=500,
+                height=500,
+                renderFun=".histPlot"))}))
 
 histBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
     "histBase",
@@ -95,40 +325,113 @@ histBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 #'
 #' 
 #' @param data .
-#' @param dep .
-#' @param group .
-#' @param alt .
-#' @param varEq .
+#' @param var .
+#' @param flipAxes .
+#' @param nBins .
+#' @param width .
+#' @param height .
+#' @param title .
+#' @param titleAlign .
+#' @param titleFontSize .
+#' @param subtitle .
+#' @param subtitleAlign .
+#' @param subtitleFontSize .
+#' @param caption .
+#' @param captionAlign .
+#' @param captionFontSize .
+#' @param xLabel .
+#' @param xLabelAlign .
+#' @param xLabelFontSize .
+#' @param yLabel .
+#' @param yLabelAlign .
+#' @param yLabelFontSize .
+#' @param titleType .
+#' @param yAxisLabelFontSize .
+#' @param yAxisRangeType .
+#' @param yAxisRangeMin .
+#' @param yAxisRangeMax .
+#' @param xAxisLabelFontSize .
+#' @param xAxisRangeType .
+#' @param xAxisRangeMin .
+#' @param xAxisRangeMax .
 #' @return A results object containing:
 #' \tabular{llllll}{
-#'   \code{results$text} \tab \tab \tab \tab \tab a preformatted \cr
+#'   \code{results$plot} \tab \tab \tab \tab \tab an image containing the histogram \cr
 #' }
 #'
 #' @export
 hist <- function(
     data,
-    dep,
-    group,
-    alt = "notequal",
-    varEq = TRUE) {
+    var,
+    flipAxes = FALSE,
+    nBins = 30,
+    width = 500,
+    height = 500,
+    title = "",
+    titleAlign = "center",
+    titleFontSize = 16,
+    subtitle = "",
+    subtitleAlign = "left",
+    subtitleFontSize = 16,
+    caption = "",
+    captionAlign = "right",
+    captionFontSize = 12,
+    xLabel = "",
+    xLabelAlign = "center",
+    xLabelFontSize = 16,
+    yLabel = "",
+    yLabelAlign = "center",
+    yLabelFontSize = 16,
+    titleType = "title",
+    yAxisLabelFontSize = 12,
+    yAxisRangeType,
+    yAxisRangeMin,
+    yAxisRangeMax,
+    xAxisLabelFontSize = 12,
+    xAxisRangeType,
+    xAxisRangeMin,
+    xAxisRangeMax) {
 
     if ( ! requireNamespace("jmvcore", quietly=TRUE))
         stop("hist requires jmvcore to be installed (restart may be required)")
 
-    if ( ! missing(dep)) dep <- jmvcore::resolveQuo(jmvcore::enquo(dep))
-    if ( ! missing(group)) group <- jmvcore::resolveQuo(jmvcore::enquo(group))
+    if ( ! missing(var)) var <- jmvcore::resolveQuo(jmvcore::enquo(var))
     if (missing(data))
         data <- jmvcore::marshalData(
             parent.frame(),
-            `if`( ! missing(dep), dep, NULL),
-            `if`( ! missing(group), group, NULL))
+            `if`( ! missing(var), var, NULL))
 
 
     options <- histOptions$new(
-        dep = dep,
-        group = group,
-        alt = alt,
-        varEq = varEq)
+        var = var,
+        flipAxes = flipAxes,
+        nBins = nBins,
+        width = width,
+        height = height,
+        title = title,
+        titleAlign = titleAlign,
+        titleFontSize = titleFontSize,
+        subtitle = subtitle,
+        subtitleAlign = subtitleAlign,
+        subtitleFontSize = subtitleFontSize,
+        caption = caption,
+        captionAlign = captionAlign,
+        captionFontSize = captionFontSize,
+        xLabel = xLabel,
+        xLabelAlign = xLabelAlign,
+        xLabelFontSize = xLabelFontSize,
+        yLabel = yLabel,
+        yLabelAlign = yLabelAlign,
+        yLabelFontSize = yLabelFontSize,
+        titleType = titleType,
+        yAxisLabelFontSize = yAxisLabelFontSize,
+        yAxisRangeType = yAxisRangeType,
+        yAxisRangeMin = yAxisRangeMin,
+        yAxisRangeMax = yAxisRangeMax,
+        xAxisLabelFontSize = xAxisLabelFontSize,
+        xAxisRangeType = xAxisRangeType,
+        xAxisRangeMin = xAxisRangeMin,
+        xAxisRangeMax = xAxisRangeMax)
 
     analysis <- histClass$new(
         options = options,

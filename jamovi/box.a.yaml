@@ -26,7 +26,7 @@ options:
         - factor
 
     - name: flipAxes
-      title: Flip Axes
+      title: Flip axes
       type: Bool
       default: false
 
@@ -46,12 +46,12 @@ options:
       default: 500
 
     - name: title
-      title: Title
+      title: Title text
       type: String
       default: ''
 
     - name: titleAlign
-      title: ''
+      title: Align
       type: List
       options:
         - name: left
@@ -62,13 +62,18 @@ options:
           title: Right
       default: center
 
+    - name: titleFontSize
+      title: Font size
+      type: Number
+      default: 16
+
     - name: subtitle
-      title: Subtitle
+      title: Title text
       type: String
       default: ''
 
     - name: subtitleAlign
-      title: ''
+      title: Align
       type: List
       options:
         - name: left
@@ -79,13 +84,18 @@ options:
           title: Right
       default: left
 
+    - name: subtitleFontSize
+      title: Font size
+      type: Number
+      default: 16
+
     - name: caption
-      title: Caption
+      title: Title text
       type: String
       default: ''
 
     - name: captionAlign
-      title: ''
+      title: Align
       type: List
       options:
         - name: left
@@ -96,13 +106,18 @@ options:
           title: Right
       default: right
 
+    - name: captionFontSize
+      title: Font size
+      type: Number
+      default: 12
+
     - name: xLabel
-      title: X-axis
+      title: Title text
       type: String
       default: ''
 
     - name: xLabelAlign
-      title: ''
+      title: Align
       type: List
       options:
         - name: left
@@ -113,13 +128,18 @@ options:
           title: Right
       default: center
 
+    - name: xLabelFontSize
+      title: Font size
+      type: Number
+      default: 16
+
     - name: yLabel
-      title: Y-axis
+      title: Title text
       type: String
       default: ''
 
     - name: yLabelAlign
-      title: ''
+      title: Align
       type: List
       options:
         - name: left
@@ -129,4 +149,57 @@ options:
         - name: right
           title: Right
       default: center
+
+    - name: yLabelFontSize
+      title: Font size
+      type: Number
+      default: 16
+
+    - name: titleType
+      title: ""
+      type: List
+      options:
+        - name: title
+          title: Plot Title
+        - name: subtitle
+          title: Plot Subtitle
+        - name: caption
+          title: Plot Caption
+        - name: xTitle
+          title: X-Axis Title
+        - name: yTitle
+          title: Y-Axis Title
+      default: title
+
+    - name: yAxisLabelFontSize
+      title: Label font size
+      type: Number
+      default: 12
+
+    - name: yAxisRangeType
+      title: Y-Axis Range
+      type: List
+      options:
+        - name: auto
+          title: Auto
+        - name: manual
+          title: Manual
+
+    - name: yAxisRangeMin
+      title: Min
+      type: Number
+
+    - name: yAxisRangeMax
+      title: Max
+      type: Number
+
+    - name: xAxisLabelFontSize
+      title: Label font size
+      type: Number
+      default: 12
+
+    - name: xAxisLabelFontSizeRevLabels
+      title: Reverse labels
+      type: Bool
+      default: false
 ...

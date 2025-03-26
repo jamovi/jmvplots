@@ -14,14 +14,26 @@ boxOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             height = 500,
             title = "",
             titleAlign = "center",
+            titleFontSize = 16,
             subtitle = "",
             subtitleAlign = "left",
+            subtitleFontSize = 16,
             caption = "",
             captionAlign = "right",
+            captionFontSize = 12,
             xLabel = "",
             xLabelAlign = "center",
+            xLabelFontSize = 16,
             yLabel = "",
-            yLabelAlign = "center", ...) {
+            yLabelAlign = "center",
+            yLabelFontSize = 16,
+            titleType = "title",
+            yAxisLabelFontSize = 12,
+            yAxisRangeType = NULL,
+            yAxisRangeMin = NULL,
+            yAxisRangeMax = NULL,
+            xAxisLabelFontSize = 12,
+            xAxisLabelFontSizeRevLabels = FALSE, ...) {
 
             super$initialize(
                 package="jmvplot",
@@ -71,6 +83,10 @@ boxOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                     "center",
                     "right"),
                 default="center")
+            private$..titleFontSize <- jmvcore::OptionNumber$new(
+                "titleFontSize",
+                titleFontSize,
+                default=16)
             private$..subtitle <- jmvcore::OptionString$new(
                 "subtitle",
                 subtitle,
@@ -83,6 +99,10 @@ boxOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                     "center",
                     "right"),
                 default="left")
+            private$..subtitleFontSize <- jmvcore::OptionNumber$new(
+                "subtitleFontSize",
+                subtitleFontSize,
+                default=16)
             private$..caption <- jmvcore::OptionString$new(
                 "caption",
                 caption,
@@ -95,6 +115,10 @@ boxOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                     "center",
                     "right"),
                 default="right")
+            private$..captionFontSize <- jmvcore::OptionNumber$new(
+                "captionFontSize",
+                captionFontSize,
+                default=12)
             private$..xLabel <- jmvcore::OptionString$new(
                 "xLabel",
                 xLabel,
@@ -107,6 +131,10 @@ boxOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                     "center",
                     "right"),
                 default="center")
+            private$..xLabelFontSize <- jmvcore::OptionNumber$new(
+                "xLabelFontSize",
+                xLabelFontSize,
+                default=16)
             private$..yLabel <- jmvcore::OptionString$new(
                 "yLabel",
                 yLabel,
@@ -119,6 +147,44 @@ boxOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                     "center",
                     "right"),
                 default="center")
+            private$..yLabelFontSize <- jmvcore::OptionNumber$new(
+                "yLabelFontSize",
+                yLabelFontSize,
+                default=16)
+            private$..titleType <- jmvcore::OptionList$new(
+                "titleType",
+                titleType,
+                options=list(
+                    "title",
+                    "subtitle",
+                    "caption",
+                    "xTitle",
+                    "yTitle"),
+                default="title")
+            private$..yAxisLabelFontSize <- jmvcore::OptionNumber$new(
+                "yAxisLabelFontSize",
+                yAxisLabelFontSize,
+                default=12)
+            private$..yAxisRangeType <- jmvcore::OptionList$new(
+                "yAxisRangeType",
+                yAxisRangeType,
+                options=list(
+                    "auto",
+                    "manual"))
+            private$..yAxisRangeMin <- jmvcore::OptionNumber$new(
+                "yAxisRangeMin",
+                yAxisRangeMin)
+            private$..yAxisRangeMax <- jmvcore::OptionNumber$new(
+                "yAxisRangeMax",
+                yAxisRangeMax)
+            private$..xAxisLabelFontSize <- jmvcore::OptionNumber$new(
+                "xAxisLabelFontSize",
+                xAxisLabelFontSize,
+                default=12)
+            private$..xAxisLabelFontSizeRevLabels <- jmvcore::OptionBool$new(
+                "xAxisLabelFontSizeRevLabels",
+                xAxisLabelFontSizeRevLabels,
+                default=FALSE)
 
             self$.addOption(private$..var)
             self$.addOption(private$..group)
@@ -128,14 +194,26 @@ boxOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             self$.addOption(private$..height)
             self$.addOption(private$..title)
             self$.addOption(private$..titleAlign)
+            self$.addOption(private$..titleFontSize)
             self$.addOption(private$..subtitle)
             self$.addOption(private$..subtitleAlign)
+            self$.addOption(private$..subtitleFontSize)
             self$.addOption(private$..caption)
             self$.addOption(private$..captionAlign)
+            self$.addOption(private$..captionFontSize)
             self$.addOption(private$..xLabel)
             self$.addOption(private$..xLabelAlign)
+            self$.addOption(private$..xLabelFontSize)
             self$.addOption(private$..yLabel)
             self$.addOption(private$..yLabelAlign)
+            self$.addOption(private$..yLabelFontSize)
+            self$.addOption(private$..titleType)
+            self$.addOption(private$..yAxisLabelFontSize)
+            self$.addOption(private$..yAxisRangeType)
+            self$.addOption(private$..yAxisRangeMin)
+            self$.addOption(private$..yAxisRangeMax)
+            self$.addOption(private$..xAxisLabelFontSize)
+            self$.addOption(private$..xAxisLabelFontSizeRevLabels)
         }),
     active = list(
         var = function() private$..var$value,
@@ -146,14 +224,26 @@ boxOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
         height = function() private$..height$value,
         title = function() private$..title$value,
         titleAlign = function() private$..titleAlign$value,
+        titleFontSize = function() private$..titleFontSize$value,
         subtitle = function() private$..subtitle$value,
         subtitleAlign = function() private$..subtitleAlign$value,
+        subtitleFontSize = function() private$..subtitleFontSize$value,
         caption = function() private$..caption$value,
         captionAlign = function() private$..captionAlign$value,
+        captionFontSize = function() private$..captionFontSize$value,
         xLabel = function() private$..xLabel$value,
         xLabelAlign = function() private$..xLabelAlign$value,
+        xLabelFontSize = function() private$..xLabelFontSize$value,
         yLabel = function() private$..yLabel$value,
-        yLabelAlign = function() private$..yLabelAlign$value),
+        yLabelAlign = function() private$..yLabelAlign$value,
+        yLabelFontSize = function() private$..yLabelFontSize$value,
+        titleType = function() private$..titleType$value,
+        yAxisLabelFontSize = function() private$..yAxisLabelFontSize$value,
+        yAxisRangeType = function() private$..yAxisRangeType$value,
+        yAxisRangeMin = function() private$..yAxisRangeMin$value,
+        yAxisRangeMax = function() private$..yAxisRangeMax$value,
+        xAxisLabelFontSize = function() private$..xAxisLabelFontSize$value,
+        xAxisLabelFontSizeRevLabels = function() private$..xAxisLabelFontSizeRevLabels$value),
     private = list(
         ..var = NA,
         ..group = NA,
@@ -163,14 +253,26 @@ boxOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
         ..height = NA,
         ..title = NA,
         ..titleAlign = NA,
+        ..titleFontSize = NA,
         ..subtitle = NA,
         ..subtitleAlign = NA,
+        ..subtitleFontSize = NA,
         ..caption = NA,
         ..captionAlign = NA,
+        ..captionFontSize = NA,
         ..xLabel = NA,
         ..xLabelAlign = NA,
+        ..xLabelFontSize = NA,
         ..yLabel = NA,
-        ..yLabelAlign = NA)
+        ..yLabelAlign = NA,
+        ..yLabelFontSize = NA,
+        ..titleType = NA,
+        ..yAxisLabelFontSize = NA,
+        ..yAxisRangeType = NA,
+        ..yAxisRangeMin = NA,
+        ..yAxisRangeMax = NA,
+        ..xAxisLabelFontSize = NA,
+        ..xAxisLabelFontSizeRevLabels = NA)
 )
 
 boxResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
@@ -226,14 +328,26 @@ boxBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 #' @param height .
 #' @param title .
 #' @param titleAlign .
+#' @param titleFontSize .
 #' @param subtitle .
 #' @param subtitleAlign .
+#' @param subtitleFontSize .
 #' @param caption .
 #' @param captionAlign .
+#' @param captionFontSize .
 #' @param xLabel .
 #' @param xLabelAlign .
+#' @param xLabelFontSize .
 #' @param yLabel .
 #' @param yLabelAlign .
+#' @param yLabelFontSize .
+#' @param titleType .
+#' @param yAxisLabelFontSize .
+#' @param yAxisRangeType .
+#' @param yAxisRangeMin .
+#' @param yAxisRangeMax .
+#' @param xAxisLabelFontSize .
+#' @param xAxisLabelFontSizeRevLabels .
 #' @return A results object containing:
 #' \tabular{llllll}{
 #'   \code{results$plot} \tab \tab \tab \tab \tab an image containing the box plot \cr
@@ -250,14 +364,26 @@ box <- function(
     height = 500,
     title = "",
     titleAlign = "center",
+    titleFontSize = 16,
     subtitle = "",
     subtitleAlign = "left",
+    subtitleFontSize = 16,
     caption = "",
     captionAlign = "right",
+    captionFontSize = 12,
     xLabel = "",
     xLabelAlign = "center",
+    xLabelFontSize = 16,
     yLabel = "",
-    yLabelAlign = "center") {
+    yLabelAlign = "center",
+    yLabelFontSize = 16,
+    titleType = "title",
+    yAxisLabelFontSize = 12,
+    yAxisRangeType,
+    yAxisRangeMin,
+    yAxisRangeMax,
+    xAxisLabelFontSize = 12,
+    xAxisLabelFontSizeRevLabels = FALSE) {
 
     if ( ! requireNamespace("jmvcore", quietly=TRUE))
         stop("box requires jmvcore to be installed (restart may be required)")
@@ -281,14 +407,26 @@ box <- function(
         height = height,
         title = title,
         titleAlign = titleAlign,
+        titleFontSize = titleFontSize,
         subtitle = subtitle,
         subtitleAlign = subtitleAlign,
+        subtitleFontSize = subtitleFontSize,
         caption = caption,
         captionAlign = captionAlign,
+        captionFontSize = captionFontSize,
         xLabel = xLabel,
         xLabelAlign = xLabelAlign,
+        xLabelFontSize = xLabelFontSize,
         yLabel = yLabel,
-        yLabelAlign = yLabelAlign)
+        yLabelAlign = yLabelAlign,
+        yLabelFontSize = yLabelFontSize,
+        titleType = titleType,
+        yAxisLabelFontSize = yAxisLabelFontSize,
+        yAxisRangeType = yAxisRangeType,
+        yAxisRangeMin = yAxisRangeMin,
+        yAxisRangeMax = yAxisRangeMax,
+        xAxisLabelFontSize = xAxisLabelFontSize,
+        xAxisLabelFontSizeRevLabels = xAxisLabelFontSizeRevLabels)
 
     analysis <- boxClass$new(
         options = options,
