@@ -129,16 +129,15 @@ barClass <- if (requireNamespace('jmvcore', quietly = TRUE))
                     if (yLabel == "") yLabel <- self$options$convar
 
                     errorBars <- self$options$errorBars
-                    if (errorBars == "se")
+                    if (errorBars == "se") {
                         p <- p +
-                            geom_errorbar(aes(ymin = y - se, ymax = y + se), width = 0.1) else if (
-                        errorBars == "sd"
-                    )
+                            geom_errorbar(aes(ymin = y - se, ymax = y + se), width = 0.1)
+                    } else if (errorBars == "sd") {
                         p <- p +
-                            geom_errorbar(aes(ymin = y - sd, ymax = y + sd), width = 0.1) else if (
-                        errorBars == "ci"
-                    )
+                            geom_errorbar(aes(ymin = y - sd, ymax = y + sd), width = 0.1)
+                    } else if (errorBars == "ci") {
                         p <- p + geom_errorbar(aes(ymin = y - ci, ymax = y + ci), width = 0.1)
+                    }
 
                     if (is.null(self$options$congroup)) {
                         p <- p +
@@ -187,23 +186,23 @@ barClass <- if (requireNamespace('jmvcore', quietly = TRUE))
 
                 p <- p +
                     theme(
-                        plot.title = element_text(
+                        plot.title = ggtext::element_markdown(
                             size = self$options$titleFontSize,
                             hjust = alignText2Number(self$options$titleAlign)
                         ),
-                        plot.subtitle = element_text(
+                        plot.subtitle = ggtext::element_markdown(
                             size = self$options$subtitleFontSize,
                             hjust = alignText2Number(self$options$subtitleAlign)
                         ),
-                        plot.caption = element_text(
+                        plot.caption = ggtext::element_markdown(
                             size = self$options$captionFontSize,
                             hjust = alignText2Number(self$options$captionAlign)
                         ),
-                        axis.title.x = element_text(
+                        axis.title.x = ggtext::element_markdown(
                             size = xLabelFontSize,
                             hjust = alignText2Number(xLabelAlign)
                         ),
-                        axis.title.y = element_text(
+                        axis.title.y = ggtext::element_markdown(
                             size = yLabelFontSize,
                             hjust = alignText2Number(yLabelAlign)
                         ),

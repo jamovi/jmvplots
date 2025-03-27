@@ -95,6 +95,7 @@ options:
           title: Standard error
         - name: ci
           title: Confidence interval
+      default: none
 
     - name: ciWidth
       title: Width

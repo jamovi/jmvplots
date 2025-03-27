@@ -16,7 +16,7 @@ barOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             barWidth = 0.9,
             width = 500,
             height = 500,
-            errorBars = NULL,
+            errorBars = "none",
             ciWidth = 0.95,
             title = "",
             titleAlign = "center",
@@ -115,7 +115,8 @@ barOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                     "none",
                     "sd",
                     "se",
-                    "ci"))
+                    "ci"),
+                default="none")
             private$..ciWidth <- jmvcore::OptionNumber$new(
                 "ciWidth",
                 ciWidth,
@@ -441,7 +442,7 @@ bar <- function(
     barWidth = 0.9,
     width = 500,
     height = 500,
-    errorBars,
+    errorBars = "none",
     ciWidth = 0.95,
     title = "",
     titleAlign = "center",

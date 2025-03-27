@@ -78,23 +78,23 @@ histClass <- if (requireNamespace('jmvcore', quietly = TRUE))
 
                 p <- p +
                     theme(
-                        plot.title = element_text(
+                        plot.title = ggtext::element_markdown(
                             size = self$options$titleFontSize,
                             hjust = alignText2Number(self$options$titleAlign)
                         ),
-                        plot.subtitle = element_text(
+                        plot.subtitle = ggtext::element_markdown(
                             size = self$options$subtitleFontSize,
                             hjust = alignText2Number(self$options$subtitleAlign)
                         ),
-                        plot.caption = element_text(
+                        plot.caption = ggtext::element_markdown(
                             size = self$options$captionFontSize,
                             hjust = alignText2Number(self$options$captionAlign)
                         ),
-                        axis.title.x = element_text(
+                        axis.title.x = ggtext::element_markdown(
                             size = xLabelFontSize,
                             hjust = alignText2Number(xLabelAlign)
                         ),
-                        axis.title.y = element_text(
+                        axis.title.y = ggtext::element_markdown(
                             size = yLabelFontSize,
                             hjust = alignText2Number(yLabelAlign)
                         ),
