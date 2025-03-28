@@ -1,16 +1,16 @@
 ---
-title: What the Package Does (Title Case)
+title: Create Elegant and Interactive Plots Built on 'ggplot2'
 name: jmvplot
-version: 0.0.0
+version: 0.0.1
 jms: '1.0'
 authors:
-  - Who wrote it
-maintainer: The package maintainer <yourself@somewhere.net>
-date: '1970-01-01'
+  - Ravi Selker
+maintainer: Ravi Selker <selker.ravi@gmail.com>
+date: '2025-04-01'
 type: R
 description: >-
-  More about what it does (maybe more than one line) Use four spaces when
-  indenting paragraphs within the Description.
+  Create elegant and interactive plots built on 'ggplot2'. The package is
+  designed to provide a convencience layer to 'ggplot2' within jamovi.
 analyses:
   - title: Barplot
     name: bar

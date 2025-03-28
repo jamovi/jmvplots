@@ -1,12 +1,13 @@
 Package: jmvplot
 Type: Package
-Title: What the Package Does (Title Case)
-Version: 0.0.0
-Author: Who wrote it
-Maintainer: The package maintainer <yourself@somewhere.net>
-Description: More about what it does (maybe more than one line)
-    Use four spaces when indenting paragraphs within the Description.
-License: What license is it under?
+Title: Create Elegant and Interactive Plots Built on 'ggplot2'
+Version: 0.0.1
+Author: Ravi Selker
+Maintainer: Ravi Selker <selker.ravi@gmail.com>
+Description: Create elegant and interactive plots built on 'ggplot2'. The package 
+    is designed to provide a convencience layer to 'ggplot2' within jamovi. For R
+    users, I recommend using 'ggplot2' directly.
+License: GPL (>= 2)
 Encoding: UTF-8
 LazyData: true
 Imports: 
@@ -14,7 +15,6 @@ Imports:
     R6,
     ggplot2,
     dplyr,
-    tidyr,
     rlang,
     ggtext
 RoxygenNote: 7.3.2
