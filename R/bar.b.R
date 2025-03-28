@@ -1,5 +1,4 @@
-#' @importFrom ggplot2 ggplot aes geom_bar labs coord_flip geom_errorbar theme element_blank
-#' element_text ylim scale_x_discrete
+#' @importFrom ggplot2 ggplot aes
 #' @importFrom rlang sym
 barClass <- if (requireNamespace('jmvcore', quietly = TRUE))
     R6::R6Class(
@@ -101,7 +100,7 @@ barClass <- if (requireNamespace('jmvcore', quietly = TRUE))
                 mode <- self$options$mode
 
                 p <- ggplot(image$state, aes(x = x, y = y)) +
-                    geom_bar(
+                    ggplot2::geom_bar(
                         stat = "identity",
                         width = self$options$barWidth,
                         color = theme$color[1],
@@ -109,106 +108,57 @@ barClass <- if (requireNamespace('jmvcore', quietly = TRUE))
                     ) +
                     ggtheme
 
-                if (self$options$flipAxes) p <- p + coord_flip()
-
-                title <- self$options$title
-                subtitle <- self$options$subtitle
-                caption <- self$options$caption
-                xLabel <- self$options$xLabel
-                yLabel <- self$options$yLabel
-
-                if (title == "") title <- NULL
-                if (subtitle == "") subtitle <- NULL
-                if (caption == "") caption <- NULL
+                if (self$options$flipAxes) p <- p + ggplot2::coord_flip()
 
                 if (mode == "categorical") {
-                    if (xLabel == "") xLabel <- self$options$catvar
-                    if (yLabel == "") yLabel <- "Count"
+                    xLabel <- self$options$catvar
+                    yLabel <- "Count"
                 } else if (mode == "continuous") {
-                    if (xLabel == "") xLabel <- self$options$congroup
-                    if (yLabel == "") yLabel <- self$options$convar
+                    xLabel <- self$options$congroup
+                    yLabel <- self$options$convar
 
                     errorBars <- self$options$errorBars
                     if (errorBars == "se") {
                         p <- p +
-                            geom_errorbar(aes(ymin = y - se, ymax = y + se), width = 0.1)
+                            ggplot2::geom_errorbar(aes(ymin = y - se, ymax = y + se), width = 0.1)
                     } else if (errorBars == "sd") {
                         p <- p +
-                            geom_errorbar(aes(ymin = y - sd, ymax = y + sd), width = 0.1)
+                            ggplot2::geom_errorbar(aes(ymin = y - sd, ymax = y + sd), width = 0.1)
                     } else if (errorBars == "ci") {
-                        p <- p + geom_errorbar(aes(ymin = y - ci, ymax = y + ci), width = 0.1)
+                        p <- p +
+                            ggplot2::geom_errorbar(aes(ymin = y - ci, ymax = y + ci), width = 0.1)
                     }
 
                     if (is.null(self$options$congroup)) {
                         p <- p +
-                            theme(axis.text.x = element_blank(), axis.ticks.x = element_blank())
+                            ggplot2::theme(
+                                axis.text.x = ggplot2::element_blank(),
+                                axis.ticks.x = ggplot2::element_blank()
+                            )
                     }
                 } else if (mode == "counts") {
-                    if (xLabel == "") xLabel <- self$options$countsLabels
-                    if (yLabel == "") yLabel <- self$options$counts
+                    xLabel <- self$options$countsLabels
+                    yLabel <- self$options$counts
 
                     if (is.null(self$options$countsLabels)) {
                         p <- p +
-                            theme(axis.text.x = element_blank(), axis.ticks.x = element_blank())
+                            ggplot2::theme(
+                                axis.text.x = ggplot2::element_blank(),
+                                axis.ticks.x = ggplot2::element_blank()
+                            )
                     }
                 }
 
                 if (self$options$yAxisRangeType == "manual")
-                    p <- p + ylim(self$options$yAxisRangeMin, self$options$yAxisRangeMax)
+                    p <- p + ggplot2::ylim(self$options$yAxisRangeMin, self$options$yAxisRangeMax)
 
                 if (self$options$xAxisLabelFontSizeRevLabels)
-                    p <- p + scale_x_discrete(limits = rev)
+                    p <- p + ggplot2::scale_x_discrete(limits = rev)
 
+                labelDefaults <- list(xLabel = xLabel, yLabel = yLabel)
                 p <- p +
-                    labs(
-                        title = title,
-                        subtitle = subtitle,
-                        caption = caption,
-                        x = xLabel,
-                        y = yLabel
-                    )
-
-                if (self$options$flipAxes) {
-                    xLabelFontSize <- self$options$yLabelFontSize
-                    xLabelAlign <- self$options$yLabelAlign
-                    yLabelFontSize <- self$options$xLabelFontSize
-                    yLabelAlign <- self$options$xLabelAlign
-                    xAxisLabelFontSize <- self$options$yAxisLabelFontSize
-                    yAxisLabelFontSize <- self$options$xAxisLabelFontSize
-                } else {
-                    xLabelFontSize <- self$options$xLabelFontSize
-                    xLabelAlign <- self$options$xLabelAlign
-                    yLabelFontSize <- self$options$yLabelFontSize
-                    yLabelAlign <- self$options$yLabelAlign
-                    xAxisLabelFontSize <- self$options$xAxisLabelFontSize
-                    yAxisLabelFontSize <- self$options$yAxisLabelFontSize
-                }
-
-                p <- p +
-                    theme(
-                        plot.title = ggtext::element_markdown(
-                            size = self$options$titleFontSize,
-                            hjust = alignText2Number(self$options$titleAlign)
-                        ),
-                        plot.subtitle = ggtext::element_markdown(
-                            size = self$options$subtitleFontSize,
-                            hjust = alignText2Number(self$options$subtitleAlign)
-                        ),
-                        plot.caption = ggtext::element_markdown(
-                            size = self$options$captionFontSize,
-                            hjust = alignText2Number(self$options$captionAlign)
-                        ),
-                        axis.title.x = ggtext::element_markdown(
-                            size = xLabelFontSize,
-                            hjust = alignText2Number(xLabelAlign)
-                        ),
-                        axis.title.y = ggtext::element_markdown(
-                            size = yLabelFontSize,
-                            hjust = alignText2Number(yLabelAlign)
-                        ),
-                        axis.text.x = element_text(size = xAxisLabelFontSize),
-                        axis.text.y = element_text(size = yAxisLabelFontSize)
-                    )
+                    setLabels(options = self$options, defaults = labelDefaults) +
+                    formatLabels(options = self$options, flipAxes = self$options$flipAxes)
 
                 return(p)
             }

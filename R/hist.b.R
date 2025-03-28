@@ -1,4 +1,5 @@
-#' @importFrom ggplot2 ggplot aes geom_histogram labs theme element_text xlim ylim
+#' @importFrom ggplot2 ggplot aes
+#' @importFrom rlang sym
 histClass <- if (requireNamespace('jmvcore', quietly = TRUE))
     R6::R6Class(
         "histClass",
@@ -24,83 +25,25 @@ histClass <- if (requireNamespace('jmvcore', quietly = TRUE))
                 if (is.null(image$state)) return(FALSE)
 
                 p <- ggplot(image$state, aes(y)) +
-                    geom_histogram(
+                    ggplot2::geom_histogram(
                         bins = self$options$nBins,
                         color = theme$color[1],
                         fill = theme$fill[2]
                     ) +
                     ggtheme
 
-                if (self$options$flipAxes) p <- p + coord_flip()
+                if (self$options$flipAxes) p <- p + ggplot2::coord_flip()
 
                 if (self$options$yAxisRangeType == "manual")
-                    p <- p + ylim(self$options$yAxisRangeMin, self$options$yAxisRangeMax)
+                    p <- p + ggplot2::ylim(self$options$yAxisRangeMin, self$options$yAxisRangeMax)
 
                 if (self$options$xAxisRangeType == "manual")
-                    p <- p + xlim(self$options$xAxisRangeMin, self$options$xAxisRangeMax)
+                    p <- p + ggplot2::xlim(self$options$xAxisRangeMin, self$options$xAxisRangeMax)
 
-                title <- self$options$title
-                subtitle <- self$options$subtitle
-                caption <- self$options$caption
-                xLabel <- self$options$xLabel
-                yLabel <- self$options$yLabel
-
-                if (title == "") title <- NULL
-                if (subtitle == "") subtitle <- NULL
-                if (caption == "") caption <- NULL
-                if (xLabel == "") xLabel <- self$options$var
-                if (yLabel == "") yLabel <- "Count"
-
+                labelDefaults <- list(xLabel = self$options$var, yLabel = "Count")
                 p <- p +
-                    labs(
-                        title = title,
-                        subtitle = subtitle,
-                        caption = caption,
-                        x = xLabel,
-                        y = yLabel
-                    )
-
-                if (self$options$flipAxes) {
-                    xLabelFontSize <- self$options$yLabelFontSize
-                    xLabelAlign <- self$options$yLabelAlign
-                    yLabelFontSize <- self$options$xLabelFontSize
-                    yLabelAlign <- self$options$xLabelAlign
-                    xAxisLabelFontSize <- self$options$yAxisLabelFontSize
-                    yAxisLabelFontSize <- self$options$xAxisLabelFontSize
-                } else {
-                    xLabelFontSize <- self$options$xLabelFontSize
-                    xLabelAlign <- self$options$xLabelAlign
-                    yLabelFontSize <- self$options$yLabelFontSize
-                    yLabelAlign <- self$options$yLabelAlign
-                    xAxisLabelFontSize <- self$options$xAxisLabelFontSize
-                    yAxisLabelFontSize <- self$options$yAxisLabelFontSize
-                }
-
-                p <- p +
-                    theme(
-                        plot.title = ggtext::element_markdown(
-                            size = self$options$titleFontSize,
-                            hjust = alignText2Number(self$options$titleAlign)
-                        ),
-                        plot.subtitle = ggtext::element_markdown(
-                            size = self$options$subtitleFontSize,
-                            hjust = alignText2Number(self$options$subtitleAlign)
-                        ),
-                        plot.caption = ggtext::element_markdown(
-                            size = self$options$captionFontSize,
-                            hjust = alignText2Number(self$options$captionAlign)
-                        ),
-                        axis.title.x = ggtext::element_markdown(
-                            size = xLabelFontSize,
-                            hjust = alignText2Number(xLabelAlign)
-                        ),
-                        axis.title.y = ggtext::element_markdown(
-                            size = yLabelFontSize,
-                            hjust = alignText2Number(yLabelAlign)
-                        ),
-                        axis.text.x = element_text(size = xAxisLabelFontSize),
-                        axis.text.y = element_text(size = yAxisLabelFontSize)
-                    )
+                    setLabels(options = self$options, defaults = labelDefaults) +
+                    formatLabels(options = self$options, flipAxes = self$options$flipAxes)
 
                 return(p)
             }
