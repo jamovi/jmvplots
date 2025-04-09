@@ -22,19 +22,25 @@ setLabels = function(options, defaults = list()) {
     caption <- options$caption
     xLabel <- options$xLabel
     yLabel <- options$yLabel
+    groupLabel <- options$legendTitle
 
     if (title == "") title <- defaults$title
     if (subtitle == "") subtitle <- defaults$subtitle
     if (caption == "") caption <- defaults$caption
     if (xLabel == "") xLabel <- defaults$xLabel
     if (yLabel == "") yLabel <- defaults$yLabel
+    if (groupLabel == "") groupLabel <- defaults$groupLabel
 
     labels <- ggplot2::labs(
         title = title,
         subtitle = subtitle,
         caption = caption,
         x = xLabel,
-        y = yLabel
+        y = yLabel,
+        group = groupLabel,
+        color = groupLabel,
+        linetype = groupLabel,
+        shape = groupLabel
     )
 
     return(labels)
@@ -53,39 +59,48 @@ formatLabels = function(options, flipAxes = FALSE) {
         yLabelFontSize <- options$xLabelFontSize
         yLabelAlign <- options$xLabelAlign
         xAxisLabelFontSize <- options$yAxisLabelFontSize
+        xAxisLabelRotation <- options$yAxisLabelRotation
         yAxisLabelFontSize <- options$xAxisLabelFontSize
+        yAxisLabelRotation <- options$xAxisLabelRotation
     } else {
         xLabelFontSize <- options$xLabelFontSize
         xLabelAlign <- options$xLabelAlign
         yLabelFontSize <- options$yLabelFontSize
         yLabelAlign <- options$yLabelAlign
         xAxisLabelFontSize <- options$xAxisLabelFontSize
+        xAxisLabelRotation <- options$xAxisLabelRotation
         yAxisLabelFontSize <- options$yAxisLabelFontSize
+        yAxisLabelRotation <- options$yAxisLabelRotation
     }
 
     labels_theme <- ggplot2::theme(
-        plot.title = ggtext::element_markdown(
+        plot.title = ggplot2::element_text(
             size = options$titleFontSize,
             hjust = alignText2Number(options$titleAlign)
         ),
-        plot.subtitle = ggtext::element_markdown(
+        plot.subtitle = ggplot2::element_text(
             size = options$subtitleFontSize,
             hjust = alignText2Number(options$subtitleAlign)
         ),
-        plot.caption = ggtext::element_markdown(
+        plot.caption = ggplot2::element_text(
             size = options$captionFontSize,
             hjust = alignText2Number(options$captionAlign)
         ),
-        axis.title.x = ggtext::element_markdown(
+        axis.title.x = ggplot2::element_text(
             size = xLabelFontSize,
             hjust = alignText2Number(xLabelAlign)
         ),
-        axis.title.y = ggtext::element_markdown(
+        axis.title.y = ggplot2::element_text(
             size = yLabelFontSize,
             hjust = alignText2Number(yLabelAlign)
         ),
-        axis.text.x = ggplot2::element_text(size = xAxisLabelFontSize),
-        axis.text.y = ggplot2::element_text(size = yAxisLabelFontSize)
+        axis.text.x = ggplot2::element_text(
+            size = xAxisLabelFontSize,
+            angle = xAxisLabelRotation
+        ),
+        axis.text.y = ggplot2::element_text(size = yAxisLabelFontSize, angle = yAxisLabelRotation),
+        legend.title = ggplot2::element_text(size = options$legendTitleFontSize),
+        legend.text = ggplot2::element_text(size = options$legendLabelFontSize)
     )
 
     return(labels_theme)

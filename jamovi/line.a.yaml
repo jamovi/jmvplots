@@ -31,15 +31,33 @@ options:
       permitted:
         - numeric
 
+    - name: group
+      title: Grouping Variable
+      type: Variable
+      suggested:
+        - nominal
+      permitted:
+        - factor
+
     - name: flipAxes
       title: Flip axes
       type: Bool
       default: false
 
+    - name: line
+      title: Show lines
+      type: Bool
+      default: true
+
     - name: lineSize
       title: Line size
       type: Number
       default: 0.5
+
+    - name: point
+      title: Show points
+      type: Bool
+      default: true
 
     - name: pointSize
       title: Point size
@@ -83,9 +101,21 @@ options:
     - name: ciWidth
       title: Width
       type: Number
-      default: 0.95
+      default: 95
       min: 0
-      max: 1
+      max: 100
+
+    - name: errorBarWidth
+      title: Error bar width
+      type: Number
+      default: 0.1
+      min: 0
+
+    - name: errorBarSize
+      title: Error bar line size
+      type: Number
+      default: 0.5
+      min: 0
 
     - name: title
       title: Title text
@@ -218,6 +248,13 @@ options:
       type: Number
       default: 12
 
+    - name: yAxisLabelRotation
+      title: Label rotation
+      type: Number
+      default: 0
+      min: 0
+      max: 360
+
     - name: yAxisRangeType
       title: Y-Axis Range
       type: List
@@ -239,4 +276,118 @@ options:
       title: Label font size
       type: Number
       default: 12
+
+    - name: xAxisLabelRotation
+      title: Label rotation
+      type: Number
+      default: 0
+      min: 0
+      max: 360
+
+    - name: legendTitle
+      title: Title text
+      type: String
+      default: ''
+
+    - name: legendTitleFontSize
+      title: Title font size
+      type: Number
+      default: 16
+
+    - name: legendLabelFontSize
+      title: Label font size
+      type: Number
+      default: 16
+
+    - name: legendKeyWidth
+      title: Key width
+      type: Number
+      default: 1
+      min: 0
+
+    - name: legenPositionType
+      title: ""
+      type: List
+      options:
+        - name: outside
+          title: Outside
+        - name: inside
+          title: Inside
+        - name: hide
+          title: Hide
+      default: outside
+
+    - name: legendPosition
+      title: Position
+      type: List
+      options:
+        - name: top
+          title: Top
+        - name: right
+          title: Right
+        - name: bottom
+          title: Bottom
+        - name: left
+          title: Left
+      default: right
+
+    - name: legendJustification
+      title: Justification
+      type: List
+      options:
+        - name: center
+          title: Center
+        - name: top
+          title: Top
+        - name: right
+          title: Right
+        - name: bottom
+          title: Bottom
+        - name: left
+          title: Left
+      default: center
+
+    - name: legendPositionX
+      title: X-position
+      type: Number
+      default: 0.8
+      min: 0
+      max: 1
+
+    - name: legendPositionY
+      title: Y-position
+      type: Number
+      default: 0.5
+      min: 0
+      max: 1
+
+    - name: legendDirection
+      title: Direction
+      type: List
+      options:
+        - name: horizontal
+          title: Horizontal
+        - name: vertical
+          title: Vertical
+      default: vertical
+
+    - name: groupPositionDodge
+      title: Dodge width
+      type: Number
+      default: 0.5
+
+    - name: groupColor
+      title: Different colors
+      type: Bool
+      default: true
+
+    - name: groupLineType
+      title: Different line types
+      type: Bool
+      default: false
+
+    - name: groupPointType
+      title: Different point types
+      type: Bool
+      default: false
 ...

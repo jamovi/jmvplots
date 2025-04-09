@@ -15,6 +15,5 @@ Imports:
     R6,
     ggplot2,
     dplyr,
-    rlang,
-    ggtext
+    rlang
 RoxygenNote: 7.3.2

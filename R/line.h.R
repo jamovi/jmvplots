@@ -9,14 +9,19 @@ lineOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             mode = "individual",
             x = NULL,
             y = NULL,
+            group = NULL,
             flipAxes = FALSE,
+            line = TRUE,
             lineSize = 0.5,
+            point = TRUE,
             pointSize = 2,
             width = 500,
             height = 500,
             aggregateType = "mean",
             errorBars = "none",
-            ciWidth = 0.95,
+            ciWidth = 95,
+            errorBarWidth = 0.1,
+            errorBarSize = 0.5,
             title = "",
             titleAlign = "center",
             titleFontSize = 16,
@@ -34,10 +39,26 @@ lineOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             yLabelFontSize = 16,
             titleType = "title",
             yAxisLabelFontSize = 12,
+            yAxisLabelRotation = 0,
             yAxisRangeType = NULL,
             yAxisRangeMin = NULL,
             yAxisRangeMax = NULL,
-            xAxisLabelFontSize = 12, ...) {
+            xAxisLabelFontSize = 12,
+            xAxisLabelRotation = 0,
+            legendTitle = "",
+            legendTitleFontSize = 16,
+            legendLabelFontSize = 16,
+            legendKeyWidth = 1,
+            legenPositionType = "outside",
+            legendPosition = "right",
+            legendJustification = "center",
+            legendPositionX = 0.8,
+            legendPositionY = 0.5,
+            legendDirection = "vertical",
+            groupPositionDodge = 0.5,
+            groupColor = TRUE,
+            groupLineType = FALSE,
+            groupPointType = FALSE, ...) {
 
             super$initialize(
                 package="jmvplot",
@@ -62,14 +83,29 @@ lineOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                     "continuous"),
                 permitted=list(
                     "numeric"))
+            private$..group <- jmvcore::OptionVariable$new(
+                "group",
+                group,
+                suggested=list(
+                    "nominal"),
+                permitted=list(
+                    "factor"))
             private$..flipAxes <- jmvcore::OptionBool$new(
                 "flipAxes",
                 flipAxes,
                 default=FALSE)
+            private$..line <- jmvcore::OptionBool$new(
+                "line",
+                line,
+                default=TRUE)
             private$..lineSize <- jmvcore::OptionNumber$new(
                 "lineSize",
                 lineSize,
                 default=0.5)
+            private$..point <- jmvcore::OptionBool$new(
+                "point",
+                point,
+                default=TRUE)
             private$..pointSize <- jmvcore::OptionNumber$new(
                 "pointSize",
                 pointSize,
@@ -101,9 +137,19 @@ lineOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             private$..ciWidth <- jmvcore::OptionNumber$new(
                 "ciWidth",
                 ciWidth,
-                default=0.95,
+                default=95,
                 min=0,
-                max=1)
+                max=100)
+            private$..errorBarWidth <- jmvcore::OptionNumber$new(
+                "errorBarWidth",
+                errorBarWidth,
+                default=0.1,
+                min=0)
+            private$..errorBarSize <- jmvcore::OptionNumber$new(
+                "errorBarSize",
+                errorBarSize,
+                default=0.5,
+                min=0)
             private$..title <- jmvcore::OptionString$new(
                 "title",
                 title,
@@ -198,6 +244,12 @@ lineOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 "yAxisLabelFontSize",
                 yAxisLabelFontSize,
                 default=12)
+            private$..yAxisLabelRotation <- jmvcore::OptionNumber$new(
+                "yAxisLabelRotation",
+                yAxisLabelRotation,
+                default=0,
+                min=0,
+                max=360)
             private$..yAxisRangeType <- jmvcore::OptionList$new(
                 "yAxisRangeType",
                 yAxisRangeType,
@@ -214,18 +266,108 @@ lineOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 "xAxisLabelFontSize",
                 xAxisLabelFontSize,
                 default=12)
+            private$..xAxisLabelRotation <- jmvcore::OptionNumber$new(
+                "xAxisLabelRotation",
+                xAxisLabelRotation,
+                default=0,
+                min=0,
+                max=360)
+            private$..legendTitle <- jmvcore::OptionString$new(
+                "legendTitle",
+                legendTitle,
+                default="")
+            private$..legendTitleFontSize <- jmvcore::OptionNumber$new(
+                "legendTitleFontSize",
+                legendTitleFontSize,
+                default=16)
+            private$..legendLabelFontSize <- jmvcore::OptionNumber$new(
+                "legendLabelFontSize",
+                legendLabelFontSize,
+                default=16)
+            private$..legendKeyWidth <- jmvcore::OptionNumber$new(
+                "legendKeyWidth",
+                legendKeyWidth,
+                default=1,
+                min=0)
+            private$..legenPositionType <- jmvcore::OptionList$new(
+                "legenPositionType",
+                legenPositionType,
+                options=list(
+                    "outside",
+                    "inside",
+                    "hide"),
+                default="outside")
+            private$..legendPosition <- jmvcore::OptionList$new(
+                "legendPosition",
+                legendPosition,
+                options=list(
+                    "top",
+                    "right",
+                    "bottom",
+                    "left"),
+                default="right")
+            private$..legendJustification <- jmvcore::OptionList$new(
+                "legendJustification",
+                legendJustification,
+                options=list(
+                    "center",
+                    "top",
+                    "right",
+                    "bottom",
+                    "left"),
+                default="center")
+            private$..legendPositionX <- jmvcore::OptionNumber$new(
+                "legendPositionX",
+                legendPositionX,
+                default=0.8,
+                min=0,
+                max=1)
+            private$..legendPositionY <- jmvcore::OptionNumber$new(
+                "legendPositionY",
+                legendPositionY,
+                default=0.5,
+                min=0,
+                max=1)
+            private$..legendDirection <- jmvcore::OptionList$new(
+                "legendDirection",
+                legendDirection,
+                options=list(
+                    "horizontal",
+                    "vertical"),
+                default="vertical")
+            private$..groupPositionDodge <- jmvcore::OptionNumber$new(
+                "groupPositionDodge",
+                groupPositionDodge,
+                default=0.5)
+            private$..groupColor <- jmvcore::OptionBool$new(
+                "groupColor",
+                groupColor,
+                default=TRUE)
+            private$..groupLineType <- jmvcore::OptionBool$new(
+                "groupLineType",
+                groupLineType,
+                default=FALSE)
+            private$..groupPointType <- jmvcore::OptionBool$new(
+                "groupPointType",
+                groupPointType,
+                default=FALSE)
 
             self$.addOption(private$..mode)
             self$.addOption(private$..x)
             self$.addOption(private$..y)
+            self$.addOption(private$..group)
             self$.addOption(private$..flipAxes)
+            self$.addOption(private$..line)
             self$.addOption(private$..lineSize)
+            self$.addOption(private$..point)
             self$.addOption(private$..pointSize)
             self$.addOption(private$..width)
             self$.addOption(private$..height)
             self$.addOption(private$..aggregateType)
             self$.addOption(private$..errorBars)
             self$.addOption(private$..ciWidth)
+            self$.addOption(private$..errorBarWidth)
+            self$.addOption(private$..errorBarSize)
             self$.addOption(private$..title)
             self$.addOption(private$..titleAlign)
             self$.addOption(private$..titleFontSize)
@@ -243,23 +385,44 @@ lineOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             self$.addOption(private$..yLabelFontSize)
             self$.addOption(private$..titleType)
             self$.addOption(private$..yAxisLabelFontSize)
+            self$.addOption(private$..yAxisLabelRotation)
             self$.addOption(private$..yAxisRangeType)
             self$.addOption(private$..yAxisRangeMin)
             self$.addOption(private$..yAxisRangeMax)
             self$.addOption(private$..xAxisLabelFontSize)
+            self$.addOption(private$..xAxisLabelRotation)
+            self$.addOption(private$..legendTitle)
+            self$.addOption(private$..legendTitleFontSize)
+            self$.addOption(private$..legendLabelFontSize)
+            self$.addOption(private$..legendKeyWidth)
+            self$.addOption(private$..legenPositionType)
+            self$.addOption(private$..legendPosition)
+            self$.addOption(private$..legendJustification)
+            self$.addOption(private$..legendPositionX)
+            self$.addOption(private$..legendPositionY)
+            self$.addOption(private$..legendDirection)
+            self$.addOption(private$..groupPositionDodge)
+            self$.addOption(private$..groupColor)
+            self$.addOption(private$..groupLineType)
+            self$.addOption(private$..groupPointType)
         }),
     active = list(
         mode = function() private$..mode$value,
         x = function() private$..x$value,
         y = function() private$..y$value,
+        group = function() private$..group$value,
         flipAxes = function() private$..flipAxes$value,
+        line = function() private$..line$value,
         lineSize = function() private$..lineSize$value,
+        point = function() private$..point$value,
         pointSize = function() private$..pointSize$value,
         width = function() private$..width$value,
         height = function() private$..height$value,
         aggregateType = function() private$..aggregateType$value,
         errorBars = function() private$..errorBars$value,
         ciWidth = function() private$..ciWidth$value,
+        errorBarWidth = function() private$..errorBarWidth$value,
+        errorBarSize = function() private$..errorBarSize$value,
         title = function() private$..title$value,
         titleAlign = function() private$..titleAlign$value,
         titleFontSize = function() private$..titleFontSize$value,
@@ -277,22 +440,43 @@ lineOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
         yLabelFontSize = function() private$..yLabelFontSize$value,
         titleType = function() private$..titleType$value,
         yAxisLabelFontSize = function() private$..yAxisLabelFontSize$value,
+        yAxisLabelRotation = function() private$..yAxisLabelRotation$value,
         yAxisRangeType = function() private$..yAxisRangeType$value,
         yAxisRangeMin = function() private$..yAxisRangeMin$value,
         yAxisRangeMax = function() private$..yAxisRangeMax$value,
-        xAxisLabelFontSize = function() private$..xAxisLabelFontSize$value),
+        xAxisLabelFontSize = function() private$..xAxisLabelFontSize$value,
+        xAxisLabelRotation = function() private$..xAxisLabelRotation$value,
+        legendTitle = function() private$..legendTitle$value,
+        legendTitleFontSize = function() private$..legendTitleFontSize$value,
+        legendLabelFontSize = function() private$..legendLabelFontSize$value,
+        legendKeyWidth = function() private$..legendKeyWidth$value,
+        legenPositionType = function() private$..legenPositionType$value,
+        legendPosition = function() private$..legendPosition$value,
+        legendJustification = function() private$..legendJustification$value,
+        legendPositionX = function() private$..legendPositionX$value,
+        legendPositionY = function() private$..legendPositionY$value,
+        legendDirection = function() private$..legendDirection$value,
+        groupPositionDodge = function() private$..groupPositionDodge$value,
+        groupColor = function() private$..groupColor$value,
+        groupLineType = function() private$..groupLineType$value,
+        groupPointType = function() private$..groupPointType$value),
     private = list(
         ..mode = NA,
         ..x = NA,
         ..y = NA,
+        ..group = NA,
         ..flipAxes = NA,
+        ..line = NA,
         ..lineSize = NA,
+        ..point = NA,
         ..pointSize = NA,
         ..width = NA,
         ..height = NA,
         ..aggregateType = NA,
         ..errorBars = NA,
         ..ciWidth = NA,
+        ..errorBarWidth = NA,
+        ..errorBarSize = NA,
         ..title = NA,
         ..titleAlign = NA,
         ..titleFontSize = NA,
@@ -310,10 +494,26 @@ lineOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
         ..yLabelFontSize = NA,
         ..titleType = NA,
         ..yAxisLabelFontSize = NA,
+        ..yAxisLabelRotation = NA,
         ..yAxisRangeType = NA,
         ..yAxisRangeMin = NA,
         ..yAxisRangeMax = NA,
-        ..xAxisLabelFontSize = NA)
+        ..xAxisLabelFontSize = NA,
+        ..xAxisLabelRotation = NA,
+        ..legendTitle = NA,
+        ..legendTitleFontSize = NA,
+        ..legendLabelFontSize = NA,
+        ..legendKeyWidth = NA,
+        ..legenPositionType = NA,
+        ..legendPosition = NA,
+        ..legendJustification = NA,
+        ..legendPositionX = NA,
+        ..legendPositionY = NA,
+        ..legendDirection = NA,
+        ..groupPositionDodge = NA,
+        ..groupColor = NA,
+        ..groupLineType = NA,
+        ..groupPointType = NA)
 )
 
 lineResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
@@ -364,14 +564,19 @@ lineBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 #' @param data .
 #' @param x .
 #' @param y .
+#' @param group .
 #' @param flipAxes .
+#' @param line .
 #' @param lineSize .
+#' @param point .
 #' @param pointSize .
 #' @param width .
 #' @param height .
 #' @param aggregateType .
 #' @param errorBars .
 #' @param ciWidth .
+#' @param errorBarWidth .
+#' @param errorBarSize .
 #' @param title .
 #' @param titleAlign .
 #' @param titleFontSize .
@@ -389,10 +594,26 @@ lineBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 #' @param yLabelFontSize .
 #' @param titleType .
 #' @param yAxisLabelFontSize .
+#' @param yAxisLabelRotation .
 #' @param yAxisRangeType .
 #' @param yAxisRangeMin .
 #' @param yAxisRangeMax .
 #' @param xAxisLabelFontSize .
+#' @param xAxisLabelRotation .
+#' @param legendTitle .
+#' @param legendTitleFontSize .
+#' @param legendLabelFontSize .
+#' @param legendKeyWidth .
+#' @param legenPositionType .
+#' @param legendPosition .
+#' @param legendJustification .
+#' @param legendPositionX .
+#' @param legendPositionY .
+#' @param legendDirection .
+#' @param groupPositionDodge .
+#' @param groupColor .
+#' @param groupLineType .
+#' @param groupPointType .
 #' @return A results object containing:
 #' \tabular{llllll}{
 #'   \code{results$plot} \tab \tab \tab \tab \tab an image containing the line plot \cr
@@ -404,14 +625,19 @@ line <- function(
     data,
     x,
     y,
+    group,
     flipAxes = FALSE,
+    line = TRUE,
     lineSize = 0.5,
+    point = TRUE,
     pointSize = 2,
     width = 500,
     height = 500,
     aggregateType = "mean",
     errorBars = "none",
-    ciWidth = 0.95,
+    ciWidth = 95,
+    errorBarWidth = 0.1,
+    errorBarSize = 0.5,
     title = "",
     titleAlign = "center",
     titleFontSize = 16,
@@ -429,35 +655,59 @@ line <- function(
     yLabelFontSize = 16,
     titleType = "title",
     yAxisLabelFontSize = 12,
+    yAxisLabelRotation = 0,
     yAxisRangeType,
     yAxisRangeMin,
     yAxisRangeMax,
-    xAxisLabelFontSize = 12) {
+    xAxisLabelFontSize = 12,
+    xAxisLabelRotation = 0,
+    legendTitle = "",
+    legendTitleFontSize = 16,
+    legendLabelFontSize = 16,
+    legendKeyWidth = 1,
+    legenPositionType = "outside",
+    legendPosition = "right",
+    legendJustification = "center",
+    legendPositionX = 0.8,
+    legendPositionY = 0.5,
+    legendDirection = "vertical",
+    groupPositionDodge = 0.5,
+    groupColor = TRUE,
+    groupLineType = FALSE,
+    groupPointType = FALSE) {
 
     if ( ! requireNamespace("jmvcore", quietly=TRUE))
         stop("line requires jmvcore to be installed (restart may be required)")
 
     if ( ! missing(x)) x <- jmvcore::resolveQuo(jmvcore::enquo(x))
     if ( ! missing(y)) y <- jmvcore::resolveQuo(jmvcore::enquo(y))
+    if ( ! missing(group)) group <- jmvcore::resolveQuo(jmvcore::enquo(group))
     if (missing(data))
         data <- jmvcore::marshalData(
             parent.frame(),
             `if`( ! missing(x), x, NULL),
-            `if`( ! missing(y), y, NULL))
+            `if`( ! missing(y), y, NULL),
+            `if`( ! missing(group), group, NULL))
 
+    for (v in group) if (v %in% names(data)) data[[v]] <- as.factor(data[[v]])
 
     options <- lineOptions$new(
         mode = mode,
         x = x,
         y = y,
+        group = group,
         flipAxes = flipAxes,
+        line = line,
         lineSize = lineSize,
+        point = point,
         pointSize = pointSize,
         width = width,
         height = height,
         aggregateType = aggregateType,
         errorBars = errorBars,
         ciWidth = ciWidth,
+        errorBarWidth = errorBarWidth,
+        errorBarSize = errorBarSize,
         title = title,
         titleAlign = titleAlign,
         titleFontSize = titleFontSize,
@@ -475,10 +725,26 @@ line <- function(
         yLabelFontSize = yLabelFontSize,
         titleType = titleType,
         yAxisLabelFontSize = yAxisLabelFontSize,
+        yAxisLabelRotation = yAxisLabelRotation,
         yAxisRangeType = yAxisRangeType,
         yAxisRangeMin = yAxisRangeMin,
         yAxisRangeMax = yAxisRangeMax,
-        xAxisLabelFontSize = xAxisLabelFontSize)
+        xAxisLabelFontSize = xAxisLabelFontSize,
+        xAxisLabelRotation = xAxisLabelRotation,
+        legendTitle = legendTitle,
+        legendTitleFontSize = legendTitleFontSize,
+        legendLabelFontSize = legendLabelFontSize,
+        legendKeyWidth = legendKeyWidth,
+        legenPositionType = legenPositionType,
+        legendPosition = legendPosition,
+        legendJustification = legendJustification,
+        legendPositionX = legendPositionX,
+        legendPositionY = legendPositionY,
+        legendDirection = legendDirection,
+        groupPositionDodge = groupPositionDodge,
+        groupColor = groupColor,
+        groupLineType = groupLineType,
+        groupPointType = groupPointType)
 
     analysis <- lineClass$new(
         options = options,
