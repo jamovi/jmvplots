@@ -139,32 +139,7 @@ lineClass <- if (requireNamespace('jmvcore', quietly = TRUE))
                             )
                     }
 
-                    p <- p + ggtheme
-
-                    if (self$options$legenPositionType == "hide") {
-                        p <- p +
-                            ggplot2::theme(
-                                legend.position = "none"
-                            )
-                    } else if (self$options$legenPositionType == "outside") {
-                        p <- p +
-                            ggplot2::theme(
-                                legend.position = self$options$legendPosition,
-                                legend.justification = self$options$legendJustification,
-                                legend.key.width = ggplot2::unit(self$options$legendKeyWidth, "cm")
-                            )
-                    } else if (self$options$legenPositionType == "inside") {
-                        p <- p +
-                            ggplot2::theme(
-                                legend.position = "inside",
-                                legend.position.inside = c(
-                                    self$options$legendPositionX,
-                                    self$options$legendPositionY
-                                ),
-                                legend.direction = self$options$legendDirection,
-                                legend.key.width = ggplot2::unit(self$options$legendKeyWidth, "cm")
-                            )
-                    }
+                    p <- p + ggtheme + formatLegend(self$options)
                 }
 
                 if (self$options$mode == "aggregate") {

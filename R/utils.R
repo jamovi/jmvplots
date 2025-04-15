@@ -39,6 +39,7 @@ setLabels = function(options, defaults = list()) {
         y = yLabel,
         group = groupLabel,
         color = groupLabel,
+        fill = groupLabel,
         linetype = groupLabel,
         shape = groupLabel
     )
@@ -104,4 +105,39 @@ formatLabels = function(options, flipAxes = FALSE) {
     )
 
     return(labels_theme)
+}
+
+#' Format legend
+#'
+#' @param options The options list; needs to contain the appropriate fields
+#' @return A ggplot2::theme object
+#' @keywords internal
+formatLegend = function(options) {
+    if (options$legenPositionType == "hide") {
+        legend_theme <- ggplot2::theme(
+            legend.position = "none"
+        )
+    } else if (options$legenPositionType == "outside") {
+        legend_theme <-
+            ggplot2::theme(
+                legend.position = options$legendPosition,
+                legend.justification = options$legendJustification,
+                legend.key.width = ggplot2::unit(options$legendKeyWidth, "cm"),
+                legend.key.height = ggplot2::unit(options$legendKeyHeight, "cm")
+            )
+    } else if (options$legenPositionType == "inside") {
+        legend_theme <-
+            ggplot2::theme(
+                legend.position = "inside",
+                legend.position.inside = c(
+                    options$legendPositionX,
+                    options$legendPositionY
+                ),
+                legend.direction = options$legendDirection,
+                legend.key.width = ggplot2::unit(options$legendKeyWidth, "cm"),
+                legend.key.height = ggplot2::unit(options$legendKeyHeight, "cm")
+            )
+    }
+
+    return(legend_theme)
 }

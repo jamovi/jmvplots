@@ -49,6 +49,7 @@ lineOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             legendTitleFontSize = 16,
             legendLabelFontSize = 16,
             legendKeyWidth = 1,
+            legendKeyHeight = 0.6,
             legenPositionType = "outside",
             legendPosition = "right",
             legendJustification = "center",
@@ -289,6 +290,11 @@ lineOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 legendKeyWidth,
                 default=1,
                 min=0)
+            private$..legendKeyHeight <- jmvcore::OptionNumber$new(
+                "legendKeyHeight",
+                legendKeyHeight,
+                default=0.6,
+                min=0)
             private$..legenPositionType <- jmvcore::OptionList$new(
                 "legenPositionType",
                 legenPositionType,
@@ -395,6 +401,7 @@ lineOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             self$.addOption(private$..legendTitleFontSize)
             self$.addOption(private$..legendLabelFontSize)
             self$.addOption(private$..legendKeyWidth)
+            self$.addOption(private$..legendKeyHeight)
             self$.addOption(private$..legenPositionType)
             self$.addOption(private$..legendPosition)
             self$.addOption(private$..legendJustification)
@@ -450,6 +457,7 @@ lineOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
         legendTitleFontSize = function() private$..legendTitleFontSize$value,
         legendLabelFontSize = function() private$..legendLabelFontSize$value,
         legendKeyWidth = function() private$..legendKeyWidth$value,
+        legendKeyHeight = function() private$..legendKeyHeight$value,
         legenPositionType = function() private$..legenPositionType$value,
         legendPosition = function() private$..legendPosition$value,
         legendJustification = function() private$..legendJustification$value,
@@ -504,6 +512,7 @@ lineOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
         ..legendTitleFontSize = NA,
         ..legendLabelFontSize = NA,
         ..legendKeyWidth = NA,
+        ..legendKeyHeight = NA,
         ..legenPositionType = NA,
         ..legendPosition = NA,
         ..legendJustification = NA,
@@ -604,6 +613,7 @@ lineBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 #' @param legendTitleFontSize .
 #' @param legendLabelFontSize .
 #' @param legendKeyWidth .
+#' @param legendKeyHeight .
 #' @param legenPositionType .
 #' @param legendPosition .
 #' @param legendJustification .
@@ -665,6 +675,7 @@ line <- function(
     legendTitleFontSize = 16,
     legendLabelFontSize = 16,
     legendKeyWidth = 1,
+    legendKeyHeight = 0.6,
     legenPositionType = "outside",
     legendPosition = "right",
     legendJustification = "center",
@@ -735,6 +746,7 @@ line <- function(
         legendTitleFontSize = legendTitleFontSize,
         legendLabelFontSize = legendLabelFontSize,
         legendKeyWidth = legendKeyWidth,
+        legendKeyHeight = legendKeyHeight,
         legenPositionType = legenPositionType,
         legendPosition = legendPosition,
         legendJustification = legendJustification,

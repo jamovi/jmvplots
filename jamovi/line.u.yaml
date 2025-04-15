@@ -353,6 +353,9 @@ children:
                   - type: TextBox
                     name: legendKeyWidth
                     format: number
+                  - type: TextBox
+                    name: legendKeyHeight
+                    format: number
           - type: LayoutBox
             cell:
               column: 1

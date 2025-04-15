@@ -305,6 +305,12 @@ options:
       default: 1
       min: 0
 
+    - name: legendKeyHeight
+      title: Key height
+      type: Number
+      default: 0.6
+      min: 0
+
     - name: legenPositionType
       title: ""
       type: List
