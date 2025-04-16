@@ -8,16 +8,21 @@ barOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
         initialize = function(
             mode = "categorical",
             catvar = NULL,
+            catgroup = NULL,
             convar = NULL,
+            congroup1 = NULL,
+            congroup2 = NULL,
             counts = NULL,
-            congroup = NULL,
             countsLabels = NULL,
+            countsgroup = NULL,
             flipAxes = FALSE,
             barWidth = 0.9,
             width = 500,
             height = 500,
             errorBars = "none",
-            ciWidth = 0.95,
+            ciWidth = 95,
+            errorBarWidth = 0.1,
+            errorBarSize = 0.5,
             title = "",
             titleAlign = "center",
             titleFontSize = 16,
@@ -35,11 +40,25 @@ barOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             yLabelFontSize = 16,
             titleType = "title",
             yAxisLabelFontSize = 12,
+            yAxisLabelRotation = 0,
             yAxisRangeType = NULL,
             yAxisRangeMin = NULL,
             yAxisRangeMax = NULL,
             xAxisLabelFontSize = 12,
-            xAxisLabelFontSizeRevLabels = FALSE, ...) {
+            xAxisLabelRotation = 0,
+            xAxisLabelFontSizeRevLabels = FALSE,
+            legendTitle = "",
+            legendTitleFontSize = 16,
+            legendLabelFontSize = 16,
+            legendKeyWidth = 0.6,
+            legendKeyHeight = 0.6,
+            legenPositionType = "outside",
+            legendPosition = "right",
+            legendJustification = "center",
+            legendPositionX = 0.8,
+            legendPositionY = 0.5,
+            legendDirection = "vertical",
+            groupBarType = "grouped", ...) {
 
             super$initialize(
                 package="jmvplot",
@@ -62,6 +81,13 @@ barOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                     "nominal"),
                 permitted=list(
                     "factor"))
+            private$..catgroup <- jmvcore::OptionVariable$new(
+                "catgroup",
+                catgroup,
+                suggested=list(
+                    "nominal"),
+                permitted=list(
+                    "factor"))
             private$..convar <- jmvcore::OptionVariable$new(
                 "convar",
                 convar,
@@ -69,6 +95,20 @@ barOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                     "continuous"),
                 permitted=list(
                     "numeric"))
+            private$..congroup1 <- jmvcore::OptionVariable$new(
+                "congroup1",
+                congroup1,
+                suggested=list(
+                    "nominal"),
+                permitted=list(
+                    "factor"))
+            private$..congroup2 <- jmvcore::OptionVariable$new(
+                "congroup2",
+                congroup2,
+                suggested=list(
+                    "nominal"),
+                permitted=list(
+                    "factor"))
             private$..counts <- jmvcore::OptionVariable$new(
                 "counts",
                 counts,
@@ -76,16 +116,16 @@ barOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                     "continuous"),
                 permitted=list(
                     "numeric"))
-            private$..congroup <- jmvcore::OptionVariable$new(
-                "congroup",
-                congroup,
+            private$..countsLabels <- jmvcore::OptionVariable$new(
+                "countsLabels",
+                countsLabels,
                 suggested=list(
                     "nominal"),
                 permitted=list(
                     "factor"))
-            private$..countsLabels <- jmvcore::OptionVariable$new(
-                "countsLabels",
-                countsLabels,
+            private$..countsgroup <- jmvcore::OptionVariable$new(
+                "countsgroup",
+                countsgroup,
                 suggested=list(
                     "nominal"),
                 permitted=list(
@@ -98,8 +138,7 @@ barOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 "barWidth",
                 barWidth,
                 default=0.9,
-                min=0,
-                max=1)
+                min=0)
             private$..width <- jmvcore::OptionNumber$new(
                 "width",
                 width,
@@ -120,9 +159,19 @@ barOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             private$..ciWidth <- jmvcore::OptionNumber$new(
                 "ciWidth",
                 ciWidth,
-                default=0.95,
+                default=95,
                 min=0,
-                max=1)
+                max=100)
+            private$..errorBarWidth <- jmvcore::OptionNumber$new(
+                "errorBarWidth",
+                errorBarWidth,
+                default=0.1,
+                min=0)
+            private$..errorBarSize <- jmvcore::OptionNumber$new(
+                "errorBarSize",
+                errorBarSize,
+                default=0.5,
+                min=0)
             private$..title <- jmvcore::OptionString$new(
                 "title",
                 title,
@@ -217,6 +266,12 @@ barOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 "yAxisLabelFontSize",
                 yAxisLabelFontSize,
                 default=12)
+            private$..yAxisLabelRotation <- jmvcore::OptionNumber$new(
+                "yAxisLabelRotation",
+                yAxisLabelRotation,
+                default=0,
+                min=0,
+                max=360)
             private$..yAxisRangeType <- jmvcore::OptionList$new(
                 "yAxisRangeType",
                 yAxisRangeType,
@@ -233,23 +288,109 @@ barOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 "xAxisLabelFontSize",
                 xAxisLabelFontSize,
                 default=12)
+            private$..xAxisLabelRotation <- jmvcore::OptionNumber$new(
+                "xAxisLabelRotation",
+                xAxisLabelRotation,
+                default=0,
+                min=0,
+                max=360)
             private$..xAxisLabelFontSizeRevLabels <- jmvcore::OptionBool$new(
                 "xAxisLabelFontSizeRevLabels",
                 xAxisLabelFontSizeRevLabels,
                 default=FALSE)
+            private$..legendTitle <- jmvcore::OptionString$new(
+                "legendTitle",
+                legendTitle,
+                default="")
+            private$..legendTitleFontSize <- jmvcore::OptionNumber$new(
+                "legendTitleFontSize",
+                legendTitleFontSize,
+                default=16)
+            private$..legendLabelFontSize <- jmvcore::OptionNumber$new(
+                "legendLabelFontSize",
+                legendLabelFontSize,
+                default=16)
+            private$..legendKeyWidth <- jmvcore::OptionNumber$new(
+                "legendKeyWidth",
+                legendKeyWidth,
+                default=0.6,
+                min=0)
+            private$..legendKeyHeight <- jmvcore::OptionNumber$new(
+                "legendKeyHeight",
+                legendKeyHeight,
+                default=0.6,
+                min=0)
+            private$..legenPositionType <- jmvcore::OptionList$new(
+                "legenPositionType",
+                legenPositionType,
+                options=list(
+                    "outside",
+                    "inside",
+                    "hide"),
+                default="outside")
+            private$..legendPosition <- jmvcore::OptionList$new(
+                "legendPosition",
+                legendPosition,
+                options=list(
+                    "top",
+                    "right",
+                    "bottom",
+                    "left"),
+                default="right")
+            private$..legendJustification <- jmvcore::OptionList$new(
+                "legendJustification",
+                legendJustification,
+                options=list(
+                    "center",
+                    "top",
+                    "right",
+                    "bottom",
+                    "left"),
+                default="center")
+            private$..legendPositionX <- jmvcore::OptionNumber$new(
+                "legendPositionX",
+                legendPositionX,
+                default=0.8,
+                min=0,
+                max=1)
+            private$..legendPositionY <- jmvcore::OptionNumber$new(
+                "legendPositionY",
+                legendPositionY,
+                default=0.5,
+                min=0,
+                max=1)
+            private$..legendDirection <- jmvcore::OptionList$new(
+                "legendDirection",
+                legendDirection,
+                options=list(
+                    "horizontal",
+                    "vertical"),
+                default="vertical")
+            private$..groupBarType <- jmvcore::OptionList$new(
+                "groupBarType",
+                groupBarType,
+                options=list(
+                    "grouped",
+                    "stacked"),
+                default="grouped")
 
             self$.addOption(private$..mode)
             self$.addOption(private$..catvar)
+            self$.addOption(private$..catgroup)
             self$.addOption(private$..convar)
+            self$.addOption(private$..congroup1)
+            self$.addOption(private$..congroup2)
             self$.addOption(private$..counts)
-            self$.addOption(private$..congroup)
             self$.addOption(private$..countsLabels)
+            self$.addOption(private$..countsgroup)
             self$.addOption(private$..flipAxes)
             self$.addOption(private$..barWidth)
             self$.addOption(private$..width)
             self$.addOption(private$..height)
             self$.addOption(private$..errorBars)
             self$.addOption(private$..ciWidth)
+            self$.addOption(private$..errorBarWidth)
+            self$.addOption(private$..errorBarSize)
             self$.addOption(private$..title)
             self$.addOption(private$..titleAlign)
             self$.addOption(private$..titleFontSize)
@@ -267,25 +408,44 @@ barOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             self$.addOption(private$..yLabelFontSize)
             self$.addOption(private$..titleType)
             self$.addOption(private$..yAxisLabelFontSize)
+            self$.addOption(private$..yAxisLabelRotation)
             self$.addOption(private$..yAxisRangeType)
             self$.addOption(private$..yAxisRangeMin)
             self$.addOption(private$..yAxisRangeMax)
             self$.addOption(private$..xAxisLabelFontSize)
+            self$.addOption(private$..xAxisLabelRotation)
             self$.addOption(private$..xAxisLabelFontSizeRevLabels)
+            self$.addOption(private$..legendTitle)
+            self$.addOption(private$..legendTitleFontSize)
+            self$.addOption(private$..legendLabelFontSize)
+            self$.addOption(private$..legendKeyWidth)
+            self$.addOption(private$..legendKeyHeight)
+            self$.addOption(private$..legenPositionType)
+            self$.addOption(private$..legendPosition)
+            self$.addOption(private$..legendJustification)
+            self$.addOption(private$..legendPositionX)
+            self$.addOption(private$..legendPositionY)
+            self$.addOption(private$..legendDirection)
+            self$.addOption(private$..groupBarType)
         }),
     active = list(
         mode = function() private$..mode$value,
         catvar = function() private$..catvar$value,
+        catgroup = function() private$..catgroup$value,
         convar = function() private$..convar$value,
+        congroup1 = function() private$..congroup1$value,
+        congroup2 = function() private$..congroup2$value,
         counts = function() private$..counts$value,
-        congroup = function() private$..congroup$value,
         countsLabels = function() private$..countsLabels$value,
+        countsgroup = function() private$..countsgroup$value,
         flipAxes = function() private$..flipAxes$value,
         barWidth = function() private$..barWidth$value,
         width = function() private$..width$value,
         height = function() private$..height$value,
         errorBars = function() private$..errorBars$value,
         ciWidth = function() private$..ciWidth$value,
+        errorBarWidth = function() private$..errorBarWidth$value,
+        errorBarSize = function() private$..errorBarSize$value,
         title = function() private$..title$value,
         titleAlign = function() private$..titleAlign$value,
         titleFontSize = function() private$..titleFontSize$value,
@@ -303,24 +463,43 @@ barOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
         yLabelFontSize = function() private$..yLabelFontSize$value,
         titleType = function() private$..titleType$value,
         yAxisLabelFontSize = function() private$..yAxisLabelFontSize$value,
+        yAxisLabelRotation = function() private$..yAxisLabelRotation$value,
         yAxisRangeType = function() private$..yAxisRangeType$value,
         yAxisRangeMin = function() private$..yAxisRangeMin$value,
         yAxisRangeMax = function() private$..yAxisRangeMax$value,
         xAxisLabelFontSize = function() private$..xAxisLabelFontSize$value,
-        xAxisLabelFontSizeRevLabels = function() private$..xAxisLabelFontSizeRevLabels$value),
+        xAxisLabelRotation = function() private$..xAxisLabelRotation$value,
+        xAxisLabelFontSizeRevLabels = function() private$..xAxisLabelFontSizeRevLabels$value,
+        legendTitle = function() private$..legendTitle$value,
+        legendTitleFontSize = function() private$..legendTitleFontSize$value,
+        legendLabelFontSize = function() private$..legendLabelFontSize$value,
+        legendKeyWidth = function() private$..legendKeyWidth$value,
+        legendKeyHeight = function() private$..legendKeyHeight$value,
+        legenPositionType = function() private$..legenPositionType$value,
+        legendPosition = function() private$..legendPosition$value,
+        legendJustification = function() private$..legendJustification$value,
+        legendPositionX = function() private$..legendPositionX$value,
+        legendPositionY = function() private$..legendPositionY$value,
+        legendDirection = function() private$..legendDirection$value,
+        groupBarType = function() private$..groupBarType$value),
     private = list(
         ..mode = NA,
         ..catvar = NA,
+        ..catgroup = NA,
         ..convar = NA,
+        ..congroup1 = NA,
+        ..congroup2 = NA,
         ..counts = NA,
-        ..congroup = NA,
         ..countsLabels = NA,
+        ..countsgroup = NA,
         ..flipAxes = NA,
         ..barWidth = NA,
         ..width = NA,
         ..height = NA,
         ..errorBars = NA,
         ..ciWidth = NA,
+        ..errorBarWidth = NA,
+        ..errorBarSize = NA,
         ..title = NA,
         ..titleAlign = NA,
         ..titleFontSize = NA,
@@ -338,11 +517,25 @@ barOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
         ..yLabelFontSize = NA,
         ..titleType = NA,
         ..yAxisLabelFontSize = NA,
+        ..yAxisLabelRotation = NA,
         ..yAxisRangeType = NA,
         ..yAxisRangeMin = NA,
         ..yAxisRangeMax = NA,
         ..xAxisLabelFontSize = NA,
-        ..xAxisLabelFontSizeRevLabels = NA)
+        ..xAxisLabelRotation = NA,
+        ..xAxisLabelFontSizeRevLabels = NA,
+        ..legendTitle = NA,
+        ..legendTitleFontSize = NA,
+        ..legendLabelFontSize = NA,
+        ..legendKeyWidth = NA,
+        ..legendKeyHeight = NA,
+        ..legenPositionType = NA,
+        ..legendPosition = NA,
+        ..legendJustification = NA,
+        ..legendPositionX = NA,
+        ..legendPositionY = NA,
+        ..legendDirection = NA,
+        ..groupBarType = NA)
 )
 
 barResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
@@ -392,16 +585,21 @@ barBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 #' @param mode .
 #' @param data .
 #' @param catvar .
+#' @param catgroup .
 #' @param convar .
+#' @param congroup1 .
+#' @param congroup2 .
 #' @param counts .
-#' @param congroup .
 #' @param countsLabels .
+#' @param countsgroup .
 #' @param flipAxes .
 #' @param barWidth .
 #' @param width .
 #' @param height .
 #' @param errorBars .
 #' @param ciWidth .
+#' @param errorBarWidth .
+#' @param errorBarSize .
 #' @param title .
 #' @param titleAlign .
 #' @param titleFontSize .
@@ -419,11 +617,25 @@ barBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 #' @param yLabelFontSize .
 #' @param titleType .
 #' @param yAxisLabelFontSize .
+#' @param yAxisLabelRotation .
 #' @param yAxisRangeType .
 #' @param yAxisRangeMin .
 #' @param yAxisRangeMax .
 #' @param xAxisLabelFontSize .
+#' @param xAxisLabelRotation .
 #' @param xAxisLabelFontSizeRevLabels .
+#' @param legendTitle .
+#' @param legendTitleFontSize .
+#' @param legendLabelFontSize .
+#' @param legendKeyWidth .
+#' @param legendKeyHeight .
+#' @param legenPositionType .
+#' @param legendPosition .
+#' @param legendJustification .
+#' @param legendPositionX .
+#' @param legendPositionY .
+#' @param legendDirection .
+#' @param groupBarType .
 #' @return A results object containing:
 #' \tabular{llllll}{
 #'   \code{results$plot} \tab \tab \tab \tab \tab an image containing the bar plot \cr
@@ -434,16 +646,21 @@ bar <- function(
     mode = "categorical",
     data,
     catvar,
+    catgroup,
     convar,
+    congroup1,
+    congroup2,
     counts,
-    congroup,
     countsLabels,
+    countsgroup,
     flipAxes = FALSE,
     barWidth = 0.9,
     width = 500,
     height = 500,
     errorBars = "none",
-    ciWidth = 0.95,
+    ciWidth = 95,
+    errorBarWidth = 0.1,
+    errorBarSize = 0.5,
     title = "",
     titleAlign = "center",
     titleFontSize = 16,
@@ -461,46 +678,74 @@ bar <- function(
     yLabelFontSize = 16,
     titleType = "title",
     yAxisLabelFontSize = 12,
+    yAxisLabelRotation = 0,
     yAxisRangeType,
     yAxisRangeMin,
     yAxisRangeMax,
     xAxisLabelFontSize = 12,
-    xAxisLabelFontSizeRevLabels = FALSE) {
+    xAxisLabelRotation = 0,
+    xAxisLabelFontSizeRevLabels = FALSE,
+    legendTitle = "",
+    legendTitleFontSize = 16,
+    legendLabelFontSize = 16,
+    legendKeyWidth = 0.6,
+    legendKeyHeight = 0.6,
+    legenPositionType = "outside",
+    legendPosition = "right",
+    legendJustification = "center",
+    legendPositionX = 0.8,
+    legendPositionY = 0.5,
+    legendDirection = "vertical",
+    groupBarType = "grouped") {
 
     if ( ! requireNamespace("jmvcore", quietly=TRUE))
         stop("bar requires jmvcore to be installed (restart may be required)")
 
     if ( ! missing(catvar)) catvar <- jmvcore::resolveQuo(jmvcore::enquo(catvar))
+    if ( ! missing(catgroup)) catgroup <- jmvcore::resolveQuo(jmvcore::enquo(catgroup))
     if ( ! missing(convar)) convar <- jmvcore::resolveQuo(jmvcore::enquo(convar))
+    if ( ! missing(congroup1)) congroup1 <- jmvcore::resolveQuo(jmvcore::enquo(congroup1))
+    if ( ! missing(congroup2)) congroup2 <- jmvcore::resolveQuo(jmvcore::enquo(congroup2))
     if ( ! missing(counts)) counts <- jmvcore::resolveQuo(jmvcore::enquo(counts))
-    if ( ! missing(congroup)) congroup <- jmvcore::resolveQuo(jmvcore::enquo(congroup))
     if ( ! missing(countsLabels)) countsLabels <- jmvcore::resolveQuo(jmvcore::enquo(countsLabels))
+    if ( ! missing(countsgroup)) countsgroup <- jmvcore::resolveQuo(jmvcore::enquo(countsgroup))
     if (missing(data))
         data <- jmvcore::marshalData(
             parent.frame(),
             `if`( ! missing(catvar), catvar, NULL),
+            `if`( ! missing(catgroup), catgroup, NULL),
             `if`( ! missing(convar), convar, NULL),
+            `if`( ! missing(congroup1), congroup1, NULL),
+            `if`( ! missing(congroup2), congroup2, NULL),
             `if`( ! missing(counts), counts, NULL),
-            `if`( ! missing(congroup), congroup, NULL),
-            `if`( ! missing(countsLabels), countsLabels, NULL))
+            `if`( ! missing(countsLabels), countsLabels, NULL),
+            `if`( ! missing(countsgroup), countsgroup, NULL))
 
     for (v in catvar) if (v %in% names(data)) data[[v]] <- as.factor(data[[v]])
-    for (v in congroup) if (v %in% names(data)) data[[v]] <- as.factor(data[[v]])
+    for (v in catgroup) if (v %in% names(data)) data[[v]] <- as.factor(data[[v]])
+    for (v in congroup1) if (v %in% names(data)) data[[v]] <- as.factor(data[[v]])
+    for (v in congroup2) if (v %in% names(data)) data[[v]] <- as.factor(data[[v]])
     for (v in countsLabels) if (v %in% names(data)) data[[v]] <- as.factor(data[[v]])
+    for (v in countsgroup) if (v %in% names(data)) data[[v]] <- as.factor(data[[v]])
 
     options <- barOptions$new(
         mode = mode,
         catvar = catvar,
+        catgroup = catgroup,
         convar = convar,
+        congroup1 = congroup1,
+        congroup2 = congroup2,
         counts = counts,
-        congroup = congroup,
         countsLabels = countsLabels,
+        countsgroup = countsgroup,
         flipAxes = flipAxes,
         barWidth = barWidth,
         width = width,
         height = height,
         errorBars = errorBars,
         ciWidth = ciWidth,
+        errorBarWidth = errorBarWidth,
+        errorBarSize = errorBarSize,
         title = title,
         titleAlign = titleAlign,
         titleFontSize = titleFontSize,
@@ -518,11 +763,25 @@ bar <- function(
         yLabelFontSize = yLabelFontSize,
         titleType = titleType,
         yAxisLabelFontSize = yAxisLabelFontSize,
+        yAxisLabelRotation = yAxisLabelRotation,
         yAxisRangeType = yAxisRangeType,
         yAxisRangeMin = yAxisRangeMin,
         yAxisRangeMax = yAxisRangeMax,
         xAxisLabelFontSize = xAxisLabelFontSize,
-        xAxisLabelFontSizeRevLabels = xAxisLabelFontSizeRevLabels)
+        xAxisLabelRotation = xAxisLabelRotation,
+        xAxisLabelFontSizeRevLabels = xAxisLabelFontSizeRevLabels,
+        legendTitle = legendTitle,
+        legendTitleFontSize = legendTitleFontSize,
+        legendLabelFontSize = legendLabelFontSize,
+        legendKeyWidth = legendKeyWidth,
+        legendKeyHeight = legendKeyHeight,
+        legenPositionType = legenPositionType,
+        legendPosition = legendPosition,
+        legendJustification = legendJustification,
+        legendPositionX = legendPositionX,
+        legendPositionY = legendPositionY,
+        legendDirection = legendDirection,
+        groupBarType = groupBarType)
 
     analysis <- barClass$new(
         options = options,
