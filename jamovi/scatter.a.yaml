@@ -25,6 +25,14 @@ options:
       permitted:
         - numeric
 
+    - name: group
+      title: Grouping Variable
+      type: Variable
+      suggested:
+        - nominal
+      permitted:
+        - factor
+
     - name: flipAxes
       title: Flip axes
       type: Bool
@@ -34,6 +42,26 @@ options:
       title: Point size
       type: Number
       default: 2
+
+    - name: line
+      title: Show line
+      type: Bool
+      default: false
+
+    - name: lineMethod
+      title: Method
+      type: List
+      options:
+        - name: lm
+          title: Linear
+        - name: loess
+          title: Smooth
+      default: lm
+
+    - name: lineSE
+      title: Standard error
+      type: Bool
+      default: true
 
     - name: width
       title: Width
@@ -176,6 +204,13 @@ options:
       type: Number
       default: 12
 
+    - name: yAxisLabelRotation
+      title: Label rotation
+      type: Number
+      default: 0
+      min: 0
+      max: 360
+
     - name: yAxisRangeType
       title: Y-Axis Range
       type: List
@@ -198,6 +233,13 @@ options:
       type: Number
       default: 12
 
+    - name: xAxisLabelRotation
+      title: Label rotation
+      type: Number
+      default: 0
+      min: 0
+      max: 360
+
     - name: xAxisRangeType
       title: X-Axis Range
       type: List
@@ -214,4 +256,97 @@ options:
     - name: xAxisRangeMax
       title: Max
       type: Number
+
+    - name: legendTitle
+      title: Title text
+      type: String
+      default: ''
+
+    - name: legendTitleFontSize
+      title: Title font size
+      type: Number
+      default: 16
+
+    - name: legendLabelFontSize
+      title: Label font size
+      type: Number
+      default: 16
+
+    - name: legendKeyWidth
+      title: Key width
+      type: Number
+      default: 0.6
+      min: 0
+
+    - name: legendKeyHeight
+      title: Key height
+      type: Number
+      default: 0.6
+      min: 0
+
+    - name: legenPositionType
+      title: ""
+      type: List
+      options:
+        - name: outside
+          title: Outside
+        - name: inside
+          title: Inside
+        - name: hide
+          title: Hide
+      default: outside
+
+    - name: legendPosition
+      title: Position
+      type: List
+      options:
+        - name: top
+          title: Top
+        - name: right
+          title: Right
+        - name: bottom
+          title: Bottom
+        - name: left
+          title: Left
+      default: right
+
+    - name: legendJustification
+      title: Justification
+      type: List
+      options:
+        - name: center
+          title: Center
+        - name: top
+          title: Top
+        - name: right
+          title: Right
+        - name: bottom
+          title: Bottom
+        - name: left
+          title: Left
+      default: center
+
+    - name: legendPositionX
+      title: X-position
+      type: Number
+      default: 0.8
+      min: 0
+      max: 1
+
+    - name: legendPositionY
+      title: Y-position
+      type: Number
+      default: 0.5
+      min: 0
+      max: 1
+
+    - name: legendDirection
+      title: Direction
+      type: List
+      options:
+        - name: horizontal
+          title: Horizontal
+        - name: vertical
+          title: Vertical
+      default: vertical
 ...

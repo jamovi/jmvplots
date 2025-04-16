@@ -8,8 +8,12 @@ scatterOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
         initialize = function(
             x = NULL,
             y = NULL,
+            group = NULL,
             flipAxes = FALSE,
             pointSize = 2,
+            line = FALSE,
+            lineMethod = "lm",
+            lineSE = TRUE,
             width = 500,
             height = 500,
             title = "",
@@ -29,13 +33,26 @@ scatterOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             yLabelFontSize = 16,
             titleType = "title",
             yAxisLabelFontSize = 12,
+            yAxisLabelRotation = 0,
             yAxisRangeType = NULL,
             yAxisRangeMin = NULL,
             yAxisRangeMax = NULL,
             xAxisLabelFontSize = 12,
+            xAxisLabelRotation = 0,
             xAxisRangeType = NULL,
             xAxisRangeMin = NULL,
-            xAxisRangeMax = NULL, ...) {
+            xAxisRangeMax = NULL,
+            legendTitle = "",
+            legendTitleFontSize = 16,
+            legendLabelFontSize = 16,
+            legendKeyWidth = 0.6,
+            legendKeyHeight = 0.6,
+            legenPositionType = "outside",
+            legendPosition = "right",
+            legendJustification = "center",
+            legendPositionX = 0.8,
+            legendPositionY = 0.5,
+            legendDirection = "vertical", ...) {
 
             super$initialize(
                 package="jmvplot",
@@ -57,6 +74,13 @@ scatterOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                     "continuous"),
                 permitted=list(
                     "numeric"))
+            private$..group <- jmvcore::OptionVariable$new(
+                "group",
+                group,
+                suggested=list(
+                    "nominal"),
+                permitted=list(
+                    "factor"))
             private$..flipAxes <- jmvcore::OptionBool$new(
                 "flipAxes",
                 flipAxes,
@@ -65,6 +89,21 @@ scatterOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 "pointSize",
                 pointSize,
                 default=2)
+            private$..line <- jmvcore::OptionBool$new(
+                "line",
+                line,
+                default=FALSE)
+            private$..lineMethod <- jmvcore::OptionList$new(
+                "lineMethod",
+                lineMethod,
+                options=list(
+                    "lm",
+                    "loess"),
+                default="lm")
+            private$..lineSE <- jmvcore::OptionBool$new(
+                "lineSE",
+                lineSE,
+                default=TRUE)
             private$..width <- jmvcore::OptionNumber$new(
                 "width",
                 width,
@@ -167,6 +206,12 @@ scatterOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 "yAxisLabelFontSize",
                 yAxisLabelFontSize,
                 default=12)
+            private$..yAxisLabelRotation <- jmvcore::OptionNumber$new(
+                "yAxisLabelRotation",
+                yAxisLabelRotation,
+                default=0,
+                min=0,
+                max=360)
             private$..yAxisRangeType <- jmvcore::OptionList$new(
                 "yAxisRangeType",
                 yAxisRangeType,
@@ -183,6 +228,12 @@ scatterOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 "xAxisLabelFontSize",
                 xAxisLabelFontSize,
                 default=12)
+            private$..xAxisLabelRotation <- jmvcore::OptionNumber$new(
+                "xAxisLabelRotation",
+                xAxisLabelRotation,
+                default=0,
+                min=0,
+                max=360)
             private$..xAxisRangeType <- jmvcore::OptionList$new(
                 "xAxisRangeType",
                 xAxisRangeType,
@@ -195,11 +246,83 @@ scatterOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             private$..xAxisRangeMax <- jmvcore::OptionNumber$new(
                 "xAxisRangeMax",
                 xAxisRangeMax)
+            private$..legendTitle <- jmvcore::OptionString$new(
+                "legendTitle",
+                legendTitle,
+                default="")
+            private$..legendTitleFontSize <- jmvcore::OptionNumber$new(
+                "legendTitleFontSize",
+                legendTitleFontSize,
+                default=16)
+            private$..legendLabelFontSize <- jmvcore::OptionNumber$new(
+                "legendLabelFontSize",
+                legendLabelFontSize,
+                default=16)
+            private$..legendKeyWidth <- jmvcore::OptionNumber$new(
+                "legendKeyWidth",
+                legendKeyWidth,
+                default=0.6,
+                min=0)
+            private$..legendKeyHeight <- jmvcore::OptionNumber$new(
+                "legendKeyHeight",
+                legendKeyHeight,
+                default=0.6,
+                min=0)
+            private$..legenPositionType <- jmvcore::OptionList$new(
+                "legenPositionType",
+                legenPositionType,
+                options=list(
+                    "outside",
+                    "inside",
+                    "hide"),
+                default="outside")
+            private$..legendPosition <- jmvcore::OptionList$new(
+                "legendPosition",
+                legendPosition,
+                options=list(
+                    "top",
+                    "right",
+                    "bottom",
+                    "left"),
+                default="right")
+            private$..legendJustification <- jmvcore::OptionList$new(
+                "legendJustification",
+                legendJustification,
+                options=list(
+                    "center",
+                    "top",
+                    "right",
+                    "bottom",
+                    "left"),
+                default="center")
+            private$..legendPositionX <- jmvcore::OptionNumber$new(
+                "legendPositionX",
+                legendPositionX,
+                default=0.8,
+                min=0,
+                max=1)
+            private$..legendPositionY <- jmvcore::OptionNumber$new(
+                "legendPositionY",
+                legendPositionY,
+                default=0.5,
+                min=0,
+                max=1)
+            private$..legendDirection <- jmvcore::OptionList$new(
+                "legendDirection",
+                legendDirection,
+                options=list(
+                    "horizontal",
+                    "vertical"),
+                default="vertical")
 
             self$.addOption(private$..x)
             self$.addOption(private$..y)
+            self$.addOption(private$..group)
             self$.addOption(private$..flipAxes)
             self$.addOption(private$..pointSize)
+            self$.addOption(private$..line)
+            self$.addOption(private$..lineMethod)
+            self$.addOption(private$..lineSE)
             self$.addOption(private$..width)
             self$.addOption(private$..height)
             self$.addOption(private$..title)
@@ -219,19 +342,36 @@ scatterOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             self$.addOption(private$..yLabelFontSize)
             self$.addOption(private$..titleType)
             self$.addOption(private$..yAxisLabelFontSize)
+            self$.addOption(private$..yAxisLabelRotation)
             self$.addOption(private$..yAxisRangeType)
             self$.addOption(private$..yAxisRangeMin)
             self$.addOption(private$..yAxisRangeMax)
             self$.addOption(private$..xAxisLabelFontSize)
+            self$.addOption(private$..xAxisLabelRotation)
             self$.addOption(private$..xAxisRangeType)
             self$.addOption(private$..xAxisRangeMin)
             self$.addOption(private$..xAxisRangeMax)
+            self$.addOption(private$..legendTitle)
+            self$.addOption(private$..legendTitleFontSize)
+            self$.addOption(private$..legendLabelFontSize)
+            self$.addOption(private$..legendKeyWidth)
+            self$.addOption(private$..legendKeyHeight)
+            self$.addOption(private$..legenPositionType)
+            self$.addOption(private$..legendPosition)
+            self$.addOption(private$..legendJustification)
+            self$.addOption(private$..legendPositionX)
+            self$.addOption(private$..legendPositionY)
+            self$.addOption(private$..legendDirection)
         }),
     active = list(
         x = function() private$..x$value,
         y = function() private$..y$value,
+        group = function() private$..group$value,
         flipAxes = function() private$..flipAxes$value,
         pointSize = function() private$..pointSize$value,
+        line = function() private$..line$value,
+        lineMethod = function() private$..lineMethod$value,
+        lineSE = function() private$..lineSE$value,
         width = function() private$..width$value,
         height = function() private$..height$value,
         title = function() private$..title$value,
@@ -251,18 +391,35 @@ scatterOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
         yLabelFontSize = function() private$..yLabelFontSize$value,
         titleType = function() private$..titleType$value,
         yAxisLabelFontSize = function() private$..yAxisLabelFontSize$value,
+        yAxisLabelRotation = function() private$..yAxisLabelRotation$value,
         yAxisRangeType = function() private$..yAxisRangeType$value,
         yAxisRangeMin = function() private$..yAxisRangeMin$value,
         yAxisRangeMax = function() private$..yAxisRangeMax$value,
         xAxisLabelFontSize = function() private$..xAxisLabelFontSize$value,
+        xAxisLabelRotation = function() private$..xAxisLabelRotation$value,
         xAxisRangeType = function() private$..xAxisRangeType$value,
         xAxisRangeMin = function() private$..xAxisRangeMin$value,
-        xAxisRangeMax = function() private$..xAxisRangeMax$value),
+        xAxisRangeMax = function() private$..xAxisRangeMax$value,
+        legendTitle = function() private$..legendTitle$value,
+        legendTitleFontSize = function() private$..legendTitleFontSize$value,
+        legendLabelFontSize = function() private$..legendLabelFontSize$value,
+        legendKeyWidth = function() private$..legendKeyWidth$value,
+        legendKeyHeight = function() private$..legendKeyHeight$value,
+        legenPositionType = function() private$..legenPositionType$value,
+        legendPosition = function() private$..legendPosition$value,
+        legendJustification = function() private$..legendJustification$value,
+        legendPositionX = function() private$..legendPositionX$value,
+        legendPositionY = function() private$..legendPositionY$value,
+        legendDirection = function() private$..legendDirection$value),
     private = list(
         ..x = NA,
         ..y = NA,
+        ..group = NA,
         ..flipAxes = NA,
         ..pointSize = NA,
+        ..line = NA,
+        ..lineMethod = NA,
+        ..lineSE = NA,
         ..width = NA,
         ..height = NA,
         ..title = NA,
@@ -282,13 +439,26 @@ scatterOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
         ..yLabelFontSize = NA,
         ..titleType = NA,
         ..yAxisLabelFontSize = NA,
+        ..yAxisLabelRotation = NA,
         ..yAxisRangeType = NA,
         ..yAxisRangeMin = NA,
         ..yAxisRangeMax = NA,
         ..xAxisLabelFontSize = NA,
+        ..xAxisLabelRotation = NA,
         ..xAxisRangeType = NA,
         ..xAxisRangeMin = NA,
-        ..xAxisRangeMax = NA)
+        ..xAxisRangeMax = NA,
+        ..legendTitle = NA,
+        ..legendTitleFontSize = NA,
+        ..legendLabelFontSize = NA,
+        ..legendKeyWidth = NA,
+        ..legendKeyHeight = NA,
+        ..legenPositionType = NA,
+        ..legendPosition = NA,
+        ..legendJustification = NA,
+        ..legendPositionX = NA,
+        ..legendPositionY = NA,
+        ..legendDirection = NA)
 )
 
 scatterResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
@@ -338,8 +508,12 @@ scatterBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 #' @param data .
 #' @param x .
 #' @param y .
+#' @param group .
 #' @param flipAxes .
 #' @param pointSize .
+#' @param line .
+#' @param lineMethod .
+#' @param lineSE .
 #' @param width .
 #' @param height .
 #' @param title .
@@ -359,13 +533,26 @@ scatterBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 #' @param yLabelFontSize .
 #' @param titleType .
 #' @param yAxisLabelFontSize .
+#' @param yAxisLabelRotation .
 #' @param yAxisRangeType .
 #' @param yAxisRangeMin .
 #' @param yAxisRangeMax .
 #' @param xAxisLabelFontSize .
+#' @param xAxisLabelRotation .
 #' @param xAxisRangeType .
 #' @param xAxisRangeMin .
 #' @param xAxisRangeMax .
+#' @param legendTitle .
+#' @param legendTitleFontSize .
+#' @param legendLabelFontSize .
+#' @param legendKeyWidth .
+#' @param legendKeyHeight .
+#' @param legenPositionType .
+#' @param legendPosition .
+#' @param legendJustification .
+#' @param legendPositionX .
+#' @param legendPositionY .
+#' @param legendDirection .
 #' @return A results object containing:
 #' \tabular{llllll}{
 #'   \code{results$plot} \tab \tab \tab \tab \tab an image containing the scatter plot \cr
@@ -376,8 +563,12 @@ scatter <- function(
     data,
     x,
     y,
+    group,
     flipAxes = FALSE,
     pointSize = 2,
+    line = FALSE,
+    lineMethod = "lm",
+    lineSE = TRUE,
     width = 500,
     height = 500,
     title = "",
@@ -397,31 +588,51 @@ scatter <- function(
     yLabelFontSize = 16,
     titleType = "title",
     yAxisLabelFontSize = 12,
+    yAxisLabelRotation = 0,
     yAxisRangeType,
     yAxisRangeMin,
     yAxisRangeMax,
     xAxisLabelFontSize = 12,
+    xAxisLabelRotation = 0,
     xAxisRangeType,
     xAxisRangeMin,
-    xAxisRangeMax) {
+    xAxisRangeMax,
+    legendTitle = "",
+    legendTitleFontSize = 16,
+    legendLabelFontSize = 16,
+    legendKeyWidth = 0.6,
+    legendKeyHeight = 0.6,
+    legenPositionType = "outside",
+    legendPosition = "right",
+    legendJustification = "center",
+    legendPositionX = 0.8,
+    legendPositionY = 0.5,
+    legendDirection = "vertical") {
 
     if ( ! requireNamespace("jmvcore", quietly=TRUE))
         stop("scatter requires jmvcore to be installed (restart may be required)")
 
     if ( ! missing(x)) x <- jmvcore::resolveQuo(jmvcore::enquo(x))
     if ( ! missing(y)) y <- jmvcore::resolveQuo(jmvcore::enquo(y))
+    if ( ! missing(group)) group <- jmvcore::resolveQuo(jmvcore::enquo(group))
     if (missing(data))
         data <- jmvcore::marshalData(
             parent.frame(),
             `if`( ! missing(x), x, NULL),
-            `if`( ! missing(y), y, NULL))
+            `if`( ! missing(y), y, NULL),
+            `if`( ! missing(group), group, NULL))
 
+    for (v in group) if (v %in% names(data)) data[[v]] <- as.factor(data[[v]])
 
     options <- scatterOptions$new(
         x = x,
         y = y,
+        group = group,
         flipAxes = flipAxes,
         pointSize = pointSize,
+        line = line,
+        lineMethod = lineMethod,
+        lineSE = lineSE,
         width = width,
         height = height,
         title = title,
@@ -441,13 +652,26 @@ scatter <- function(
         yLabelFontSize = yLabelFontSize,
         titleType = titleType,
         yAxisLabelFontSize = yAxisLabelFontSize,
+        yAxisLabelRotation = yAxisLabelRotation,
         yAxisRangeType = yAxisRangeType,
         yAxisRangeMin = yAxisRangeMin,
         yAxisRangeMax = yAxisRangeMax,
         xAxisLabelFontSize = xAxisLabelFontSize,
+        xAxisLabelRotation = xAxisLabelRotation,
         xAxisRangeType = xAxisRangeType,
         xAxisRangeMin = xAxisRangeMin,
-        xAxisRangeMax = xAxisRangeMax)
+        xAxisRangeMax = xAxisRangeMax,
+        legendTitle = legendTitle,
+        legendTitleFontSize = legendTitleFontSize,
+        legendLabelFontSize = legendLabelFontSize,
+        legendKeyWidth = legendKeyWidth,
+        legendKeyHeight = legendKeyHeight,
+        legenPositionType = legenPositionType,
+        legendPosition = legendPosition,
+        legendJustification = legendJustification,
+        legendPositionX = legendPositionX,
+        legendPositionY = legendPositionY,
+        legendDirection = legendDirection)
 
     analysis <- scatterClass$new(
         options = options,

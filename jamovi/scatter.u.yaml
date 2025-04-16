@@ -22,8 +22,15 @@ children:
             name: 'y'
             maxItemCount: 1
             isTarget: true
+      - type: TargetLayoutBox
+        label: Grouping Variable
+        children:
+          - type: VariablesListBox
+            name: group
+            maxItemCount: 1
+            isTarget: true
   - type: CollapseBox
-    label: Options
+    label: General Options
     collapsed: true
     stretchFactor: 1
     children:
@@ -38,6 +45,30 @@ children:
             stretchFactor: 1
             children:
               - type: Label
+                label: Scatter
+                children:
+                  - type: TextBox
+                    name: pointSize
+                    format: number
+              - type: Label
+                label: Regression Line
+                children:
+                  - type: CheckBox
+                    name: line
+                    children:
+                      - type: ComboBox
+                        name: lineMethod
+                        enable: (line)
+                      - type: CheckBox
+                        name: lineSE
+                        enable: (line)
+          - type: LayoutBox
+            cell:
+              column: 1
+              row: 0
+            stretchFactor: 1
+            children:
+              - type: Label
                 label: Plot Size
                 children:
                   - type: TextBox
@@ -46,20 +77,11 @@ children:
                   - type: TextBox
                     name: height
                     format: number
-          - type: LayoutBox
-            cell:
-              column: 1
-              row: 0
-            stretchFactor: 1
-            children:
               - type: Label
-                label: Other
+                label: Plot Orientation
                 children:
                   - type: CheckBox
                     name: flipAxes
-                  - type: TextBox
-                    name: pointSize
-                    format: number
   - type: CollapseBox
     label: Plot & Axis Titles
     collapsed: true
@@ -150,6 +172,10 @@ children:
                   - type: TextBox
                     name: xAxisLabelFontSize
                     format: number
+                  - type: TextBox
+                    name: xAxisLabelRotation
+                    suffix: "°"
+                    format: number
               - type: Label
                 label: Range
                 children:
@@ -182,6 +208,10 @@ children:
                   - type: TextBox
                     name: yAxisLabelFontSize
                     format: number
+                  - type: TextBox
+                    name: yAxisLabelRotation
+                    suffix: "°"
+                    format: number
               - type: Label
                 label: Range
                 children:
@@ -202,3 +232,74 @@ children:
                         name: yAxisRangeMax
                         format: number
                         enable: (yAxisRangeType:manual)
+  - type: CollapseBox
+    label: Legend
+    collapsed: true
+    stretchFactor: 1
+    children:
+      - type: LayoutBox
+        margin: large
+        stretchFactor: 1
+        children:
+          - type: LayoutBox
+            cell:
+              column: 0
+              row: 0
+            stretchFactor: 1
+            children:
+              - type: Label
+                label: Legend Title
+                children:
+                  - type: TextBox
+                    name: legendTitle
+                    format: string
+                    width: large
+                  - type: TextBox
+                    name: legendTitleFontSize
+                    format: number
+                  - type: TextBox
+                    name: legendLabelFontSize
+                    format: number
+              - type: Label
+                label: Legend Style
+                children:
+                  - type: TextBox
+                    name: legendKeyWidth
+                    format: number
+                  - type: TextBox
+                    name: legendKeyHeight
+                    format: number
+          - type: LayoutBox
+            cell:
+              column: 1
+              row: 0
+            stretchFactor: 1
+            children:
+              - type: Label
+                label: Legend Position
+                children:
+                  - type: ModeSelector
+                    name: legenPositionType
+                    stretchFactor: 1
+                    children:
+                      - type: Content
+                        name: outside
+                        children:
+                          - type: ComboBox
+                            name: legendPosition
+                          - type: ComboBox
+                            name: legendJustification
+                      - type: Content
+                        name: inside
+                        children:
+                          - type: TextBox
+                            name: legendPositionX
+                            format: number
+                          - type: TextBox
+                            name: legendPositionY
+                            format: number
+                          - type: ComboBox
+                            name: legendDirection
+                      - type: Content
+                        name: hide
+                        children: []
