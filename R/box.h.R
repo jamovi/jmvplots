@@ -7,9 +7,12 @@ boxOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
     public = list(
         initialize = function(
             var = NULL,
-            group = NULL,
+            group1 = NULL,
+            group2 = NULL,
             flipAxes = FALSE,
             notch = FALSE,
+            boxWidth = 0.5,
+            outliers = TRUE,
             width = 500,
             height = 500,
             title = "",
@@ -32,8 +35,21 @@ boxOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             yAxisRangeType = NULL,
             yAxisRangeMin = NULL,
             yAxisRangeMax = NULL,
+            yAxisLabelRotation = 0,
             xAxisLabelFontSize = 12,
-            xAxisLabelFontSizeRevLabels = FALSE, ...) {
+            xAxisLabelFontSizeRevLabels = FALSE,
+            xAxisLabelRotation = 0,
+            legendTitle = "",
+            legendTitleFontSize = 16,
+            legendLabelFontSize = 16,
+            legendKeyWidth = 0.6,
+            legendKeyHeight = 0.6,
+            legenPositionType = "outside",
+            legendPosition = "right",
+            legendJustification = "center",
+            legendPositionX = 0.8,
+            legendPositionY = 0.5,
+            legendDirection = "vertical", ...) {
 
             super$initialize(
                 package="jmvplot",
@@ -48,9 +64,16 @@ boxOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                     "continuous"),
                 permitted=list(
                     "numeric"))
-            private$..group <- jmvcore::OptionVariable$new(
-                "group",
-                group,
+            private$..group1 <- jmvcore::OptionVariable$new(
+                "group1",
+                group1,
+                suggested=list(
+                    "nominal"),
+                permitted=list(
+                    "factor"))
+            private$..group2 <- jmvcore::OptionVariable$new(
+                "group2",
+                group2,
                 suggested=list(
                     "nominal"),
                 permitted=list(
@@ -63,6 +86,16 @@ boxOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 "notch",
                 notch,
                 default=FALSE)
+            private$..boxWidth <- jmvcore::OptionNumber$new(
+                "boxWidth",
+                boxWidth,
+                default=0.5,
+                min=0,
+                max=1)
+            private$..outliers <- jmvcore::OptionBool$new(
+                "outliers",
+                outliers,
+                default=TRUE)
             private$..width <- jmvcore::OptionNumber$new(
                 "width",
                 width,
@@ -177,6 +210,12 @@ boxOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             private$..yAxisRangeMax <- jmvcore::OptionNumber$new(
                 "yAxisRangeMax",
                 yAxisRangeMax)
+            private$..yAxisLabelRotation <- jmvcore::OptionNumber$new(
+                "yAxisLabelRotation",
+                yAxisLabelRotation,
+                default=0,
+                min=0,
+                max=360)
             private$..xAxisLabelFontSize <- jmvcore::OptionNumber$new(
                 "xAxisLabelFontSize",
                 xAxisLabelFontSize,
@@ -185,11 +224,88 @@ boxOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 "xAxisLabelFontSizeRevLabels",
                 xAxisLabelFontSizeRevLabels,
                 default=FALSE)
+            private$..xAxisLabelRotation <- jmvcore::OptionNumber$new(
+                "xAxisLabelRotation",
+                xAxisLabelRotation,
+                default=0,
+                min=0,
+                max=360)
+            private$..legendTitle <- jmvcore::OptionString$new(
+                "legendTitle",
+                legendTitle,
+                default="")
+            private$..legendTitleFontSize <- jmvcore::OptionNumber$new(
+                "legendTitleFontSize",
+                legendTitleFontSize,
+                default=16)
+            private$..legendLabelFontSize <- jmvcore::OptionNumber$new(
+                "legendLabelFontSize",
+                legendLabelFontSize,
+                default=16)
+            private$..legendKeyWidth <- jmvcore::OptionNumber$new(
+                "legendKeyWidth",
+                legendKeyWidth,
+                default=0.6,
+                min=0)
+            private$..legendKeyHeight <- jmvcore::OptionNumber$new(
+                "legendKeyHeight",
+                legendKeyHeight,
+                default=0.6,
+                min=0)
+            private$..legenPositionType <- jmvcore::OptionList$new(
+                "legenPositionType",
+                legenPositionType,
+                options=list(
+                    "outside",
+                    "inside",
+                    "hide"),
+                default="outside")
+            private$..legendPosition <- jmvcore::OptionList$new(
+                "legendPosition",
+                legendPosition,
+                options=list(
+                    "top",
+                    "right",
+                    "bottom",
+                    "left"),
+                default="right")
+            private$..legendJustification <- jmvcore::OptionList$new(
+                "legendJustification",
+                legendJustification,
+                options=list(
+                    "center",
+                    "top",
+                    "right",
+                    "bottom",
+                    "left"),
+                default="center")
+            private$..legendPositionX <- jmvcore::OptionNumber$new(
+                "legendPositionX",
+                legendPositionX,
+                default=0.8,
+                min=0,
+                max=1)
+            private$..legendPositionY <- jmvcore::OptionNumber$new(
+                "legendPositionY",
+                legendPositionY,
+                default=0.5,
+                min=0,
+                max=1)
+            private$..legendDirection <- jmvcore::OptionList$new(
+                "legendDirection",
+                legendDirection,
+                options=list(
+                    "horizontal",
+                    "vertical"),
+                default="vertical")
 
             self$.addOption(private$..var)
-            self$.addOption(private$..group)
+            self$.addOption(private$..group1)
+            self$.addOption(private$..group2)
             self$.addOption(private$..flipAxes)
             self$.addOption(private$..notch)
+            self$.addOption(private$..boxWidth)
+            self$.addOption(private$..outliers)
             self$.addOption(private$..width)
             self$.addOption(private$..height)
             self$.addOption(private$..title)
@@ -212,14 +328,30 @@ boxOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             self$.addOption(private$..yAxisRangeType)
             self$.addOption(private$..yAxisRangeMin)
             self$.addOption(private$..yAxisRangeMax)
+            self$.addOption(private$..yAxisLabelRotation)
             self$.addOption(private$..xAxisLabelFontSize)
             self$.addOption(private$..xAxisLabelFontSizeRevLabels)
+            self$.addOption(private$..xAxisLabelRotation)
+            self$.addOption(private$..legendTitle)
+            self$.addOption(private$..legendTitleFontSize)
+            self$.addOption(private$..legendLabelFontSize)
+            self$.addOption(private$..legendKeyWidth)
+            self$.addOption(private$..legendKeyHeight)
+            self$.addOption(private$..legenPositionType)
+            self$.addOption(private$..legendPosition)
+            self$.addOption(private$..legendJustification)
+            self$.addOption(private$..legendPositionX)
+            self$.addOption(private$..legendPositionY)
+            self$.addOption(private$..legendDirection)
         }),
     active = list(
         var = function() private$..var$value,
-        group = function() private$..group$value,
+        group1 = function() private$..group1$value,
+        group2 = function() private$..group2$value,
         flipAxes = function() private$..flipAxes$value,
         notch = function() private$..notch$value,
+        boxWidth = function() private$..boxWidth$value,
+        outliers = function() private$..outliers$value,
         width = function() private$..width$value,
         height = function() private$..height$value,
         title = function() private$..title$value,
@@ -242,13 +374,29 @@ boxOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
         yAxisRangeType = function() private$..yAxisRangeType$value,
         yAxisRangeMin = function() private$..yAxisRangeMin$value,
         yAxisRangeMax = function() private$..yAxisRangeMax$value,
+        yAxisLabelRotation = function() private$..yAxisLabelRotation$value,
         xAxisLabelFontSize = function() private$..xAxisLabelFontSize$value,
-        xAxisLabelFontSizeRevLabels = function() private$..xAxisLabelFontSizeRevLabels$value),
+        xAxisLabelFontSizeRevLabels = function() private$..xAxisLabelFontSizeRevLabels$value,
+        xAxisLabelRotation = function() private$..xAxisLabelRotation$value,
+        legendTitle = function() private$..legendTitle$value,
+        legendTitleFontSize = function() private$..legendTitleFontSize$value,
+        legendLabelFontSize = function() private$..legendLabelFontSize$value,
+        legendKeyWidth = function() private$..legendKeyWidth$value,
+        legendKeyHeight = function() private$..legendKeyHeight$value,
+        legenPositionType = function() private$..legenPositionType$value,
+        legendPosition = function() private$..legendPosition$value,
+        legendJustification = function() private$..legendJustification$value,
+        legendPositionX = function() private$..legendPositionX$value,
+        legendPositionY = function() private$..legendPositionY$value,
+        legendDirection = function() private$..legendDirection$value),
     private = list(
         ..var = NA,
-        ..group = NA,
+        ..group1 = NA,
+        ..group2 = NA,
         ..flipAxes = NA,
         ..notch = NA,
+        ..boxWidth = NA,
+        ..outliers = NA,
         ..width = NA,
         ..height = NA,
         ..title = NA,
@@ -271,8 +419,21 @@ boxOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
         ..yAxisRangeType = NA,
         ..yAxisRangeMin = NA,
         ..yAxisRangeMax = NA,
+        ..yAxisLabelRotation = NA,
         ..xAxisLabelFontSize = NA,
-        ..xAxisLabelFontSizeRevLabels = NA)
+        ..xAxisLabelFontSizeRevLabels = NA,
+        ..xAxisLabelRotation = NA,
+        ..legendTitle = NA,
+        ..legendTitleFontSize = NA,
+        ..legendLabelFontSize = NA,
+        ..legendKeyWidth = NA,
+        ..legendKeyHeight = NA,
+        ..legenPositionType = NA,
+        ..legendPosition = NA,
+        ..legendJustification = NA,
+        ..legendPositionX = NA,
+        ..legendPositionY = NA,
+        ..legendDirection = NA)
 )
 
 boxResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
@@ -321,9 +482,12 @@ boxBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 #' 
 #' @param data .
 #' @param var .
-#' @param group .
+#' @param group1 .
+#' @param group2 .
 #' @param flipAxes .
 #' @param notch .
+#' @param boxWidth .
+#' @param outliers .
 #' @param width .
 #' @param height .
 #' @param title .
@@ -346,8 +510,21 @@ boxBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 #' @param yAxisRangeType .
 #' @param yAxisRangeMin .
 #' @param yAxisRangeMax .
+#' @param yAxisLabelRotation .
 #' @param xAxisLabelFontSize .
 #' @param xAxisLabelFontSizeRevLabels .
+#' @param xAxisLabelRotation .
+#' @param legendTitle .
+#' @param legendTitleFontSize .
+#' @param legendLabelFontSize .
+#' @param legendKeyWidth .
+#' @param legendKeyHeight .
+#' @param legenPositionType .
+#' @param legendPosition .
+#' @param legendJustification .
+#' @param legendPositionX .
+#' @param legendPositionY .
+#' @param legendDirection .
 #' @return A results object containing:
 #' \tabular{llllll}{
 #'   \code{results$plot} \tab \tab \tab \tab \tab an image containing the box plot \cr
@@ -357,9 +534,12 @@ boxBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 box <- function(
     data,
     var,
-    group,
+    group1,
+    group2,
     flipAxes = FALSE,
     notch = FALSE,
+    boxWidth = 0.5,
+    outliers = TRUE,
     width = 500,
     height = 500,
     title = "",
@@ -382,27 +562,46 @@ box <- function(
     yAxisRangeType,
     yAxisRangeMin,
     yAxisRangeMax,
+    yAxisLabelRotation = 0,
     xAxisLabelFontSize = 12,
-    xAxisLabelFontSizeRevLabels = FALSE) {
+    xAxisLabelFontSizeRevLabels = FALSE,
+    xAxisLabelRotation = 0,
+    legendTitle = "",
+    legendTitleFontSize = 16,
+    legendLabelFontSize = 16,
+    legendKeyWidth = 0.6,
+    legendKeyHeight = 0.6,
+    legenPositionType = "outside",
+    legendPosition = "right",
+    legendJustification = "center",
+    legendPositionX = 0.8,
+    legendPositionY = 0.5,
+    legendDirection = "vertical") {
 
     if ( ! requireNamespace("jmvcore", quietly=TRUE))
         stop("box requires jmvcore to be installed (restart may be required)")
 
     if ( ! missing(var)) var <- jmvcore::resolveQuo(jmvcore::enquo(var))
-    if ( ! missing(group)) group <- jmvcore::resolveQuo(jmvcore::enquo(group))
+    if ( ! missing(group1)) group1 <- jmvcore::resolveQuo(jmvcore::enquo(group1))
+    if ( ! missing(group2)) group2 <- jmvcore::resolveQuo(jmvcore::enquo(group2))
     if (missing(data))
         data <- jmvcore::marshalData(
             parent.frame(),
             `if`( ! missing(var), var, NULL),
-            `if`( ! missing(group), group, NULL))
+            `if`( ! missing(group1), group1, NULL),
+            `if`( ! missing(group2), group2, NULL))
 
-    for (v in group) if (v %in% names(data)) data[[v]] <- as.factor(data[[v]])
+    for (v in group1) if (v %in% names(data)) data[[v]] <- as.factor(data[[v]])
+    for (v in group2) if (v %in% names(data)) data[[v]] <- as.factor(data[[v]])
 
     options <- boxOptions$new(
         var = var,
-        group = group,
+        group1 = group1,
+        group2 = group2,
         flipAxes = flipAxes,
         notch = notch,
+        boxWidth = boxWidth,
+        outliers = outliers,
         width = width,
         height = height,
         title = title,
@@ -425,8 +624,21 @@ box <- function(
         yAxisRangeType = yAxisRangeType,
         yAxisRangeMin = yAxisRangeMin,
         yAxisRangeMax = yAxisRangeMax,
+        yAxisLabelRotation = yAxisLabelRotation,
         xAxisLabelFontSize = xAxisLabelFontSize,
-        xAxisLabelFontSizeRevLabels = xAxisLabelFontSizeRevLabels)
+        xAxisLabelFontSizeRevLabels = xAxisLabelFontSizeRevLabels,
+        xAxisLabelRotation = xAxisLabelRotation,
+        legendTitle = legendTitle,
+        legendTitleFontSize = legendTitleFontSize,
+        legendLabelFontSize = legendLabelFontSize,
+        legendKeyWidth = legendKeyWidth,
+        legendKeyHeight = legendKeyHeight,
+        legenPositionType = legenPositionType,
+        legendPosition = legendPosition,
+        legendJustification = legendJustification,
+        legendPositionX = legendPositionX,
+        legendPositionY = legendPositionY,
+        legendDirection = legendDirection)
 
     analysis <- boxClass$new(
         options = options,

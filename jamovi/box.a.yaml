@@ -17,8 +17,16 @@ options:
       permitted:
         - numeric
 
-    - name: group
-      title: Grouping Variable
+    - name: group1
+      title: Grouping Variable 1
+      type: Variable
+      suggested:
+        - nominal
+      permitted:
+        - factor
+
+    - name: group2
+      title: Grouping Variable 2
       type: Variable
       suggested:
         - nominal
@@ -34,6 +42,18 @@ options:
       title: Notch
       type: Bool
       default: false
+
+    - name: boxWidth
+      title: Width
+      type: Number
+      default: 0.5
+      min: 0
+      max: 1
+
+    - name: outliers
+      title: Show outliers
+      type: Bool
+      default: true
 
     - name: width
       title: Width
@@ -193,6 +213,13 @@ options:
       title: Max
       type: Number
 
+    - name: yAxisLabelRotation
+      title: Label rotation
+      type: Number
+      default: 0
+      min: 0
+      max: 360
+
     - name: xAxisLabelFontSize
       title: Label font size
       type: Number
@@ -202,4 +229,104 @@ options:
       title: Reverse labels
       type: Bool
       default: false
+
+    - name: xAxisLabelRotation
+      title: Label rotation
+      type: Number
+      default: 0
+      min: 0
+      max: 360
+
+    - name: legendTitle
+      title: Title text
+      type: String
+      default: ''
+
+    - name: legendTitleFontSize
+      title: Title font size
+      type: Number
+      default: 16
+
+    - name: legendLabelFontSize
+      title: Label font size
+      type: Number
+      default: 16
+
+    - name: legendKeyWidth
+      title: Key width
+      type: Number
+      default: 0.6
+      min: 0
+
+    - name: legendKeyHeight
+      title: Key height
+      type: Number
+      default: 0.6
+      min: 0
+
+    - name: legenPositionType
+      title: ""
+      type: List
+      options:
+        - name: outside
+          title: Outside
+        - name: inside
+          title: Inside
+        - name: hide
+          title: Hide
+      default: outside
+
+    - name: legendPosition
+      title: Position
+      type: List
+      options:
+        - name: top
+          title: Top
+        - name: right
+          title: Right
+        - name: bottom
+          title: Bottom
+        - name: left
+          title: Left
+      default: right
+
+    - name: legendJustification
+      title: Justification
+      type: List
+      options:
+        - name: center
+          title: Center
+        - name: top
+          title: Top
+        - name: right
+          title: Right
+        - name: bottom
+          title: Bottom
+        - name: left
+          title: Left
+      default: center
+
+    - name: legendPositionX
+      title: X-position
+      type: Number
+      default: 0.8
+      min: 0
+      max: 1
+
+    - name: legendPositionY
+      title: Y-position
+      type: Number
+      default: 0.5
+      min: 0
+      max: 1
+
+    - name: legendDirection
+      title: Direction
+      type: List
+      options:
+        - name: horizontal
+          title: Horizontal
+        - name: vertical
+          title: Vertical
+      default: vertical
 ...
