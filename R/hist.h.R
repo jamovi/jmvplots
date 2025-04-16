@@ -7,8 +7,15 @@ histOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
     public = list(
         initialize = function(
             var = NULL,
+            group = NULL,
             flipAxes = FALSE,
-            nBins = 30,
+            bins = TRUE,
+            binWidth = 0.5,
+            binOpacity = 1,
+            line = FALSE,
+            density = FALSE,
+            densityOpacity = 0.2,
+            densityKernel = "gaussian",
             width = 500,
             height = 500,
             title = "",
@@ -28,13 +35,26 @@ histOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             yLabelFontSize = 16,
             titleType = "title",
             yAxisLabelFontSize = 12,
+            yAxisLabelRotation = 0,
             yAxisRangeType = NULL,
             yAxisRangeMin = NULL,
             yAxisRangeMax = NULL,
             xAxisLabelFontSize = 12,
+            xAxisLabelRotation = 0,
             xAxisRangeType = NULL,
             xAxisRangeMin = NULL,
-            xAxisRangeMax = NULL, ...) {
+            xAxisRangeMax = NULL,
+            legendTitle = "",
+            legendTitleFontSize = 16,
+            legendLabelFontSize = 16,
+            legendKeyWidth = 0.6,
+            legendKeyHeight = 0.6,
+            legenPositionType = "outside",
+            legendPosition = "right",
+            legendJustification = "center",
+            legendPositionX = 0.8,
+            legendPositionY = 0.5,
+            legendDirection = "vertical", ...) {
 
             super$initialize(
                 package="jmvplot",
@@ -49,14 +69,58 @@ histOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                     "continuous"),
                 permitted=list(
                     "numeric"))
+            private$..group <- jmvcore::OptionVariable$new(
+                "group",
+                group,
+                suggested=list(
+                    "nominal"),
+                permitted=list(
+                    "factor"))
             private$..flipAxes <- jmvcore::OptionBool$new(
                 "flipAxes",
                 flipAxes,
                 default=FALSE)
-            private$..nBins <- jmvcore::OptionNumber$new(
-                "nBins",
-                nBins,
-                default=30)
+            private$..bins <- jmvcore::OptionBool$new(
+                "bins",
+                bins,
+                default=TRUE)
+            private$..binWidth <- jmvcore::OptionNumber$new(
+                "binWidth",
+                binWidth,
+                default=0.5,
+                min=0)
+            private$..binOpacity <- jmvcore::OptionNumber$new(
+                "binOpacity",
+                binOpacity,
+                default=1,
+                min=0,
+                max=1)
+            private$..line <- jmvcore::OptionBool$new(
+                "line",
+                line,
+                default=FALSE)
+            private$..density <- jmvcore::OptionBool$new(
+                "density",
+                density,
+                default=FALSE)
+            private$..densityOpacity <- jmvcore::OptionNumber$new(
+                "densityOpacity",
+                densityOpacity,
+                default=0.2,
+                min=0,
+                max=1)
+            private$..densityKernel <- jmvcore::OptionList$new(
+                "densityKernel",
+                densityKernel,
+                options=list(
+                    "gaussian",
+                    "rectangular",
+                    "triangular",
+                    "epanechnikov",
+                    "biweight",
+                    "cosine",
+                    "optcosine"),
+                default="gaussian")
             private$..width <- jmvcore::OptionNumber$new(
                 "width",
                 width,
@@ -159,6 +223,12 @@ histOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 "yAxisLabelFontSize",
                 yAxisLabelFontSize,
                 default=12)
+            private$..yAxisLabelRotation <- jmvcore::OptionNumber$new(
+                "yAxisLabelRotation",
+                yAxisLabelRotation,
+                default=0,
+                min=0,
+                max=360)
             private$..yAxisRangeType <- jmvcore::OptionList$new(
                 "yAxisRangeType",
                 yAxisRangeType,
@@ -175,6 +245,12 @@ histOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 "xAxisLabelFontSize",
                 xAxisLabelFontSize,
                 default=12)
+            private$..xAxisLabelRotation <- jmvcore::OptionNumber$new(
+                "xAxisLabelRotation",
+                xAxisLabelRotation,
+                default=0,
+                min=0,
+                max=360)
             private$..xAxisRangeType <- jmvcore::OptionList$new(
                 "xAxisRangeType",
                 xAxisRangeType,
@@ -187,10 +263,85 @@ histOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             private$..xAxisRangeMax <- jmvcore::OptionNumber$new(
                 "xAxisRangeMax",
                 xAxisRangeMax)
+            private$..legendTitle <- jmvcore::OptionString$new(
+                "legendTitle",
+                legendTitle,
+                default="")
+            private$..legendTitleFontSize <- jmvcore::OptionNumber$new(
+                "legendTitleFontSize",
+                legendTitleFontSize,
+                default=16)
+            private$..legendLabelFontSize <- jmvcore::OptionNumber$new(
+                "legendLabelFontSize",
+                legendLabelFontSize,
+                default=16)
+            private$..legendKeyWidth <- jmvcore::OptionNumber$new(
+                "legendKeyWidth",
+                legendKeyWidth,
+                default=0.6,
+                min=0)
+            private$..legendKeyHeight <- jmvcore::OptionNumber$new(
+                "legendKeyHeight",
+                legendKeyHeight,
+                default=0.6,
+                min=0)
+            private$..legenPositionType <- jmvcore::OptionList$new(
+                "legenPositionType",
+                legenPositionType,
+                options=list(
+                    "outside",
+                    "inside",
+                    "hide"),
+                default="outside")
+            private$..legendPosition <- jmvcore::OptionList$new(
+                "legendPosition",
+                legendPosition,
+                options=list(
+                    "top",
+                    "right",
+                    "bottom",
+                    "left"),
+                default="right")
+            private$..legendJustification <- jmvcore::OptionList$new(
+                "legendJustification",
+                legendJustification,
+                options=list(
+                    "center",
+                    "top",
+                    "right",
+                    "bottom",
+                    "left"),
+                default="center")
+            private$..legendPositionX <- jmvcore::OptionNumber$new(
+                "legendPositionX",
+                legendPositionX,
+                default=0.8,
+                min=0,
+                max=1)
+            private$..legendPositionY <- jmvcore::OptionNumber$new(
+                "legendPositionY",
+                legendPositionY,
+                default=0.5,
+                min=0,
+                max=1)
+            private$..legendDirection <- jmvcore::OptionList$new(
+                "legendDirection",
+                legendDirection,
+                options=list(
+                    "horizontal",
+                    "vertical"),
+                default="vertical")
 
             self$.addOption(private$..var)
+            self$.addOption(private$..group)
             self$.addOption(private$..flipAxes)
-            self$.addOption(private$..nBins)
+            self$.addOption(private$..bins)
+            self$.addOption(private$..binWidth)
+            self$.addOption(private$..binOpacity)
+            self$.addOption(private$..line)
+            self$.addOption(private$..density)
+            self$.addOption(private$..densityOpacity)
+            self$.addOption(private$..densityKernel)
             self$.addOption(private$..width)
             self$.addOption(private$..height)
             self$.addOption(private$..title)
@@ -210,18 +361,38 @@ histOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             self$.addOption(private$..yLabelFontSize)
             self$.addOption(private$..titleType)
             self$.addOption(private$..yAxisLabelFontSize)
+            self$.addOption(private$..yAxisLabelRotation)
             self$.addOption(private$..yAxisRangeType)
             self$.addOption(private$..yAxisRangeMin)
             self$.addOption(private$..yAxisRangeMax)
             self$.addOption(private$..xAxisLabelFontSize)
+            self$.addOption(private$..xAxisLabelRotation)
             self$.addOption(private$..xAxisRangeType)
             self$.addOption(private$..xAxisRangeMin)
             self$.addOption(private$..xAxisRangeMax)
+            self$.addOption(private$..legendTitle)
+            self$.addOption(private$..legendTitleFontSize)
+            self$.addOption(private$..legendLabelFontSize)
+            self$.addOption(private$..legendKeyWidth)
+            self$.addOption(private$..legendKeyHeight)
+            self$.addOption(private$..legenPositionType)
+            self$.addOption(private$..legendPosition)
+            self$.addOption(private$..legendJustification)
+            self$.addOption(private$..legendPositionX)
+            self$.addOption(private$..legendPositionY)
+            self$.addOption(private$..legendDirection)
         }),
     active = list(
         var = function() private$..var$value,
+        group = function() private$..group$value,
         flipAxes = function() private$..flipAxes$value,
-        nBins = function() private$..nBins$value,
+        bins = function() private$..bins$value,
+        binWidth = function() private$..binWidth$value,
+        binOpacity = function() private$..binOpacity$value,
+        line = function() private$..line$value,
+        density = function() private$..density$value,
+        densityOpacity = function() private$..densityOpacity$value,
+        densityKernel = function() private$..densityKernel$value,
         width = function() private$..width$value,
         height = function() private$..height$value,
         title = function() private$..title$value,
@@ -241,17 +412,37 @@ histOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
         yLabelFontSize = function() private$..yLabelFontSize$value,
         titleType = function() private$..titleType$value,
         yAxisLabelFontSize = function() private$..yAxisLabelFontSize$value,
+        yAxisLabelRotation = function() private$..yAxisLabelRotation$value,
         yAxisRangeType = function() private$..yAxisRangeType$value,
         yAxisRangeMin = function() private$..yAxisRangeMin$value,
         yAxisRangeMax = function() private$..yAxisRangeMax$value,
         xAxisLabelFontSize = function() private$..xAxisLabelFontSize$value,
+        xAxisLabelRotation = function() private$..xAxisLabelRotation$value,
         xAxisRangeType = function() private$..xAxisRangeType$value,
         xAxisRangeMin = function() private$..xAxisRangeMin$value,
-        xAxisRangeMax = function() private$..xAxisRangeMax$value),
+        xAxisRangeMax = function() private$..xAxisRangeMax$value,
+        legendTitle = function() private$..legendTitle$value,
+        legendTitleFontSize = function() private$..legendTitleFontSize$value,
+        legendLabelFontSize = function() private$..legendLabelFontSize$value,
+        legendKeyWidth = function() private$..legendKeyWidth$value,
+        legendKeyHeight = function() private$..legendKeyHeight$value,
+        legenPositionType = function() private$..legenPositionType$value,
+        legendPosition = function() private$..legendPosition$value,
+        legendJustification = function() private$..legendJustification$value,
+        legendPositionX = function() private$..legendPositionX$value,
+        legendPositionY = function() private$..legendPositionY$value,
+        legendDirection = function() private$..legendDirection$value),
     private = list(
         ..var = NA,
+        ..group = NA,
         ..flipAxes = NA,
-        ..nBins = NA,
+        ..bins = NA,
+        ..binWidth = NA,
+        ..binOpacity = NA,
+        ..line = NA,
+        ..density = NA,
+        ..densityOpacity = NA,
+        ..densityKernel = NA,
         ..width = NA,
         ..height = NA,
         ..title = NA,
@@ -271,13 +462,26 @@ histOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
         ..yLabelFontSize = NA,
         ..titleType = NA,
         ..yAxisLabelFontSize = NA,
+        ..yAxisLabelRotation = NA,
         ..yAxisRangeType = NA,
         ..yAxisRangeMin = NA,
         ..yAxisRangeMax = NA,
         ..xAxisLabelFontSize = NA,
+        ..xAxisLabelRotation = NA,
         ..xAxisRangeType = NA,
         ..xAxisRangeMin = NA,
-        ..xAxisRangeMax = NA)
+        ..xAxisRangeMax = NA,
+        ..legendTitle = NA,
+        ..legendTitleFontSize = NA,
+        ..legendLabelFontSize = NA,
+        ..legendKeyWidth = NA,
+        ..legendKeyHeight = NA,
+        ..legenPositionType = NA,
+        ..legendPosition = NA,
+        ..legendJustification = NA,
+        ..legendPositionX = NA,
+        ..legendPositionY = NA,
+        ..legendDirection = NA)
 )
 
 histResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
@@ -326,8 +530,15 @@ histBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 #' 
 #' @param data .
 #' @param var .
+#' @param group .
 #' @param flipAxes .
-#' @param nBins .
+#' @param bins .
+#' @param binWidth .
+#' @param binOpacity .
+#' @param line .
+#' @param density .
+#' @param densityOpacity .
+#' @param densityKernel .
 #' @param width .
 #' @param height .
 #' @param title .
@@ -347,13 +558,26 @@ histBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 #' @param yLabelFontSize .
 #' @param titleType .
 #' @param yAxisLabelFontSize .
+#' @param yAxisLabelRotation .
 #' @param yAxisRangeType .
 #' @param yAxisRangeMin .
 #' @param yAxisRangeMax .
 #' @param xAxisLabelFontSize .
+#' @param xAxisLabelRotation .
 #' @param xAxisRangeType .
 #' @param xAxisRangeMin .
 #' @param xAxisRangeMax .
+#' @param legendTitle .
+#' @param legendTitleFontSize .
+#' @param legendLabelFontSize .
+#' @param legendKeyWidth .
+#' @param legendKeyHeight .
+#' @param legenPositionType .
+#' @param legendPosition .
+#' @param legendJustification .
+#' @param legendPositionX .
+#' @param legendPositionY .
+#' @param legendDirection .
 #' @return A results object containing:
 #' \tabular{llllll}{
 #'   \code{results$plot} \tab \tab \tab \tab \tab an image containing the histogram \cr
@@ -363,8 +587,15 @@ histBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 hist <- function(
     data,
     var,
+    group,
     flipAxes = FALSE,
-    nBins = 30,
+    bins = TRUE,
+    binWidth = 0.5,
+    binOpacity = 1,
+    line = FALSE,
+    density = FALSE,
+    densityOpacity = 0.2,
+    densityKernel = "gaussian",
     width = 500,
     height = 500,
     title = "",
@@ -384,28 +615,51 @@ hist <- function(
     yLabelFontSize = 16,
     titleType = "title",
     yAxisLabelFontSize = 12,
+    yAxisLabelRotation = 0,
     yAxisRangeType,
     yAxisRangeMin,
     yAxisRangeMax,
     xAxisLabelFontSize = 12,
+    xAxisLabelRotation = 0,
     xAxisRangeType,
     xAxisRangeMin,
-    xAxisRangeMax) {
+    xAxisRangeMax,
+    legendTitle = "",
+    legendTitleFontSize = 16,
+    legendLabelFontSize = 16,
+    legendKeyWidth = 0.6,
+    legendKeyHeight = 0.6,
+    legenPositionType = "outside",
+    legendPosition = "right",
+    legendJustification = "center",
+    legendPositionX = 0.8,
+    legendPositionY = 0.5,
+    legendDirection = "vertical") {
 
     if ( ! requireNamespace("jmvcore", quietly=TRUE))
         stop("hist requires jmvcore to be installed (restart may be required)")
 
     if ( ! missing(var)) var <- jmvcore::resolveQuo(jmvcore::enquo(var))
+    if ( ! missing(group)) group <- jmvcore::resolveQuo(jmvcore::enquo(group))
     if (missing(data))
         data <- jmvcore::marshalData(
             parent.frame(),
-            `if`( ! missing(var), var, NULL))
+            `if`( ! missing(var), var, NULL),
+            `if`( ! missing(group), group, NULL))
 
+    for (v in group) if (v %in% names(data)) data[[v]] <- as.factor(data[[v]])
 
     options <- histOptions$new(
         var = var,
+        group = group,
         flipAxes = flipAxes,
-        nBins = nBins,
+        bins = bins,
+        binWidth = binWidth,
+        binOpacity = binOpacity,
+        line = line,
+        density = density,
+        densityOpacity = densityOpacity,
+        densityKernel = densityKernel,
         width = width,
         height = height,
         title = title,
@@ -425,13 +679,26 @@ hist <- function(
         yLabelFontSize = yLabelFontSize,
         titleType = titleType,
         yAxisLabelFontSize = yAxisLabelFontSize,
+        yAxisLabelRotation = yAxisLabelRotation,
         yAxisRangeType = yAxisRangeType,
         yAxisRangeMin = yAxisRangeMin,
         yAxisRangeMax = yAxisRangeMax,
         xAxisLabelFontSize = xAxisLabelFontSize,
+        xAxisLabelRotation = xAxisLabelRotation,
         xAxisRangeType = xAxisRangeType,
         xAxisRangeMin = xAxisRangeMin,
-        xAxisRangeMax = xAxisRangeMax)
+        xAxisRangeMax = xAxisRangeMax,
+        legendTitle = legendTitle,
+        legendTitleFontSize = legendTitleFontSize,
+        legendLabelFontSize = legendLabelFontSize,
+        legendKeyWidth = legendKeyWidth,
+        legendKeyHeight = legendKeyHeight,
+        legenPositionType = legenPositionType,
+        legendPosition = legendPosition,
+        legendJustification = legendJustification,
+        legendPositionX = legendPositionX,
+        legendPositionY = legendPositionY,
+        legendDirection = legendDirection)
 
     analysis <- histClass$new(
         options = options,
