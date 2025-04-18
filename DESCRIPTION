@@ -16,4 +16,7 @@ Imports:
     ggplot2,
     dplyr,
     rlang
+Suggests:
+    testthat,
+    vdiffr
 RoxygenNote: 7.3.2

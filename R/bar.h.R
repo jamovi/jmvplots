@@ -41,9 +41,9 @@ barOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             titleType = "title",
             yAxisLabelFontSize = 12,
             yAxisLabelRotation = 0,
-            yAxisRangeType = NULL,
-            yAxisRangeMin = NULL,
-            yAxisRangeMax = NULL,
+            yAxisRangeType = "auto",
+            yAxisRangeMin = 0,
+            yAxisRangeMax = 0,
             xAxisLabelFontSize = 12,
             xAxisLabelRotation = 0,
             xAxisLabelFontSizeRevLabels = FALSE,
@@ -77,6 +77,7 @@ barOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             private$..catvar <- jmvcore::OptionVariable$new(
                 "catvar",
                 catvar,
+                default=NULL,
                 suggested=list(
                     "nominal"),
                 permitted=list(
@@ -84,6 +85,7 @@ barOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             private$..catgroup <- jmvcore::OptionVariable$new(
                 "catgroup",
                 catgroup,
+                default=NULL,
                 suggested=list(
                     "nominal"),
                 permitted=list(
@@ -91,6 +93,7 @@ barOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             private$..convar <- jmvcore::OptionVariable$new(
                 "convar",
                 convar,
+                default=NULL,
                 suggested=list(
                     "continuous"),
                 permitted=list(
@@ -98,6 +101,7 @@ barOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             private$..congroup1 <- jmvcore::OptionVariable$new(
                 "congroup1",
                 congroup1,
+                default=NULL,
                 suggested=list(
                     "nominal"),
                 permitted=list(
@@ -105,6 +109,7 @@ barOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             private$..congroup2 <- jmvcore::OptionVariable$new(
                 "congroup2",
                 congroup2,
+                default=NULL,
                 suggested=list(
                     "nominal"),
                 permitted=list(
@@ -112,6 +117,7 @@ barOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             private$..counts <- jmvcore::OptionVariable$new(
                 "counts",
                 counts,
+                default=NULL,
                 suggested=list(
                     "continuous"),
                 permitted=list(
@@ -119,6 +125,7 @@ barOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             private$..countsLabels <- jmvcore::OptionVariable$new(
                 "countsLabels",
                 countsLabels,
+                default=NULL,
                 suggested=list(
                     "nominal"),
                 permitted=list(
@@ -126,6 +133,7 @@ barOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             private$..countsgroup <- jmvcore::OptionVariable$new(
                 "countsgroup",
                 countsgroup,
+                default=NULL,
                 suggested=list(
                     "nominal"),
                 permitted=list(
@@ -277,13 +285,16 @@ barOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 yAxisRangeType,
                 options=list(
                     "auto",
-                    "manual"))
+                    "manual"),
+                default="auto")
             private$..yAxisRangeMin <- jmvcore::OptionNumber$new(
                 "yAxisRangeMin",
-                yAxisRangeMin)
+                yAxisRangeMin,
+                default=0)
             private$..yAxisRangeMax <- jmvcore::OptionNumber$new(
                 "yAxisRangeMax",
-                yAxisRangeMax)
+                yAxisRangeMax,
+                default=0)
             private$..xAxisLabelFontSize <- jmvcore::OptionNumber$new(
                 "xAxisLabelFontSize",
                 xAxisLabelFontSize,
@@ -645,14 +656,14 @@ barBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 bar <- function(
     mode = "categorical",
     data,
-    catvar,
-    catgroup,
-    convar,
-    congroup1,
-    congroup2,
-    counts,
-    countsLabels,
-    countsgroup,
+    catvar = NULL,
+    catgroup = NULL,
+    convar = NULL,
+    congroup1 = NULL,
+    congroup2 = NULL,
+    counts = NULL,
+    countsLabels = NULL,
+    countsgroup = NULL,
     flipAxes = FALSE,
     barWidth = 0.9,
     width = 500,
@@ -679,9 +690,9 @@ bar <- function(
     titleType = "title",
     yAxisLabelFontSize = 12,
     yAxisLabelRotation = 0,
-    yAxisRangeType,
-    yAxisRangeMin,
-    yAxisRangeMax,
+    yAxisRangeType = "auto",
+    yAxisRangeMin = 0,
+    yAxisRangeMax = 0,
     xAxisLabelFontSize = 12,
     xAxisLabelRotation = 0,
     xAxisLabelFontSizeRevLabels = FALSE,
