@@ -52,6 +52,7 @@ histClass <- if (requireNamespace('jmvcore', quietly = TRUE))
                                 binwidth = self$options$binWidth,
                                 color = theme$color[1],
                                 fill = theme$fill[2],
+                                size = self$options$lineSize
                             )
                     }
 
@@ -62,7 +63,7 @@ histClass <- if (requireNamespace('jmvcore', quietly = TRUE))
                                 color = theme$color[1],
                                 fill = theme$fill[2],
                                 alpha = self$options$densityOpacity,
-                                kernel = self$options$densityKernel
+                                size = self$options$densityLineSize
                             )
                     }
 
@@ -87,7 +88,8 @@ histClass <- if (requireNamespace('jmvcore', quietly = TRUE))
                         p <- p +
                             ggplot2::geom_freqpoly(
                                 position = "identity",
-                                binwidth = self$options$binWidth
+                                binwidth = self$options$binWidth,
+                                size = self$options$lineSize
                             )
                     }
 
@@ -97,7 +99,7 @@ histClass <- if (requireNamespace('jmvcore', quietly = TRUE))
                                 aes(y = ggplot2::after_stat(count) * self$options$binWidth),
                                 position = "identity",
                                 alpha = self$options$densityOpacity,
-                                kernel = self$options$densityKernel
+                                size = self$options$densityLineSize
                             )
                     }
 

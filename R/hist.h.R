@@ -13,9 +13,10 @@ histOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             binWidth = 0.5,
             binOpacity = 1,
             line = FALSE,
+            lineSize = 0.5,
             density = FALSE,
             densityOpacity = 0.2,
-            densityKernel = "gaussian",
+            densityLineSize = 0.5,
             width = 500,
             height = 500,
             title = "",
@@ -99,6 +100,10 @@ histOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 "line",
                 line,
                 default=FALSE)
+            private$..lineSize <- jmvcore::OptionNumber$new(
+                "lineSize",
+                lineSize,
+                default=0.5)
             private$..density <- jmvcore::OptionBool$new(
                 "density",
                 density,
@@ -109,18 +114,10 @@ histOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 default=0.2,
                 min=0,
                 max=1)
-            private$..densityKernel <- jmvcore::OptionList$new(
-                "densityKernel",
-                densityKernel,
-                options=list(
-                    "gaussian",
-                    "rectangular",
-                    "triangular",
-                    "epanechnikov",
-                    "biweight",
-                    "cosine",
-                    "optcosine"),
-                default="gaussian")
+            private$..densityLineSize <- jmvcore::OptionNumber$new(
+                "densityLineSize",
+                densityLineSize,
+                default=0.5)
             private$..width <- jmvcore::OptionNumber$new(
                 "width",
                 width,
@@ -339,9 +336,10 @@ histOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             self$.addOption(private$..binWidth)
             self$.addOption(private$..binOpacity)
             self$.addOption(private$..line)
+            self$.addOption(private$..lineSize)
             self$.addOption(private$..density)
             self$.addOption(private$..densityOpacity)
-            self$.addOption(private$..densityKernel)
+            self$.addOption(private$..densityLineSize)
             self$.addOption(private$..width)
             self$.addOption(private$..height)
             self$.addOption(private$..title)
@@ -390,9 +388,10 @@ histOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
         binWidth = function() private$..binWidth$value,
         binOpacity = function() private$..binOpacity$value,
         line = function() private$..line$value,
+        lineSize = function() private$..lineSize$value,
         density = function() private$..density$value,
         densityOpacity = function() private$..densityOpacity$value,
-        densityKernel = function() private$..densityKernel$value,
+        densityLineSize = function() private$..densityLineSize$value,
         width = function() private$..width$value,
         height = function() private$..height$value,
         title = function() private$..title$value,
@@ -440,9 +439,10 @@ histOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
         ..binWidth = NA,
         ..binOpacity = NA,
         ..line = NA,
+        ..lineSize = NA,
         ..density = NA,
         ..densityOpacity = NA,
-        ..densityKernel = NA,
+        ..densityLineSize = NA,
         ..width = NA,
         ..height = NA,
         ..title = NA,
@@ -536,9 +536,10 @@ histBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 #' @param binWidth .
 #' @param binOpacity .
 #' @param line .
+#' @param lineSize .
 #' @param density .
 #' @param densityOpacity .
-#' @param densityKernel .
+#' @param densityLineSize .
 #' @param width .
 #' @param height .
 #' @param title .
@@ -593,9 +594,10 @@ hist <- function(
     binWidth = 0.5,
     binOpacity = 1,
     line = FALSE,
+    lineSize = 0.5,
     density = FALSE,
     densityOpacity = 0.2,
-    densityKernel = "gaussian",
+    densityLineSize = 0.5,
     width = 500,
     height = 500,
     title = "",
@@ -657,9 +659,10 @@ hist <- function(
         binWidth = binWidth,
         binOpacity = binOpacity,
         line = line,
+        lineSize = lineSize,
         density = density,
         densityOpacity = densityOpacity,
-        densityKernel = densityKernel,
+        densityLineSize = densityLineSize,
         width = width,
         height = height,
         title = title,

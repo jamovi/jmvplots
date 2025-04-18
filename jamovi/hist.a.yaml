@@ -53,6 +53,11 @@ options:
       type: Bool
       default: false
 
+    - name: lineSize
+      title: Line size
+      type: Number
+      default: 0.5
+
     - name: density
       title: Show density
       type: Bool
@@ -65,25 +70,10 @@ options:
       min: 0
       max: 1
 
-    - name: densityKernel
-      title: Smoothing kernel
-      type: List
-      options:
-        - name: gaussian
-          title: Gaussian
-        - name: rectangular
-          title: Rectangular
-        - name: triangular
-          title: Triangular
-        - name: epanechnikov
-          title: Epanechnikov
-        - name: biweight
-          title: Biweight
-        - name: cosine
-          title: Cosine
-        - name: optcosine
-          title: Optcosine
-      default: gaussian
+    - name: densityLineSize
+      title: Line size
+      type: Number
+      default: 0.5
 
     - name: width
       title: Width

@@ -52,6 +52,11 @@ children:
                         enable: (bins)
                   - type: CheckBox
                     name: line
+                    children:
+                      - type: TextBox
+                        name: lineSize
+                        format: number
+                        enable: (line)
               - type: Label
                 label: Density
                 children:
@@ -62,8 +67,9 @@ children:
                         name: densityOpacity
                         format: number
                         enable: (density)
-                      - type: ComboBox
-                        name: densityKernel
+                      - type: TextBox
+                        name: densityLineSize
+                        format: number
                         enable: (density)
           - type: LayoutBox
             cell:
