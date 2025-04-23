@@ -47,3 +47,63 @@ testthat::test_that("mode continuous, 2 grouping variable", {
 
     vdiffr::expect_doppelganger("con-2-group", disp_bar_jmvplot)
 })
+
+testthat::test_that("mode counts, no labels", {
+    df <- data.frame(
+        counts = c(1, 2, 3)
+    )
+
+    disp_bar_jmvplot <- jmvplot::bar(data = df, mode = "counts", counts = counts)
+
+    vdiffr::expect_doppelganger("counts-no-labels", disp_bar_jmvplot)
+})
+
+testthat::test_that("mode counts, with labels", {
+    df <- data.frame(
+        counts = c(1, 2, 3),
+        labels = c("A", "B", "C")
+    )
+
+    disp_bar_jmvplot <- jmvplot::bar(
+        data = df,
+        mode = "counts",
+        counts = counts,
+        countsLabels = labels
+    )
+
+    vdiffr::expect_doppelganger("counts-with-labels", disp_bar_jmvplot)
+})
+
+testthat::test_that("mode counts, no labels, grouping variable", {
+    df <- data.frame(
+        counts = c(1, 2, 3),
+        group = c("A", "B", "C")
+    )
+
+    disp_bar_jmvplot <- jmvplot::bar(
+        data = df,
+        mode = "counts",
+        counts = counts,
+        countsgroup = group
+    )
+
+    vdiffr::expect_doppelganger("counts-no-labels-group", disp_bar_jmvplot)
+})
+
+testthat::test_that("mode counts, with labels, grouping variable", {
+    df <- data.frame(
+        counts = c(1, 2, 3, 4, 5, 6),
+        labels = c("A", "A", "A", "B", "B", "B"),
+        group = c("A", "B", "C", "A", "B", "C")
+    )
+
+    disp_bar_jmvplot <- jmvplot::bar(
+        data = df,
+        mode = "counts",
+        counts = counts,
+        countsLabels = labels,
+        countsgroup = group
+    )
+
+    vdiffr::expect_doppelganger("counts-with-labels-group", disp_bar_jmvplot)
+})
