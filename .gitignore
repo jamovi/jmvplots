@@ -52,6 +52,9 @@ jamovi/ui/*.options.js
 build/
 build*/
 
+# vdiffr test files
+tests/testthat/_snaps/**/*.new.svg
+
 # other files / folders
 temp/
 man/
