@@ -104,6 +104,11 @@ options:
       default: 0.9
       min: 0
 
+    - name: valueLabels
+      title: Value labels
+      type: Bool
+      default: false
+
     - name: width
       title: Width
       type: Number

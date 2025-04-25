@@ -227,35 +227,22 @@ barClass <- if (requireNamespace('jmvcore', quietly = TRUE))
             .barPlot = function(image, ggtheme, theme, ...) {
                 if (is.null(image$state)) return(FALSE)
 
-                ggplot_args <- list(data = image$state)
-                geom_bar_args <- list(stat = "identity", color = theme$color[1])
+                plot_call_list <- list(
+                    "ggplot" = private$.getInitPlotCallList(image$state),
+                    "geom_bar" = private$.getGeomBarCallList(theme),
+                    "geom_text" = private$.getGeomTextCallList()
+                )
 
-                if (!self$grouped) {
-                    ggplot_args$mapping <- aes(x = x, y = y)
-                    geom_bar_args$width <- self$options$barWidth
-                    geom_bar_args$fill <- theme$fill[2]
-                } else {
-                    ggplot_args$mapping <- aes(x = x, y = y, group = group, fill = group)
-
-                    if (self$options$groupBarType == "grouped") {
-                        position <- ggplot2::position_dodge(
-                            width = self$options$barWidth
-                        )
-
-                        geom_bar_args$width <- self$options$barWidth * 0.9
-                        geom_bar_args$position <- position
-                    } else {
-                        geom_bar_args$width <- self$options$barWidth
-                    }
-                }
-
-                p <- do.call(ggplot2::ggplot, ggplot_args) +
-                    do.call(ggplot2::geom_bar, geom_bar_args) +
+                p <- do.call(plot_call_list$ggplot$fun, plot_call_list$ggplot$args) +
+                    do.call(plot_call_list$geom_bar$fun, plot_call_list$geom_bar$args) +
                     ggtheme
 
                 if (self$grouped) p <- p + formatLegend(self$options)
 
                 if (private$.hasErrorBars()) p <- p + private$.getErrorBars()
+
+                if (self$options$valueLabels)
+                    p <- p + do.call(plot_call_list$geom_text$fun, plot_call_list$geom_text$args)
 
                 if (self$options$yAxisRangeType == "manual")
                     p <- p + ggplot2::ylim(self$options$yAxisRangeMin, self$options$yAxisRangeMax)
@@ -360,6 +347,72 @@ barClass <- if (requireNamespace('jmvcore', quietly = TRUE))
                 }
 
                 return(geom)
+            },
+            #' Get the function and arguments to initialize the plot
+            #'
+            #' @param data The data to be used in the plot
+            #' @return A list containing the function and arguments to initialize the plot
+            .getInitPlotCallList = function(data) {
+                args <- list(data = data)
+
+                if (!self$grouped) {
+                    args$mapping <- aes(x = x, y = y)
+                } else {
+                    args$mapping <- aes(x = x, y = y, group = group, fill = group)
+                }
+
+                return(list(fun = ggplot2::ggplot, args = args))
+            },
+            #' Get the function and arguments to create the bar plot
+            #'
+            #' @param theme The theme to be used in the plot
+            #' @return A list containing the function and arguments to create the bar plot
+            .getGeomBarCallList = function(theme) {
+                args <- list(stat = "identity", color = theme$color[1])
+
+                if (!self$grouped) {
+                    args$width <- self$options$barWidth
+                    args$fill <- theme$fill[2]
+                } else {
+                    if (self$options$groupBarType == "grouped") {
+                        position <- ggplot2::position_dodge(
+                            width = self$options$barWidth
+                        )
+
+                        args$width <- self$options$barWidth * 0.9
+                        args$position <- position
+                    } else {
+                        args$width <- self$options$barWidth
+                    }
+                }
+
+                return(list(fun = ggplot2::geom_bar, args = args))
+            },
+            #' Get the function and arguments to create the text labels
+            #'
+            #' @return A list containing the function and arguments to create the text labels
+            .getGeomTextCallList = function() {
+                args <- list(mapping = aes(label = y), size = 5)
+
+                if (self$grouped) {
+                    if (self$options$groupBarType == "grouped") {
+                        args$position <- ggplot2::position_dodge(
+                            width = self$options$barWidth
+                        )
+                    } else {
+                        args$position <- ggplot2::position_stack(vjust = 0.5)
+                    }
+                }
+
+                if (!self$grouped || (self$grouped && self$options$groupBarType == "grouped")) {
+                    if (self$options$flipAxes) {
+                        args$hjust <- -0.5
+                    } else {
+                        args$vjust <- -0.5
+                    }
+                }
+
+                return(list(fun = ggplot2::geom_text, args = args))
             }
         )
     )

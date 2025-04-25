@@ -17,6 +17,7 @@ barOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             countsgroup = NULL,
             flipAxes = FALSE,
             barWidth = 0.9,
+            valueLabels = FALSE,
             width = 500,
             height = 500,
             errorBars = "none",
@@ -147,6 +148,10 @@ barOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 barWidth,
                 default=0.9,
                 min=0)
+            private$..valueLabels <- jmvcore::OptionBool$new(
+                "valueLabels",
+                valueLabels,
+                default=FALSE)
             private$..width <- jmvcore::OptionNumber$new(
                 "width",
                 width,
@@ -396,6 +401,7 @@ barOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             self$.addOption(private$..countsgroup)
             self$.addOption(private$..flipAxes)
             self$.addOption(private$..barWidth)
+            self$.addOption(private$..valueLabels)
             self$.addOption(private$..width)
             self$.addOption(private$..height)
             self$.addOption(private$..errorBars)
@@ -451,6 +457,7 @@ barOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
         countsgroup = function() private$..countsgroup$value,
         flipAxes = function() private$..flipAxes$value,
         barWidth = function() private$..barWidth$value,
+        valueLabels = function() private$..valueLabels$value,
         width = function() private$..width$value,
         height = function() private$..height$value,
         errorBars = function() private$..errorBars$value,
@@ -505,6 +512,7 @@ barOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
         ..countsgroup = NA,
         ..flipAxes = NA,
         ..barWidth = NA,
+        ..valueLabels = NA,
         ..width = NA,
         ..height = NA,
         ..errorBars = NA,
@@ -605,6 +613,7 @@ barBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 #' @param countsgroup .
 #' @param flipAxes .
 #' @param barWidth .
+#' @param valueLabels .
 #' @param width .
 #' @param height .
 #' @param errorBars .
@@ -666,6 +675,7 @@ bar <- function(
     countsgroup = NULL,
     flipAxes = FALSE,
     barWidth = 0.9,
+    valueLabels = FALSE,
     width = 500,
     height = 500,
     errorBars = "none",
@@ -751,6 +761,7 @@ bar <- function(
         countsgroup = countsgroup,
         flipAxes = flipAxes,
         barWidth = barWidth,
+        valueLabels = valueLabels,
         width = width,
         height = height,
         errorBars = errorBars,
