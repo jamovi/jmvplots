@@ -227,42 +227,33 @@ barClass <- if (requireNamespace('jmvcore', quietly = TRUE))
             .barPlot = function(image, ggtheme, theme, ...) {
                 if (is.null(image$state)) return(FALSE)
 
+                ggplot_args <- list(data = image$state)
+                geom_bar_args <- list(stat = "identity", color = theme$color[1])
+
                 if (!self$grouped) {
-                    p <- ggplot(image$state, aes(x = x, y = y)) +
-                        ggplot2::geom_bar(
-                            stat = "identity",
-                            width = self$options$barWidth,
-                            color = theme$color[1],
-                            fill = theme$fill[2]
-                        ) +
-                        ggtheme
+                    ggplot_args$mapping <- aes(x = x, y = y)
+                    geom_bar_args$width <- self$options$barWidth
+                    geom_bar_args$fill <- theme$fill[2]
                 } else {
-                    p <- ggplot(image$state, aes(x = x, y = y, group = group, fill = group))
+                    ggplot_args$mapping <- aes(x = x, y = y, group = group, fill = group)
 
                     if (self$options$groupBarType == "grouped") {
-                        position = ggplot2::position_dodge(
-                            width = self$options$barWidth,
-                            preserve = "single"
+                        position <- ggplot2::position_dodge(
+                            width = self$options$barWidth
                         )
 
-                        p <- p +
-                            ggplot2::geom_bar(
-                                color = theme$color[1],
-                                stat = "identity",
-                                width = self$options$barWidth * 0.9,
-                                position = position
-                            )
+                        geom_bar_args$width <- self$options$barWidth * 0.9
+                        geom_bar_args$position <- position
                     } else {
-                        p <- p +
-                            ggplot2::geom_bar(
-                                color = theme$color[1],
-                                stat = "identity",
-                                width = self$options$barWidth
-                            )
+                        geom_bar_args$width <- self$options$barWidth
                     }
-
-                    p <- p + ggtheme + formatLegend(self$options)
                 }
+
+                p <- do.call(ggplot2::ggplot, ggplot_args) +
+                    do.call(ggplot2::geom_bar, geom_bar_args) +
+                    ggtheme
+
+                if (self$grouped) p <- p + formatLegend(self$options)
 
                 if (private$.hasErrorBars()) p <- p + private$.getErrorBars()
 
