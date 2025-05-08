@@ -48,6 +48,45 @@ testthat::test_that("mode continuous, 2 grouping variable", {
     vdiffr::expect_doppelganger("con-2-group", disp_bar_jmvplot)
 })
 
+testthat::test_that("mode continuous, no grouping variable, error bars", {
+    disp_bar_jmvplot <- jmvplot::bar(
+        data = ToothGrowth,
+        mode = "continuous",
+        convar = len,
+        errorBars = "ci",
+        ciWidth = 95,
+    )
+
+    vdiffr::expect_doppelganger("con-no-group-ci", disp_bar_jmvplot)
+})
+
+testthat::test_that("mode continuous, 1 grouping variable, error bars", {
+    disp_bar_jmvplot <- jmvplot::bar(
+        data = ToothGrowth,
+        mode = "continuous",
+        convar = len,
+        congroup1 = dose,
+        errorBars = "ci",
+        ciWidth = 95,
+    )
+
+    vdiffr::expect_doppelganger("con-1-group-ci", disp_bar_jmvplot)
+})
+
+testthat::test_that("mode continuous, 2 grouping variable, error bars", {
+    disp_bar_jmvplot <- jmvplot::bar(
+        data = ToothGrowth,
+        mode = "continuous",
+        convar = len,
+        congroup1 = dose,
+        congroup2 = supp,
+        errorBars = "ci",
+        ciWidth = 95,
+    )
+
+    vdiffr::expect_doppelganger("con-2-group-ci", disp_bar_jmvplot)
+})
+
 testthat::test_that("mode counts, no labels", {
     df <- data.frame(
         counts = c(1, 2, 3)

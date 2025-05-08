@@ -175,18 +175,6 @@ barClass <- if (requireNamespace('jmvcore', quietly = TRUE))
                             dplyr::filter(!is.na(y) & !is.na(x) & !is.na(group)) |>
                             dplyr::select(x, y, group) |>
                             dplyr::ungroup()
-
-                        # df <- self$data |>
-                        #     dplyr::mutate(.row_id = dplyr::row_number()) |>
-                        #     dplyr::select(.row_id, !!sym(var), !!sym(group)) |>
-                        #     dplyr::group_by(!!sym(group)) |>
-                        #     dplyr::rename(y = !!sym(var), x = .row_id, group = !!sym(group)) |>
-                        #     dplyr::filter(!is.na(y)) |>
-                        #     dplyr::mutate(
-                        #         y = jmvcore::toNumeric(y),
-                        #         x = factor(x),
-                        #         group = factor(group)
-                        #     )
                     } else {
                         df <- self$data |>
                             dplyr::select(
@@ -202,23 +190,6 @@ barClass <- if (requireNamespace('jmvcore', quietly = TRUE))
                             dplyr::filter(!is.na(y) & !is.na(x) & !is.na(group)) |>
                             dplyr::select(x, y, group) |>
                             dplyr::ungroup()
-                        # df <- self$data |>
-                        #     dplyr::mutate(.row_id = dplyr::row_number()) |>
-                        #     dplyr::select(.row_id, !!sym(var), !!sym(labels), !!sym(group)) |>
-                        #     dplyr::group_by(!!sym(group)) |>
-                        #     dplyr::rename(
-                        #         y = !!sym(var),
-                        #         label_text = !!sym(labels),
-                        #         x = .row_id,
-                        #         group = !!sym(group)
-                        #     ) |>
-                        #     dplyr::filter(!is.na(y)) |>
-                        #     dplyr::mutate(
-                        #         y = jmvcore::toNumeric(y),
-                        #         x = factor(x),
-                        #         ,
-                        #         group = factor(group)
-                        #     )
                     }
                 }
 
@@ -230,7 +201,8 @@ barClass <- if (requireNamespace('jmvcore', quietly = TRUE))
                 plot_call_list <- list(
                     "ggplot" = private$.getInitPlotCallList(image$state),
                     "geom_bar" = private$.getGeomBarCallList(theme),
-                    "geom_text" = private$.getGeomTextCallList()
+                    "geom_text" = private$.getGeomTextCallList(),
+                    "geom_errorbar" = private$.getGeomErrorBarCallList()
                 )
 
                 p <- do.call(plot_call_list$ggplot$fun, plot_call_list$ggplot$args) +
@@ -239,7 +211,10 @@ barClass <- if (requireNamespace('jmvcore', quietly = TRUE))
 
                 if (self$grouped) p <- p + formatLegend(self$options)
 
-                if (private$.hasErrorBars()) p <- p + private$.getErrorBars()
+                if (private$.hasErrorBars()) {
+                    p <- p +
+                        do.call(plot_call_list$geom_errorbar$fun, plot_call_list$geom_errorbar$args)
+                }
 
                 if (self$options$valueLabels)
                     p <- p + do.call(plot_call_list$geom_text$fun, plot_call_list$geom_text$args)
@@ -314,40 +289,6 @@ barClass <- if (requireNamespace('jmvcore', quietly = TRUE))
 
                 return(FALSE)
             },
-            .getErrorBars = function() {
-                errorBars <- self$options$errorBars
-
-                if (self$grouped && self$options$groupBarType == "grouped") {
-                    geom <- ggplot2::geom_errorbar(
-                        aes(
-                            ymin = y - !!sym(errorBars),
-                            ymax = y + !!sym(errorBars),
-                            group = group
-                        ),
-                        size = self$options$errorBarSize,
-                        width = self$options$errorBarWidth,
-                        position = ggplot2::position_dodge(
-                            width = self$options$barWidth,
-                            preserve = "single"
-                        ),
-                        show.legend = FALSE
-                    )
-                } else if (!self$grouped) {
-                    geom <- ggplot2::geom_errorbar(
-                        aes(
-                            ymin = y - !!sym(errorBars),
-                            ymax = y + !!sym(errorBars)
-                        ),
-                        size = self$options$errorBarSize,
-                        width = self$options$errorBarWidth,
-                        show.legend = FALSE
-                    )
-                } else {
-                    geom <- NULL
-                }
-
-                return(geom)
-            },
             #' Get the function and arguments to initialize the plot
             #'
             #' @param data The data to be used in the plot
@@ -388,11 +329,42 @@ barClass <- if (requireNamespace('jmvcore', quietly = TRUE))
 
                 return(list(fun = ggplot2::geom_bar, args = args))
             },
+            #' Get the function and arguments to create the error bars
+            #'
+            #' @return A list containing the function and arguments to create the error bars
+            .getGeomErrorBarCallList = function() {
+                errorBars <- self$options$errorBars
+
+                args <- list(
+                    size = self$options$errorBarSize,
+                    width = self$options$errorBarWidth,
+                    show.legend = FALSE
+                )
+
+                if (self$grouped) {
+                    args$mapping <- aes(
+                        ymin = y - !!sym(errorBars),
+                        ymax = y + !!sym(errorBars),
+                        group = group
+                    )
+                    args$position <- ggplot2::position_dodge(
+                        width = self$options$barWidth,
+                        preserve = "single"
+                    )
+                } else {
+                    args$mapping <- aes(
+                        ymin = y - !!sym(errorBars),
+                        ymax = y + !!sym(errorBars)
+                    )
+                }
+
+                return(list(fun = ggplot2::geom_errorbar, args = args))
+            },
             #' Get the function and arguments to create the text labels
             #'
             #' @return A list containing the function and arguments to create the text labels
             .getGeomTextCallList = function() {
-                args <- list(mapping = aes(label = y), size = 5)
+                args <- list(mapping = aes(label = round(y, 2)), size = 5)
 
                 if (self$grouped) {
                     if (self$options$groupBarType == "grouped") {
