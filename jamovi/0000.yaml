@@ -15,28 +15,33 @@ analyses:
   - title: Barplot
     name: bar
     ns: jmvplot
-    menuGroup: jmvplot
+    menuGroup: .
     menuTitle: Barplot
+    ribbon: plots
   - title: Boxplot
     name: box
     ns: jmvplot
-    menuGroup: jmvplot
+    menuGroup: .
     menuTitle: Boxplot
+    ribbon: plots
   - title: Histogram
     name: hist
     ns: jmvplot
-    menuGroup: jmvplot
+    menuGroup: .
     menuTitle: Histogram
+    ribbon: plots
   - title: Scatterplot
     name: scatter
     ns: jmvplot
-    menuGroup: jmvplot
+    menuGroup: .
     menuTitle: Scatterplot
+    ribbon: plots
   - title: Lineplot
     name: line
     ns: jmvplot
-    menuGroup: jmvplot
+    menuGroup: .
     menuTitle: Lineplot
+    ribbon: plots
 usesNative: true
 minApp: 1.0.8
 

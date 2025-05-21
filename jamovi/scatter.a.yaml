@@ -1,7 +1,8 @@
 ---
 name:  scatter
 title: Scatterplot
-menuGroup: jmvplot
+ribbon: plots
+menuGroup: .
 version: '1.0.0'
 jas: '1.2'
 
