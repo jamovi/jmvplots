@@ -200,44 +200,62 @@ barClass <- if (requireNamespace('jmvcore', quietly = TRUE))
 
                 plot_call_list <- list(
                     "ggplot" = private$.getInitPlotCallList(image$state),
-                    "geom_bar" = private$.getGeomBarCallList(theme),
-                    "geom_text" = private$.getGeomTextCallList(),
-                    "geom_errorbar" = private$.getGeomErrorBarCallList()
+                    "geom_bar" = private$.getGeomBarCallList(theme)
                 )
 
-                p <- do.call(plot_call_list$ggplot$fun, plot_call_list$ggplot$args) +
-                    do.call(plot_call_list$geom_bar$fun, plot_call_list$geom_bar$args) +
-                    ggtheme
-
-                if (self$grouped) p <- p + formatLegend(self$options)
-
-                if (private$.hasErrorBars()) {
-                    p <- p +
-                        do.call(plot_call_list$geom_errorbar$fun, plot_call_list$geom_errorbar$args)
-                }
+                if (private$.hasErrorBars())
+                    plot_call_list$geom_errorbar <- private$.getGeomErrorBarCallList()
 
                 if (self$options$valueLabels)
-                    p <- p + do.call(plot_call_list$geom_text$fun, plot_call_list$geom_text$args)
+                    plot_call_list$geom_text <- private$.getGeomTextCallList()
 
-                if (self$options$yAxisRangeType == "manual")
-                    p <- p + ggplot2::ylim(self$options$yAxisRangeMin, self$options$yAxisRangeMax)
+                if (self$options$yAxisRangeType == "manual") {
+                    plot_call_list$ylim <- list(
+                        ggplot2::ylim,
+                        list(
+                            min = self$options$yAxisRangeMin,
+                            max = self$options$yAxisRangeMax
+                        )
+                    )
+                }
 
                 if (
                     !self$grouped &&
                         self$options$mode == "counts" &&
                         !is.null(self$options$countsLabels)
-                )
-                    p <- p + ggplot2::scale_x_discrete(labels = image$state$label_text)
-
-                if (self$options$xAxisLabelFontSizeRevLabels)
-                    p <- p + ggplot2::scale_x_discrete(limits = rev)
+                ) {
+                    plot_call_list$scale_x_discrete <- list(
+                        ggplot2::scale_x_discrete,
+                        list(labels = image$state$label_text)
+                    )
+                } else if (self$options$xAxisLabelFontSizeRevLabels) {
+                    plot_call_list$scale_x_discrete <- list(
+                        ggplot2::scale_x_discrete,
+                        list(labels = rev)
+                    )
+                }
 
                 labelDefaults <- private$.getDefaultLabels()
-                p <- p +
-                    setLabels(options = self$options, defaults = labelDefaults) +
-                    formatLabels(options = self$options, flipAxes = self$options$flipAxes)
+                plot_call_list$labs <- getLabsCallList(self$options, labelDefaults)
 
-                if (self$options$flipAxes) p <- p + ggplot2::coord_flip()
+                if (self$options$flipAxes)
+                    plot_call_list$coord_flip <- list(ggplot2::coord_flip, list())
+
+                theme_call_list_args <- list()
+                if (self$grouped) {
+                    theme_call_list_args <- utils::modifyList(
+                        theme_call_list_args,
+                        getLegendThemeCallArgs(self$options)
+                    )
+                }
+                theme_call_list_args <- utils::modifyList(
+                    theme_call_list_args,
+                    getLabelsThemeCallArgs(self$options, self$options$flipAxes)
+                )
+
+                p <- createPlotFromCallStack(plot_call_list) +
+                    ggtheme +
+                    do.call(ggplot2::theme, theme_call_list_args)
 
                 return(p)
             },
