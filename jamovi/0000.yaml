@@ -17,31 +17,31 @@ analyses:
     ns: jmvplot
     menuGroup: .
     menuTitle: Barplot
-    ribbon: plots
+    category: plots
   - title: Boxplot
     name: box
     ns: jmvplot
     menuGroup: .
     menuTitle: Boxplot
-    ribbon: plots
+    category: plots
   - title: Histogram
     name: hist
     ns: jmvplot
     menuGroup: .
     menuTitle: Histogram
-    ribbon: plots
+    category: plots
   - title: Scatterplot
     name: scatter
     ns: jmvplot
     menuGroup: .
     menuTitle: Scatterplot
-    ribbon: plots
+    category: plots
   - title: Lineplot
     name: line
     ns: jmvplot
     menuGroup: .
     menuTitle: Lineplot
-    ribbon: plots
+    category: plots
 usesNative: true
 minApp: 1.0.8
 

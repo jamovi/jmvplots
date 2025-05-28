@@ -1,7 +1,7 @@
 ---
 name:  scatter
 title: Scatterplot
-ribbon: plots
+category: plots
 menuGroup: .
 version: '1.0.0'
 jas: '1.2'
