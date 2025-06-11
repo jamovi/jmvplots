@@ -125,7 +125,7 @@ histClass <- if (requireNamespace('jmvcore', quietly = TRUE)) {
 
                 labelDefaults <- list(
                     xLabel = self$options$var,
-                    yLabel = "Frequency (N)",
+                    yLabel = .("Frequency (N)"),
                     groupLabel = self$options$group
                 )
                 p <- p +

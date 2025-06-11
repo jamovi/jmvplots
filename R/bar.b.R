@@ -271,7 +271,7 @@ barClass <- if (requireNamespace('jmvcore', quietly = TRUE)) {
                 mode <- self$options$mode
                 if (mode == "categorical") {
                     xLabel <- self$options$catvar
-                    yLabel <- "Count"
+                    yLabel <- .("Frequency (N)")
                 } else if (mode == "continuous") {
                     xLabel <- self$options$congroup1
 
@@ -291,7 +291,7 @@ barClass <- if (requireNamespace('jmvcore', quietly = TRUE)) {
                     }
 
                     yLabel <- jmvcore::format(
-                        "{var} (mean{error})",
+                        .("{var} (mean{error})"),
                         var = self$options$convar,
                         error = error
                     )
