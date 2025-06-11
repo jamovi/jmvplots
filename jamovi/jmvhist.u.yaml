@@ -1,5 +1,5 @@
-title: Scatterplot
-name: scatter
+title: Histogram
+name: jmvhist
 jus: '3.0'
 stage: 0
 compilerMode: tame
@@ -9,17 +9,10 @@ children:
     stretchFactor: 1
     children:
       - type: TargetLayoutBox
-        label: X-Axis
+        label: Variable
         children:
           - type: VariablesListBox
-            name: x
-            maxItemCount: 1
-            isTarget: true
-      - type: TargetLayoutBox
-        label: Y-Axis
-        children:
-          - type: VariablesListBox
-            name: 'y'
+            name: var
             maxItemCount: 1
             isTarget: true
       - type: TargetLayoutBox
@@ -45,23 +38,39 @@ children:
             stretchFactor: 1
             children:
               - type: Label
-                label: Scatter
+                label: Histogram
                 children:
                   - type: TextBox
-                    name: pointSize
+                    name: binWidth
                     format: number
-              - type: Label
-                label: Regression Line
-                children:
+                  - type: CheckBox
+                    name: bins
+                    children:
+                      - type: TextBox
+                        name: binOpacity
+                        format: number
+                        enable: (bins)
                   - type: CheckBox
                     name: line
                     children:
-                      - type: ComboBox
-                        name: lineMethod
+                      - type: TextBox
+                        name: lineSize
+                        format: number
                         enable: (line)
-                      - type: CheckBox
-                        name: lineSE
-                        enable: (line)
+              - type: Label
+                label: Density
+                children:
+                  - type: CheckBox
+                    name: density
+                    children:
+                      - type: TextBox
+                        name: densityOpacity
+                        format: number
+                        enable: (density)
+                      - type: TextBox
+                        name: densityLineSize
+                        format: number
+                        enable: (density)
           - type: LayoutBox
             cell:
               column: 1

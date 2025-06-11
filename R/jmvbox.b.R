@@ -1,10 +1,10 @@
 #' @importFrom ggplot2 ggplot aes
 #' @importFrom rlang sym
 #' @importFrom jmvcore .
-boxClass <- if (requireNamespace('jmvcore', quietly = TRUE)) {
+jmvboxClass <- if (requireNamespace('jmvcore', quietly = TRUE)) {
     R6::R6Class(
-        "boxClass",
-        inherit = boxBase,
+        "jmvboxClass",
+        inherit = jmvboxBase,
         private = list(
             .run = function() {
                 if (is.null(self$options$var)) {

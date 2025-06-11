@@ -1,6 +1,6 @@
 ---
-name:  hist
-title: Histogram
+name:  jmvscatter
+title: Scatterplot
 category: plots
 menuGroup: .
 version: '1.0.0'
@@ -10,8 +10,16 @@ options:
     - name: data
       type: Data
 
-    - name: var
-      title: Variable
+    - name: x
+      title: X-Axis
+      type: Variable
+      suggested:
+        - continuous
+      permitted:
+        - numeric
+
+    - name: y
+      title: Y-Axis
       type: Variable
       suggested:
         - continuous
@@ -31,50 +39,30 @@ options:
       type: Bool
       default: false
 
-    - name: bins
-      title: Show bins
-      type: Bool
-      default: true
-
-    - name: binWidth
-      title: Bin width
+    - name: pointSize
+      title: Point size
       type: Number
-      default: 0.5
-      min: 0
-
-    - name: binOpacity
-      title: Bin opacity
-      type: Number
-      default: 1
-      min: 0
-      max: 1
+      default: 2
 
     - name: line
       title: Show line
       type: Bool
       default: false
 
-    - name: lineSize
-      title: Line size
-      type: Number
-      default: 0.5
+    - name: lineMethod
+      title: Method
+      type: List
+      options:
+        - name: lm
+          title: Linear
+        - name: loess
+          title: Smooth
+      default: lm
 
-    - name: density
-      title: Show density
+    - name: lineSE
+      title: Standard error
       type: Bool
-      default: false
-
-    - name: densityOpacity
-      title: Density opacity
-      type: Number
-      default: 0.2
-      min: 0
-      max: 1
-
-    - name: densityLineSize
-      title: Line size
-      type: Number
-      default: 0.5
+      default: true
 
     - name: width
       title: Width

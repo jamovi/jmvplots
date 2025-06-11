@@ -1,14 +1,15 @@
 ---
-name:  box
-title: Boxplot
+name:  jmvhist
+title: Histogram
 jrs:   '1.1'
 
 items:
     - name: plot
       title: ''
       type: Image
-      description: an image containing the box plot
+      description: an image containing the histogram
       width: 500
       height: 500
-      renderFun: .boxPlot
+      renderFun: .histPlot
+
 ...

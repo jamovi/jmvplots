@@ -1,94 +1,34 @@
 ---
-name:  bar
-title: Barplot
+name:  jmvbox
+title: Boxplot
 category: plots
 menuGroup: .
 version: '1.0.0'
 jas: '1.2'
 
 options:
-    - name: mode
-      title: "Variable type"
-      type: List
-      options:
-        - name: categorical
-          title: Categorical
-        - name: continuous
-          title: Continuous
-        - name: counts
-          title: Counts
-      default: categorical
-
     - name: data
       type: Data
 
-    - name: catvar
-      title: Categorical Variable
+    - name: var
+      title: Variable
       type: Variable
-      default: null
-      suggested:
-        - nominal
-      permitted:
-        - factor
-
-    - name: catgroup
-      title: Grouping Variable
-      type: Variable
-      default: null
-      suggested:
-        - nominal
-      permitted:
-        - factor
-
-    - name: convar
-      title: Continuous Variable
-      type: Variable
-      default: null
       suggested:
         - continuous
       permitted:
         - numeric
 
-    - name: congroup1
+    - name: group1
       title: Grouping Variable 1
       type: Variable
-      default: null
       suggested:
         - nominal
       permitted:
         - factor
 
-    - name: congroup2
+    - name: group2
       title: Grouping Variable 2
       type: Variable
-      default: null
-      suggested:
-        - nominal
-      permitted:
-        - factor
-
-    - name: counts
-      title: Counts
-      type: Variable
-      default: null
-      suggested:
-        - continuous
-      permitted:
-        - numeric
-
-    - name: countsLabels
-      title: Labels
-      type: Variable
-      default: null
-      suggested:
-        - nominal
-      permitted:
-        - factor
-
-    - name: countsgroup
-      title: Grouping Variable
-      type: Variable
-      default: null
       suggested:
         - nominal
       permitted:
@@ -99,16 +39,22 @@ options:
       type: Bool
       default: false
 
-    - name: barWidth
-      title: Width
-      type: Number
-      default: 0.9
-      min: 0
-
-    - name: valueLabels
-      title: Value labels
+    - name: notch
+      title: Notch
       type: Bool
       default: false
+
+    - name: boxWidth
+      title: Width
+      type: Number
+      default: 0.5
+      min: 0
+      max: 1
+
+    - name: outliers
+      title: Show outliers
+      type: Bool
+      default: true
 
     - name: width
       title: Width
@@ -119,39 +65,6 @@ options:
       title: Height
       type: Number
       default: 500
-
-    - name: errorBars
-      title: Error bars
-      type: List
-      options:
-        - name: none
-          title: None
-        - name: sd
-          title: Standard deviation
-        - name: se
-          title: Standard error
-        - name: ci
-          title: Confidence interval
-      default: none
-
-    - name: ciWidth
-      title: Width
-      type: Number
-      default: 95
-      min: 0
-      max: 100
-
-    - name: errorBarWidth
-      title: Error bar width
-      type: Number
-      default: 0.1
-      min: 0
-
-    - name: errorBarSize
-      title: Error bar line size
-      type: Number
-      default: 0.5
-      min: 0
 
     - name: title
       title: Title text
@@ -284,13 +197,6 @@ options:
       type: Number
       default: 12
 
-    - name: yAxisLabelRotation
-      title: Label rotation
-      type: Number
-      default: 0
-      min: 0
-      max: 360
-
     - name: yAxisRangeType
       title: Y-Axis Range
       type: List
@@ -299,22 +205,31 @@ options:
           title: Auto
         - name: manual
           title: Manual
-      default: auto
 
     - name: yAxisRangeMin
       title: Min
       type: Number
-      default: 0
 
     - name: yAxisRangeMax
       title: Max
       type: Number
+
+    - name: yAxisLabelRotation
+      title: Label rotation
+      type: Number
       default: 0
+      min: 0
+      max: 360
 
     - name: xAxisLabelFontSize
       title: Label font size
       type: Number
       default: 12
+
+    - name: xAxisLabelFontSizeRevLabels
+      title: Reverse labels
+      type: Bool
+      default: false
 
     - name: xAxisLabelRotation
       title: Label rotation
@@ -322,11 +237,6 @@ options:
       default: 0
       min: 0
       max: 360
-
-    - name: xAxisLabelFontSizeRevLabels
-      title: Reverse labels
-      type: Bool
-      default: false
 
     - name: legendTitle
       title: Title text
@@ -420,14 +330,4 @@ options:
         - name: vertical
           title: Vertical
       default: vertical
-
-    - name: groupBarType
-      title: Bar type
-      type: List
-      options:
-        - name: grouped
-          title: Grouped
-        - name: stacked
-          title: Stacked
-      default: grouped
 ...

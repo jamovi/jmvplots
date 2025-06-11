@@ -1,4 +1,4 @@
-Package: jmvplot
+Package: scatr
 Type: Package
 Title: Create Elegant and Interactive Plots Built on 'ggplot2'
 Version: 0.0.1

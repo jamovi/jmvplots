@@ -1,5 +1,5 @@
-title: Histogram
-name: hist
+title: Boxplot
+name: jmvbox
 jus: '3.0'
 stage: 0
 compilerMode: tame
@@ -16,10 +16,17 @@ children:
             maxItemCount: 1
             isTarget: true
       - type: TargetLayoutBox
-        label: Grouping Variable
+        label: Grouping Variable 1
         children:
           - type: VariablesListBox
-            name: group
+            name: group1
+            maxItemCount: 1
+            isTarget: true
+      - type: TargetLayoutBox
+        label: Grouping Variable 2
+        children:
+          - type: VariablesListBox
+            name: group2
             maxItemCount: 1
             isTarget: true
   - type: CollapseBox
@@ -38,39 +45,15 @@ children:
             stretchFactor: 1
             children:
               - type: Label
-                label: Histogram
+                label: Box Element
                 children:
                   - type: TextBox
-                    name: binWidth
+                    name: boxWidth
                     format: number
                   - type: CheckBox
-                    name: bins
-                    children:
-                      - type: TextBox
-                        name: binOpacity
-                        format: number
-                        enable: (bins)
+                    name: outliers
                   - type: CheckBox
-                    name: line
-                    children:
-                      - type: TextBox
-                        name: lineSize
-                        format: number
-                        enable: (line)
-              - type: Label
-                label: Density
-                children:
-                  - type: CheckBox
-                    name: density
-                    children:
-                      - type: TextBox
-                        name: densityOpacity
-                        format: number
-                        enable: (density)
-                      - type: TextBox
-                        name: densityLineSize
-                        format: number
-                        enable: (density)
+                    name: notch
           - type: LayoutBox
             cell:
               column: 1
@@ -185,26 +168,8 @@ children:
                     name: xAxisLabelRotation
                     suffix: "°"
                     format: number
-              - type: Label
-                label: Range
-                children:
-                  - type: RadioButton
-                    name: xAxisRangeType_auto
-                    optionName: xAxisRangeType
-                    optionPart: auto
-                  - type: RadioButton
-                    name: xAxisRangeType_manual
-                    optionName: xAxisRangeType
-                    optionPart: manual
-                    children:
-                      - type: TextBox
-                        name: xAxisRangeMin
-                        format: number
-                        enable: (xAxisRangeType:manual)
-                      - type: TextBox
-                        name: xAxisRangeMax
-                        format: number
-                        enable: (xAxisRangeType:manual)
+                  - type: CheckBox
+                    name: xAxisLabelFontSizeRevLabels
           - type: LayoutBox
             cell:
               column: 1

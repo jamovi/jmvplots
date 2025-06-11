@@ -1,145 +1,34 @@
-title: Barplot
-name: bar
+title: Scatterplot
+name: jmvscatter
 jus: '3.0'
 stage: 0
 compilerMode: tame
 children:
-  - type: ModeSelector
-    name: mode
+  - type: VariableSupplier
+    persistentItems: false
     stretchFactor: 1
     children:
-      - type: Content
-        name: categorical
+      - type: TargetLayoutBox
+        label: X-Axis
         children:
-          - type: VariableSupplier
-            persistentItems: false
-            stretchFactor: 1
-            children:
-              - type: TargetLayoutBox
-                label: Categorical Variable
-                children:
-                  - type: VariablesListBox
-                    name: catvar
-                    maxItemCount: 1
-                    isTarget: true
-              - type: TargetLayoutBox
-                label: Grouping Variable
-                children:
-                  - type: VariablesListBox
-                    name: catgroup
-                    maxItemCount: 1
-                    isTarget: true
-      - type: Content
-        name: continuous
+          - type: VariablesListBox
+            name: x
+            maxItemCount: 1
+            isTarget: true
+      - type: TargetLayoutBox
+        label: Y-Axis
         children:
-          - type: VariableSupplier
-            persistentItems: false
-            stretchFactor: 1
-            children:
-              - type: TargetLayoutBox
-                label: Continuous Variable
-                children:
-                  - type: VariablesListBox
-                    name: convar
-                    maxItemCount: 1
-                    isTarget: true
-              - type: TargetLayoutBox
-                label: Grouping Variable 1
-                children:
-                  - type: VariablesListBox
-                    name: congroup1
-                    maxItemCount: 1
-                    isTarget: true
-              - type: TargetLayoutBox
-                label: Grouping Variable 2
-                children:
-                  - type: VariablesListBox
-                    name: congroup2
-                    maxItemCount: 1
-                    isTarget: true
-          - type: CollapseBox
-            label: Continuous Options
-            collapsed: true
-            stretchFactor: 1
-            children:
-              - type: LayoutBox
-                margin: large
-                stretchFactor: 1
-                children:
-                  - type: LayoutBox
-                    cell:
-                      column: 0
-                      row: 0
-                    stretchFactor: 1
-                    children:
-                      - type: Label
-                        label: Error Bars
-                        children:
-                          - type: RadioButton
-                            name: errorBars_none
-                            optionName: errorBars
-                            optionPart: none
-                          - type: RadioButton
-                            name: errorBars_sd
-                            optionName: errorBars
-                            optionPart: sd
-                          - type: RadioButton
-                            name: errorBars_se
-                            optionName: errorBars
-                            optionPart: se
-                          - type: RadioButton
-                            name: yAxisRangeType_ci
-                            optionName: errorBars
-                            optionPart: ci
-                            children:
-                              - type: TextBox
-                                name: ciWidth
-                                format: number
-                                suffix: "%"
-                                enable: (errorBars:ci)
-              - type: LayoutBox
-                cell:
-                  column: 1
-                  row: 0
-                stretchFactor: 1
-                children:
-                  - type: Label
-                    label: Error Bar Styling
-                    children:
-                      - type: TextBox
-                        name: errorBarSize
-                        format: number
-                      - type: TextBox
-                        name: errorBarWidth
-                        format: number
-      - type: Content
-        name: counts
+          - type: VariablesListBox
+            name: 'y'
+            maxItemCount: 1
+            isTarget: true
+      - type: TargetLayoutBox
+        label: Grouping Variable
         children:
-          - type: VariableSupplier
-            persistentItems: false
-            stretchFactor: 1
-            children:
-              - type: TargetLayoutBox
-                label: Counts
-                children:
-                  - type: VariablesListBox
-                    name: counts
-                    maxItemCount: 1
-                    isTarget: true
-              - type: TargetLayoutBox
-                label: Labels
-                children:
-                  - type: VariablesListBox
-                    name: countsLabels
-                    maxItemCount: 1
-                    isTarget: true
-              - type: TargetLayoutBox
-                label: Grouping Variable
-                children:
-                  - type: VariablesListBox
-                    name: countsgroup
-                    maxItemCount: 1
-                    isTarget: true
+          - type: VariablesListBox
+            name: group
+            maxItemCount: 1
+            isTarget: true
   - type: CollapseBox
     label: General Options
     collapsed: true
@@ -156,13 +45,23 @@ children:
             stretchFactor: 1
             children:
               - type: Label
-                label: Bar
+                label: Scatter
                 children:
                   - type: TextBox
-                    name: barWidth
+                    name: pointSize
                     format: number
+              - type: Label
+                label: Regression Line
+                children:
                   - type: CheckBox
-                    name: valueLabels
+                    name: line
+                    children:
+                      - type: ComboBox
+                        name: lineMethod
+                        enable: (line)
+                      - type: CheckBox
+                        name: lineSE
+                        enable: (line)
           - type: LayoutBox
             cell:
               column: 1
@@ -183,38 +82,6 @@ children:
                 children:
                   - type: CheckBox
                     name: flipAxes
-  - type: CollapseBox
-    label: Group Options
-    collapsed: true
-    stretchFactor: 1
-    children:
-      - type: LayoutBox
-        margin: large
-        stretchFactor: 1
-        children:
-          - type: LayoutBox
-            cell:
-              column: 0
-              row: 0
-            stretchFactor: 1
-            children:
-              - type: Label
-                label: Bar Type
-                children:
-                  - type: RadioButton
-                    name: groupBarType_grouped
-                    optionName: groupBarType
-                    optionPart: grouped
-                  - type: RadioButton
-                    name: groupBarType_stacked
-                    optionName: groupBarType
-                    optionPart: stacked
-          - type: LayoutBox
-            cell:
-              column: 1
-              row: 0
-            stretchFactor: 1
-            children: []
   - type: CollapseBox
     label: Plot & Axis Titles
     collapsed: true
@@ -309,8 +176,26 @@ children:
                     name: xAxisLabelRotation
                     suffix: "°"
                     format: number
-                  - type: CheckBox
-                    name: xAxisLabelFontSizeRevLabels
+              - type: Label
+                label: Range
+                children:
+                  - type: RadioButton
+                    name: xAxisRangeType_auto
+                    optionName: xAxisRangeType
+                    optionPart: auto
+                  - type: RadioButton
+                    name: xAxisRangeType_manual
+                    optionName: xAxisRangeType
+                    optionPart: manual
+                    children:
+                      - type: TextBox
+                        name: xAxisRangeMin
+                        format: number
+                        enable: (xAxisRangeType:manual)
+                      - type: TextBox
+                        name: xAxisRangeMax
+                        format: number
+                        enable: (xAxisRangeType:manual)
           - type: LayoutBox
             cell:
               column: 1

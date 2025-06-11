@@ -1,10 +1,10 @@
 #' @importFrom ggplot2 ggplot aes
 #' @importFrom rlang sym
 #' @importFrom jmvcore .
-barClass <- if (requireNamespace('jmvcore', quietly = TRUE)) {
+jmvbarClass <- if (requireNamespace('jmvcore', quietly = TRUE)) {
     R6::R6Class(
-        "barClass",
-        inherit = barBase,
+        "jmvbarClass",
+        inherit = jmvbarBase,
         #### Active bindings ----
         active = list(
             group = function() {

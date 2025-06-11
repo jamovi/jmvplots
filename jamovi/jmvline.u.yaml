@@ -1,5 +1,5 @@
-title: Boxplot
-name: box
+title: Lineplot
+name: jmvline
 jus: '3.0'
 stage: 0
 compilerMode: tame
@@ -9,26 +9,99 @@ children:
     stretchFactor: 1
     children:
       - type: TargetLayoutBox
-        label: Variable
+        label: X-Axis
         children:
           - type: VariablesListBox
-            name: var
+            name: x
             maxItemCount: 1
             isTarget: true
       - type: TargetLayoutBox
-        label: Grouping Variable 1
+        label: Y-Axis
         children:
           - type: VariablesListBox
-            name: group1
+            name: 'y'
             maxItemCount: 1
             isTarget: true
       - type: TargetLayoutBox
-        label: Grouping Variable 2
+        label: Grouping Variable
         children:
           - type: VariablesListBox
-            name: group2
+            name: group
             maxItemCount: 1
             isTarget: true
+  - type: ModeSelector
+    name: mode
+    stretchFactor: 1
+    children:
+      - type: Content
+        name: aggregate
+        children:
+          - type: CollapseBox
+            label: Aggregate Options
+            collapsed: true
+            stretchFactor: 1
+            children:
+              - type: LayoutBox
+                margin: large
+                stretchFactor: 1
+                children:
+                  - type: LayoutBox
+                    cell:
+                      column: 0
+                      row: 0
+                    stretchFactor: 1
+                    children:
+                      - type: Label
+                        label: Aggregate
+                        children:
+                          - type: RadioButton
+                            name: aggregateType_mean
+                            optionName: aggregateType
+                            optionPart: mean
+                          - type: RadioButton
+                            name: aggregateType_median
+                            optionName: aggregateType
+                            optionPart: median
+              - type: LayoutBox
+                cell:
+                  column: 1
+                  row: 0
+                stretchFactor: 1
+                children:
+                  - type: Label
+                    label: Error Bars
+                    children:
+                      - type: RadioButton
+                        name: errorBars_none
+                        optionName: errorBars
+                        optionPart: none
+                      - type: RadioButton
+                        name: errorBars_sd
+                        optionName: errorBars
+                        optionPart: sd
+                      - type: RadioButton
+                        name: errorBars_se
+                        optionName: errorBars
+                        optionPart: se
+                      - type: RadioButton
+                        name: yAxisRangeType_ci
+                        optionName: errorBars
+                        optionPart: ci
+                        children:
+                          - type: TextBox
+                            name: ciWidth
+                            format: number
+                            suffix: "%"
+                            enable: (errorBars:ci)
+                  - type: Label
+                    label: Error Bar Styling
+                    children:
+                      - type: TextBox
+                        name: errorBarSize
+                        format: number
+                      - type: TextBox
+                        name: errorBarWidth
+                        format: number
   - type: CollapseBox
     label: General Options
     collapsed: true
@@ -45,15 +118,21 @@ children:
             stretchFactor: 1
             children:
               - type: Label
-                label: Box Element
+                label: Line
                 children:
+                  - type: CheckBox
+                    name: line
                   - type: TextBox
-                    name: boxWidth
+                    name: lineSize
                     format: number
+              - type: Label
+                label: Point
+                children:
                   - type: CheckBox
-                    name: outliers
-                  - type: CheckBox
-                    name: notch
+                    name: point
+                  - type: TextBox
+                    name: pointSize
+                    format: number
           - type: LayoutBox
             cell:
               column: 1
@@ -74,6 +153,42 @@ children:
                 children:
                   - type: CheckBox
                     name: flipAxes
+  - type: CollapseBox
+    label: Group Options
+    collapsed: true
+    stretchFactor: 1
+    children:
+      - type: LayoutBox
+        margin: large
+        stretchFactor: 1
+        children:
+          - type: LayoutBox
+            cell:
+              column: 0
+              row: 0
+            stretchFactor: 1
+            children:
+              - type: Label
+                label: Line & Point Style
+                children:
+                  - type: CheckBox
+                    name: groupColor
+                  - type: CheckBox
+                    name: groupLineType
+                  - type: CheckBox
+                    name: groupPointType
+          - type: LayoutBox
+            cell:
+              column: 1
+              row: 0
+            stretchFactor: 1
+            children:
+              - type: Label
+                label: Point Dodging
+                children:
+                  - type: TextBox
+                    name: groupPositionDodge
+                    format: number
   - type: CollapseBox
     label: Plot & Axis Titles
     collapsed: true
@@ -168,8 +283,6 @@ children:
                     name: xAxisLabelRotation
                     suffix: "°"
                     format: number
-                  - type: CheckBox
-                    name: xAxisLabelFontSizeRevLabels
           - type: LayoutBox
             cell:
               column: 1

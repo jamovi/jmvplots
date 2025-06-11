@@ -1,10 +1,10 @@
 #' @importFrom ggplot2 ggplot aes
 #' @importFrom rlang sym
 #' @importFrom jmvcore .
-lineClass <- if (requireNamespace('jmvcore', quietly = TRUE)) {
+jmvlineClass <- if (requireNamespace('jmvcore', quietly = TRUE)) {
     R6::R6Class(
-        "lineClass",
-        inherit = lineBase,
+        "jmvlineClass",
+        inherit = jmvlineBase,
         private = list(
             .run = function() {
                 if (is.null(self$options$x) || is.null(self$options$y)) {

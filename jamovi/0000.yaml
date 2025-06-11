@@ -1,6 +1,6 @@
 ---
 title: Create Elegant and Interactive Plots Built on 'ggplot2'
-name: jmvplot
+name: scatr
 version: 0.0.1
 jms: '1.0'
 authors:
@@ -13,36 +13,37 @@ description: >-
   designed to provide a convencience layer to 'ggplot2' within jamovi.
 analyses:
   - title: Barplot
-    name: bar
-    ns: jmvplot
+    name: jmvbar
+    ns: scatr
     menuGroup: .
     menuTitle: Barplot
     category: plots
   - title: Boxplot
-    name: box
-    ns: jmvplot
+    name: jmvbox
+    ns: scatr
     menuGroup: .
     menuTitle: Boxplot
     category: plots
   - title: Histogram
-    name: hist
-    ns: jmvplot
+    name: jmvhist
+    ns: scatr
     menuGroup: .
     menuTitle: Histogram
     category: plots
   - title: Scatterplot
-    name: scatter
-    ns: jmvplot
+    name: jmvscatter
+    ns: scatr
     menuGroup: .
     menuTitle: Scatterplot
     category: plots
   - title: Lineplot
-    name: line
-    ns: jmvplot
+    name: jmvline
+    ns: scatr
     menuGroup: .
     menuTitle: Lineplot
     category: plots
 usesNative: true
 minApp: 1.0.8
+index: 1
 
 ...

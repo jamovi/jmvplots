@@ -51,6 +51,6 @@
 <text x='383.31' y='535.51' text-anchor='middle' style='font-size: 12.00px; fill: #333333; font-family: sans;' textLength='6.67px' lengthAdjust='spacingAndGlyphs'>1</text>
 <text x='584.40' y='535.51' text-anchor='middle' style='font-size: 12.00px; fill: #333333; font-family: sans;' textLength='6.67px' lengthAdjust='spacingAndGlyphs'>2</text>
 <text x='383.31' y='559.40' text-anchor='middle' style='font-size: 16.00px; fill: #333333; font-family: sans;' textLength='34.70px' lengthAdjust='spacingAndGlyphs'>dose</text>
-<text transform='translate(27.62,265.99) rotate(-90)' text-anchor='middle' style='font-size: 16.00px; fill: #333333; font-family: sans;' textLength='42.70px' lengthAdjust='spacingAndGlyphs'>Count</text>
+<text transform='translate(27.62,265.99) rotate(-90)' text-anchor='middle' style='font-size: 16.00px; fill: #333333; font-family: sans;' textLength='102.27px' lengthAdjust='spacingAndGlyphs'>Frequency (N)</text>
 </g>
 </svg>

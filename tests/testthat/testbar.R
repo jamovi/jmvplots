@@ -1,11 +1,11 @@
 testthat::test_that("mode categorical, no grouping variable", {
-    disp_bar_jmvplot <- jmvplot::bar(data = ToothGrowth, mode = "categorical", catvar = dose)
+    disp_bar_jmvplot <- scatr::jmvbar(data = ToothGrowth, mode = "categorical", catvar = dose)
 
     vdiffr::expect_doppelganger("cat-no-group", disp_bar_jmvplot)
 })
 
 testthat::test_that("mode categorical, grouping variable", {
-    disp_bar_jmvplot <- jmvplot::bar(
+    disp_bar_jmvplot <- scatr::jmvbar(
         data = ToothGrowth,
         mode = "categorical",
         catvar = dose,
@@ -16,7 +16,7 @@ testthat::test_that("mode categorical, grouping variable", {
 })
 
 testthat::test_that("mode continuous, no grouping variable", {
-    disp_bar_jmvplot <- jmvplot::bar(
+    disp_bar_jmvplot <- scatr::jmvbar(
         data = ToothGrowth,
         mode = "continuous",
         convar = len
@@ -26,7 +26,7 @@ testthat::test_that("mode continuous, no grouping variable", {
 })
 
 testthat::test_that("mode continuous, 1 grouping variable", {
-    disp_bar_jmvplot <- jmvplot::bar(
+    disp_bar_jmvplot <- scatr::jmvbar(
         data = ToothGrowth,
         mode = "continuous",
         convar = len,
@@ -37,7 +37,7 @@ testthat::test_that("mode continuous, 1 grouping variable", {
 })
 
 testthat::test_that("mode continuous, 2 grouping variable", {
-    disp_bar_jmvplot <- jmvplot::bar(
+    disp_bar_jmvplot <- scatr::jmvbar(
         data = ToothGrowth,
         mode = "continuous",
         convar = len,
@@ -49,7 +49,7 @@ testthat::test_that("mode continuous, 2 grouping variable", {
 })
 
 testthat::test_that("mode continuous, no grouping variable, error bars", {
-    disp_bar_jmvplot <- jmvplot::bar(
+    disp_bar_jmvplot <- scatr::jmvbar(
         data = ToothGrowth,
         mode = "continuous",
         convar = len,
@@ -61,7 +61,7 @@ testthat::test_that("mode continuous, no grouping variable, error bars", {
 })
 
 testthat::test_that("mode continuous, 1 grouping variable, error bars", {
-    disp_bar_jmvplot <- jmvplot::bar(
+    disp_bar_jmvplot <- scatr::jmvbar(
         data = ToothGrowth,
         mode = "continuous",
         convar = len,
@@ -74,7 +74,7 @@ testthat::test_that("mode continuous, 1 grouping variable, error bars", {
 })
 
 testthat::test_that("mode continuous, 2 grouping variable, error bars", {
-    disp_bar_jmvplot <- jmvplot::bar(
+    disp_bar_jmvplot <- scatr::jmvbar(
         data = ToothGrowth,
         mode = "continuous",
         convar = len,
@@ -92,7 +92,7 @@ testthat::test_that("mode counts, no labels", {
         counts = c(1, 2, 3)
     )
 
-    disp_bar_jmvplot <- jmvplot::bar(data = df, mode = "counts", counts = counts)
+    disp_bar_jmvplot <- scatr::jmvbar(data = df, mode = "counts", counts = counts)
 
     vdiffr::expect_doppelganger("counts-no-labels", disp_bar_jmvplot)
 })
@@ -103,7 +103,7 @@ testthat::test_that("mode counts, with labels", {
         labels = c("A", "B", "C")
     )
 
-    disp_bar_jmvplot <- jmvplot::bar(
+    disp_bar_jmvplot <- scatr::jmvbar(
         data = df,
         mode = "counts",
         counts = counts,
@@ -119,7 +119,7 @@ testthat::test_that("mode counts, no labels, grouping variable", {
         group = c("A", "B", "C")
     )
 
-    disp_bar_jmvplot <- jmvplot::bar(
+    disp_bar_jmvplot <- scatr::jmvbar(
         data = df,
         mode = "counts",
         counts = counts,
@@ -136,7 +136,7 @@ testthat::test_that("mode counts, with labels, grouping variable", {
         group = c("A", "B", "C", "A", "B", "C")
     )
 
-    disp_bar_jmvplot <- jmvplot::bar(
+    disp_bar_jmvplot <- scatr::jmvbar(
         data = df,
         mode = "counts",
         counts = counts,

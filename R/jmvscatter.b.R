@@ -1,10 +1,10 @@
 #' @importFrom ggplot2 ggplot aes
 #' @importFrom rlang sym
 #' @importFrom jmvcore .
-scatterClass <- if (requireNamespace('jmvcore', quietly = TRUE)) {
+jmvscatterClass <- if (requireNamespace('jmvcore', quietly = TRUE)) {
     R6::R6Class(
-        "scatterClass",
-        inherit = scatterBase,
+        "jmvscatterClass",
+        inherit = jmvscatterBase,
         private = list(
             .run = function() {
                 if (is.null(self$options$x) || is.null(self$options$y)) {

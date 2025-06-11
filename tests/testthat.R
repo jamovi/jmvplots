@@ -1,4 +1,4 @@
 library(testthat)
-library(jmvplot)
+library(scatr)
 
-test_check("jmvplot")
+test_check("scatr")

@@ -1,6 +1,6 @@
 ---
-name:  box
-title: Boxplot
+name:  jmvhist
+title: Histogram
 category: plots
 menuGroup: .
 version: '1.0.0'
@@ -18,16 +18,8 @@ options:
       permitted:
         - numeric
 
-    - name: group1
-      title: Grouping Variable 1
-      type: Variable
-      suggested:
-        - nominal
-      permitted:
-        - factor
-
-    - name: group2
-      title: Grouping Variable 2
+    - name: group
+      title: Grouping Variable
       type: Variable
       suggested:
         - nominal
@@ -39,22 +31,50 @@ options:
       type: Bool
       default: false
 
-    - name: notch
-      title: Notch
+    - name: bins
+      title: Show bins
       type: Bool
-      default: false
+      default: true
 
-    - name: boxWidth
-      title: Width
+    - name: binWidth
+      title: Bin width
       type: Number
       default: 0.5
       min: 0
+
+    - name: binOpacity
+      title: Bin opacity
+      type: Number
+      default: 1
+      min: 0
       max: 1
 
-    - name: outliers
-      title: Show outliers
+    - name: line
+      title: Show line
       type: Bool
-      default: true
+      default: false
+
+    - name: lineSize
+      title: Line size
+      type: Number
+      default: 0.5
+
+    - name: density
+      title: Show density
+      type: Bool
+      default: false
+
+    - name: densityOpacity
+      title: Density opacity
+      type: Number
+      default: 0.2
+      min: 0
+      max: 1
+
+    - name: densityLineSize
+      title: Line size
+      type: Number
+      default: 0.5
 
     - name: width
       title: Width
@@ -197,6 +217,13 @@ options:
       type: Number
       default: 12
 
+    - name: yAxisLabelRotation
+      title: Label rotation
+      type: Number
+      default: 0
+      min: 0
+      max: 360
+
     - name: yAxisRangeType
       title: Y-Axis Range
       type: List
@@ -214,22 +241,10 @@ options:
       title: Max
       type: Number
 
-    - name: yAxisLabelRotation
-      title: Label rotation
-      type: Number
-      default: 0
-      min: 0
-      max: 360
-
     - name: xAxisLabelFontSize
       title: Label font size
       type: Number
       default: 12
-
-    - name: xAxisLabelFontSizeRevLabels
-      title: Reverse labels
-      type: Bool
-      default: false
 
     - name: xAxisLabelRotation
       title: Label rotation
@@ -237,6 +252,23 @@ options:
       default: 0
       min: 0
       max: 360
+
+    - name: xAxisRangeType
+      title: X-Axis Range
+      type: List
+      options:
+        - name: auto
+          title: Auto
+        - name: manual
+          title: Manual
+
+    - name: xAxisRangeMin
+      title: Min
+      type: Number
+
+    - name: xAxisRangeMax
+      title: Max
+      type: Number
 
     - name: legendTitle
       title: Title text

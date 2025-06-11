@@ -54,7 +54,7 @@
 <text x='348.76' y='535.51' text-anchor='middle' style='font-size: 12.00px; fill: #333333; font-family: sans;' textLength='6.67px' lengthAdjust='spacingAndGlyphs'>1</text>
 <text x='522.01' y='535.51' text-anchor='middle' style='font-size: 12.00px; fill: #333333; font-family: sans;' textLength='6.67px' lengthAdjust='spacingAndGlyphs'>2</text>
 <text x='348.76' y='559.40' text-anchor='middle' style='font-size: 16.00px; fill: #333333; font-family: sans;' textLength='34.70px' lengthAdjust='spacingAndGlyphs'>dose</text>
-<text transform='translate(27.62,265.99) rotate(-90)' text-anchor='middle' style='font-size: 16.00px; fill: #333333; font-family: sans;' textLength='42.70px' lengthAdjust='spacingAndGlyphs'>Count</text>
+<text transform='translate(27.62,265.99) rotate(-90)' text-anchor='middle' style='font-size: 16.00px; fill: #333333; font-family: sans;' textLength='102.27px' lengthAdjust='spacingAndGlyphs'>Frequency (N)</text>
 <rect x='641.90' y='229.86' width='63.15' height='72.26' style='stroke-width: 1.55; stroke: none;' />
 <text x='649.87' y='250.51' style='font-size: 16.00px; fill: #333333; font-family: sans;' textLength='34.70px' lengthAdjust='spacingAndGlyphs'>supp</text>
 <rect x='650.58' y='260.85' width='15.59' height='15.59' style='stroke-width: 1.07; stroke: #333333; stroke-linecap: butt; stroke-linejoin: miter; fill: #A6C4F1;' />
