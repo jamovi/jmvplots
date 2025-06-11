@@ -1,12 +1,15 @@
 #' @importFrom ggplot2 ggplot aes
 #' @importFrom rlang sym
-lineClass <- if (requireNamespace('jmvcore', quietly = TRUE))
+#' @importFrom jmvcore .
+lineClass <- if (requireNamespace('jmvcore', quietly = TRUE)) {
     R6::R6Class(
         "lineClass",
         inherit = lineBase,
         private = list(
             .run = function() {
-                if (is.null(self$options$x) || is.null(self$options$y)) return()
+                if (is.null(self$options$x) || is.null(self$options$y)) {
+                    return()
+                }
 
                 private$.preparePlotData()
             },
@@ -92,7 +95,9 @@ lineClass <- if (requireNamespace('jmvcore', quietly = TRUE))
                 return(df)
             },
             .linePlot = function(image, ggtheme, theme, ...) {
-                if (is.null(image$state)) return(FALSE)
+                if (is.null(image$state)) {
+                    return(FALSE)
+                }
 
                 if (is.null(self$options$group)) {
                     p <- ggplot(image$state, aes(x = x, y = y, group = 1))
@@ -114,9 +119,13 @@ lineClass <- if (requireNamespace('jmvcore', quietly = TRUE))
                 } else {
                     p <- ggplot(image$state, aes(x = x, y = y, group = group))
 
-                    if (self$options$groupColor) p <- p + aes(color = group)
+                    if (self$options$groupColor) {
+                        p <- p + aes(color = group)
+                    }
 
-                    if (self$options$groupPointType) p <- p + aes(shape = group)
+                    if (self$options$groupPointType) {
+                        p <- p + aes(shape = group)
+                    }
 
                     if (self$options$line) {
                         p <- p +
@@ -158,10 +167,13 @@ lineClass <- if (requireNamespace('jmvcore', quietly = TRUE))
                     }
                 }
 
-                if (self$options$flipAxes) p <- p + ggplot2::coord_flip()
+                if (self$options$flipAxes) {
+                    p <- p + ggplot2::coord_flip()
+                }
 
-                if (self$options$yAxisRangeType == "manual")
+                if (self$options$yAxisRangeType == "manual") {
                     p <- p + ggplot2::ylim(self$options$yAxisRangeMin, self$options$yAxisRangeMax)
+                }
 
                 labelDefaults <- list(
                     xLabel = self$options$x,
@@ -174,5 +186,11 @@ lineClass <- if (requireNamespace('jmvcore', quietly = TRUE))
 
                 return(p)
             }
+        ),
+        public = list(
+            asSource = function() {
+                return(.("Syntax mode for plots is not yet available."))
+            }
         )
     )
+}

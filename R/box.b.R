@@ -1,12 +1,15 @@
 #' @importFrom ggplot2 ggplot aes
 #' @importFrom rlang sym
-boxClass <- if (requireNamespace('jmvcore', quietly = TRUE))
+#' @importFrom jmvcore .
+boxClass <- if (requireNamespace('jmvcore', quietly = TRUE)) {
     R6::R6Class(
         "boxClass",
         inherit = boxBase,
         private = list(
             .run = function() {
-                if (is.null(self$options$var)) return()
+                if (is.null(self$options$var)) {
+                    return()
+                }
 
                 private$.preparePlotData()
             },
@@ -39,7 +42,9 @@ boxClass <- if (requireNamespace('jmvcore', quietly = TRUE))
                 image$setState(df)
             },
             .boxPlot = function(image, ggtheme, theme, ...) {
-                if (is.null(image$state)) return(FALSE)
+                if (is.null(image$state)) {
+                    return(FALSE)
+                }
 
                 if (is.null(self$options$group1) || is.null(self$options$group2)) {
                     p <- ggplot(image$state, aes(x = x, y = y)) +
@@ -68,18 +73,22 @@ boxClass <- if (requireNamespace('jmvcore', quietly = TRUE))
                         formatLegend(self$options)
                 }
 
-                if (self$options$yAxisRangeType == "manual")
+                if (self$options$yAxisRangeType == "manual") {
                     p <- p + ggplot2::ylim(self$options$yAxisRangeMin, self$options$yAxisRangeMax)
+                }
 
-                if (self$options$xAxisLabelFontSizeRevLabels)
+                if (self$options$xAxisLabelFontSizeRevLabels) {
                     p <- p + ggplot2::scale_x_discrete(limits = rev)
+                }
 
                 labelDefaults <- private$.getDefaultLabels()
                 p <- p +
                     setLabels(options = self$options, defaults = labelDefaults) +
                     formatLabels(options = self$options, flipAxes = self$options$flipAxes)
 
-                if (self$options$flipAxes) p <- p + ggplot2::coord_flip()
+                if (self$options$flipAxes) {
+                    p <- p + ggplot2::coord_flip()
+                }
 
                 return(p)
             },
@@ -102,5 +111,11 @@ boxClass <- if (requireNamespace('jmvcore', quietly = TRUE))
                     groupLabel = groupLabel
                 ))
             }
+        ),
+        public = list(
+            asSource = function() {
+                return(.("Syntax mode for plots is not yet available."))
+            }
         )
     )
+}

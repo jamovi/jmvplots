@@ -1,6 +1,7 @@
 #' @importFrom ggplot2 ggplot aes
 #' @importFrom rlang sym
-barClass <- if (requireNamespace('jmvcore', quietly = TRUE))
+#' @importFrom jmvcore .
+barClass <- if (requireNamespace('jmvcore', quietly = TRUE)) {
     R6::R6Class(
         "barClass",
         inherit = barBase,
@@ -39,8 +40,9 @@ barClass <- if (requireNamespace('jmvcore', quietly = TRUE))
                     (mode == "categorical" && is.null(self$options$catvar)) ||
                         (mode == "continuous" && is.null(self$options$convar)) ||
                         (mode == "counts" && is.null(self$options$counts))
-                )
+                ) {
                     return()
+                }
 
                 private$.preparePlotData()
             },
@@ -196,18 +198,22 @@ barClass <- if (requireNamespace('jmvcore', quietly = TRUE))
                 return(df)
             },
             .barPlot = function(image, ggtheme, theme, ...) {
-                if (is.null(image$state)) return(FALSE)
+                if (is.null(image$state)) {
+                    return(FALSE)
+                }
 
                 plot_call_list <- list(
                     "ggplot" = private$.getInitPlotCallList(image$state),
                     "geom_bar" = private$.getGeomBarCallList(theme)
                 )
 
-                if (private$.hasErrorBars())
+                if (private$.hasErrorBars()) {
                     plot_call_list$geom_errorbar <- private$.getGeomErrorBarCallList()
+                }
 
-                if (self$options$valueLabels)
+                if (self$options$valueLabels) {
                     plot_call_list$geom_text <- private$.getGeomTextCallList()
+                }
 
                 if (self$options$yAxisRangeType == "manual") {
                     plot_call_list$ylim <- list(
@@ -238,8 +244,9 @@ barClass <- if (requireNamespace('jmvcore', quietly = TRUE))
                 labelDefaults <- private$.getDefaultLabels()
                 plot_call_list$labs <- getLabsCallList(self$options, labelDefaults)
 
-                if (self$options$flipAxes)
+                if (self$options$flipAxes) {
                     plot_call_list$coord_flip <- list(ggplot2::coord_flip, list())
+                }
 
                 theme_call_list_args <- list()
                 if (self$grouped) {
@@ -404,5 +411,11 @@ barClass <- if (requireNamespace('jmvcore', quietly = TRUE))
 
                 return(list(fun = ggplot2::geom_text, args = args))
             }
+        ),
+        public = list(
+            asSource = function() {
+                return(.("Syntax mode for plots is not yet available."))
+            }
         )
     )
+}

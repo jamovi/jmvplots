@@ -1,12 +1,15 @@
 #' @importFrom ggplot2 ggplot aes
 #' @importFrom rlang sym
-histClass <- if (requireNamespace('jmvcore', quietly = TRUE))
+#' @importFrom jmvcore .
+histClass <- if (requireNamespace('jmvcore', quietly = TRUE)) {
     R6::R6Class(
         "histClass",
         inherit = histBase,
         private = list(
             .run = function() {
-                if (is.null(self$options$var)) return()
+                if (is.null(self$options$var)) {
+                    return()
+                }
 
                 private$.preparePlotData()
             },
@@ -29,7 +32,9 @@ histClass <- if (requireNamespace('jmvcore', quietly = TRUE))
                 image$setState(df)
             },
             .histPlot = function(image, ggtheme, theme, ...) {
-                if (is.null(image$state)) return(FALSE)
+                if (is.null(image$state)) {
+                    return(FALSE)
+                }
 
                 group <- self$options$group
 
@@ -106,13 +111,17 @@ histClass <- if (requireNamespace('jmvcore', quietly = TRUE))
                     p <- p + ggtheme + formatLegend(self$options)
                 }
 
-                if (self$options$flipAxes) p <- p + ggplot2::coord_flip()
+                if (self$options$flipAxes) {
+                    p <- p + ggplot2::coord_flip()
+                }
 
-                if (self$options$yAxisRangeType == "manual")
+                if (self$options$yAxisRangeType == "manual") {
                     p <- p + ggplot2::ylim(self$options$yAxisRangeMin, self$options$yAxisRangeMax)
+                }
 
-                if (self$options$xAxisRangeType == "manual")
+                if (self$options$xAxisRangeType == "manual") {
                     p <- p + ggplot2::xlim(self$options$xAxisRangeMin, self$options$xAxisRangeMax)
+                }
 
                 labelDefaults <- list(
                     xLabel = self$options$var,
@@ -125,5 +134,11 @@ histClass <- if (requireNamespace('jmvcore', quietly = TRUE))
 
                 return(p)
             }
+        ),
+        public = list(
+            asSource = function() {
+                return(.("Syntax mode for plots is not yet available."))
+            }
         )
     )
+}
