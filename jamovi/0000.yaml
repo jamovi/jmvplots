@@ -31,7 +31,7 @@ analyses:
     menuTitle: Histogram
     category: plots
   - title: Scatterplot
-    name: jmvscatter
+    name: scat
     ns: scatr
     menuGroup: .
     menuTitle: Scatterplot

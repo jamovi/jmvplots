@@ -1,10 +1,10 @@
 #' @importFrom ggplot2 ggplot aes
 #' @importFrom rlang sym
 #' @importFrom jmvcore .
-jmvscatterClass <- if (requireNamespace('jmvcore', quietly = TRUE)) {
+scatClass <- if (requireNamespace('jmvcore', quietly = TRUE)) {
     R6::R6Class(
-        "jmvscatterClass",
-        inherit = jmvscatterBase,
+        "scatClass",
+        inherit = scatBase,
         private = list(
             .run = function() {
                 if (is.null(self$options$x) || is.null(self$options$y)) {
@@ -47,6 +47,15 @@ jmvscatterClass <- if (requireNamespace('jmvcore', quietly = TRUE)) {
 
                 group <- self$options$group
 
+                # In previous version of scat, the `line` option was a string value ("none",
+                # "linear", or "smooth"). Because in the current version, the `line` option is
+                # a boolean we add a check and convert the string value to a boolean to remain
+                # backwards compatible.
+                line <- self$options$line
+                if (!is.logical(line)) {
+                    line <- line != "none"
+                }
+
                 if (is.null(group)) {
                     p <- ggplot(image$state, aes(x = x, y = y)) +
                         ggplot2::geom_point(
@@ -56,7 +65,7 @@ jmvscatterClass <- if (requireNamespace('jmvcore', quietly = TRUE)) {
                         ) +
                         ggtheme
 
-                    if (self$options$line) {
+                    if (line) {
                         p <- p +
                             ggplot2::geom_smooth(
                                 method = self$options$lineMethod,
@@ -74,7 +83,7 @@ jmvscatterClass <- if (requireNamespace('jmvcore', quietly = TRUE)) {
                         ggtheme +
                         formatLegend(self$options)
 
-                    if (self$options$line) {
+                    if (line) {
                         p <- p +
                             ggplot2::geom_smooth(
                                 method = self$options$lineMethod,
