@@ -35,6 +35,12 @@ jobs:
           http-user-agent: ${{ matrix.config.http-user-agent }}
           use-public-rspm: true
 
+      - name: Install libpng from R-project repo (macOS)
+        if: runner.os == 'macOS'
+        run: |
+          curl -LO https://mac.r-project.org/bin/darwin20/arm64/libpng-1.6.38-darwin.20-arm64.tar.xz
+          sudo tar -xvf libpng-1.6.38-darwin.20-arm64.tar.xz -C /
+
       - uses: r-lib/actions/setup-r-dependencies@v2
         with:
           extra-packages: any::rcmdcheck, any::roxygen2, github::jamovi/jmvcore
