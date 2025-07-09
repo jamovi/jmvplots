@@ -42,6 +42,12 @@ analyses:
     menuGroup: .
     menuTitle: Lineplot
     category: plots
+  - title: Paretoplot
+    name: pareto
+    ns: scatr
+    menuGroup: .
+    menuTitle: Paretoplot
+    category: plots
 usesNative: true
 minApp: 1.0.8
 index: 1

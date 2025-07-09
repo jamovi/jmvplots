@@ -1,0 +1,170 @@
+title: Paretoplot
+name: pareto
+jus: '3.0'
+stage: 0
+compilerMode: tame
+children:
+  - type: VariableSupplier
+    persistentItems: false
+    stretchFactor: 1
+    children:
+      - type: TargetLayoutBox
+        label: X-Axis
+        children:
+          - type: VariablesListBox
+            name: x
+            maxItemCount: 1
+            isTarget: true
+      - type: TargetLayoutBox
+        label: Counts (optional)
+        children:
+          - type: VariablesListBox
+            name: counts
+            maxItemCount: 1
+            isTarget: true
+  - type: CollapseBox
+    label: General Options
+    collapsed: true
+    stretchFactor: 1
+    children:
+      - type: LayoutBox
+        margin: large
+        stretchFactor: 1
+        children:
+          - type: LayoutBox
+            cell:
+              column: 0
+              row: 0
+            stretchFactor: 1
+            children:
+              - type: Label
+                label: Bar
+                children:
+                  - type: TextBox
+                    name: barWidth
+                    format: number
+          - type: LayoutBox
+            cell:
+              column: 1
+              row: 0
+            stretchFactor: 1
+            children:
+              - type: Label
+                label: Plot Size
+                children:
+                  - type: TextBox
+                    name: width
+                    format: number
+                  - type: TextBox
+                    name: height
+                    format: number
+  - type: CollapseBox
+    label: Plot & Axis Titles
+    collapsed: true
+    stretchFactor: 1
+    children:
+      - type: ModeSelector
+        name: titleType
+        stretchFactor: 1
+        children:
+          - type: Content
+            name: title
+            children:
+              - type: TextBox
+                name: title
+                format: string
+                width: largest
+              - type: TextBox
+                name: titleFontSize
+                format: number
+              - type: ComboBox
+                name: titleAlign
+          - type: Content
+            name: subtitle
+            children:
+              - type: TextBox
+                name: subtitle
+                format: string
+                width: largest
+              - type: TextBox
+                name: subtitleFontSize
+                format: number
+              - type: ComboBox
+                name: subtitleAlign
+          - type: Content
+            name: caption
+            children:
+              - type: TextBox
+                name: caption
+                format: string
+                width: largest
+              - type: TextBox
+                name: captionFontSize
+                format: number
+              - type: ComboBox
+                name: captionAlign
+          - type: Content
+            name: xTitle
+            children:
+              - type: TextBox
+                name: xLabel
+                format: string
+                width: largest
+              - type: TextBox
+                name: xLabelFontSize
+                format: number
+              - type: ComboBox
+                name: xLabelAlign
+          - type: Content
+            name: yTitle
+            children:
+              - type: TextBox
+                name: yLabel
+                format: string
+                width: largest
+              - type: TextBox
+                name: yLabelFontSize
+                format: number
+              - type: ComboBox
+                name: yLabelAlign
+  - type: CollapseBox
+    label: Axes
+    collapsed: true
+    stretchFactor: 1
+    children:
+      - type: LayoutBox
+        margin: large
+        stretchFactor: 1
+        children:
+          - type: LayoutBox
+            cell:
+              column: 0
+              row: 0
+            stretchFactor: 1
+            children:
+              - type: Label
+                label: X-Axis
+                children:
+                  - type: TextBox
+                    name: xAxisLabelFontSize
+                    format: number
+                  - type: TextBox
+                    name: xAxisLabelRotation
+                    suffix: "°"
+                    format: number
+          - type: LayoutBox
+            cell:
+              column: 1
+              row: 0
+            stretchFactor: 1
+            children:
+              - type: Label
+                label: Y-Axis
+                children:
+                  - type: TextBox
+                    name: yAxisLabelFontSize
+                    format: number
+                  - type: TextBox
+                    name: yAxisLabelRotation
+                    suffix: "°"
+                    format: number

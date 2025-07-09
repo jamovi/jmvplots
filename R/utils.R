@@ -4,8 +4,12 @@
 #' @return The alignment number
 #' @keywords internal
 alignText2Number = function(text) {
-    if (text == "left") return(0)
-    if (text == "center") return(0.5)
+    if (text == "left") {
+        return(0)
+    }
+    if (text == "center") {
+        return(0.5)
+    }
     if (text == "right") return(1)
 }
 
@@ -14,22 +18,40 @@ alignText2Number = function(text) {
 #'
 #' @param options The options list; needs to contain the appropriate fields
 #' @param defaults The default values for the labels
+#' @param legend Whether there is a legend or not
 #' @return A ggplot2::labs object
 #' @keywords internal
-setLabels = function(options, defaults = list()) {
+setLabels = function(options, defaults = list(), legend = TRUE) {
     title <- options$title
     subtitle <- options$subtitle
     caption <- options$caption
     xLabel <- options$xLabel
     yLabel <- options$yLabel
-    groupLabel <- options$legendTitle
 
-    if (title == "") title <- defaults$title
-    if (subtitle == "") subtitle <- defaults$subtitle
-    if (caption == "") caption <- defaults$caption
-    if (xLabel == "") xLabel <- defaults$xLabel
-    if (yLabel == "") yLabel <- defaults$yLabel
-    if (groupLabel == "") groupLabel <- defaults$groupLabel
+    if (legend) {
+        groupLabel <- options$legendTitle
+    } else {
+        groupLabel <- ""
+    }
+
+    if (title == "") {
+        title <- defaults$title
+    }
+    if (subtitle == "") {
+        subtitle <- defaults$subtitle
+    }
+    if (caption == "") {
+        caption <- defaults$caption
+    }
+    if (xLabel == "") {
+        xLabel <- defaults$xLabel
+    }
+    if (yLabel == "") {
+        yLabel <- defaults$yLabel
+    }
+    if (groupLabel == "") {
+        groupLabel <- defaults$groupLabel
+    }
 
     labels <- ggplot2::labs(
         title = title,
@@ -51,9 +73,10 @@ setLabels = function(options, defaults = list()) {
 #'
 #' @param options The options list; needs to contain the appropriate fields
 #' @param flipAxes Whether the axes are flipped or not
+#' @param legend Whether there is a legend or not
 #' @return A ggplot2::theme object
 #' @keywords internal
-formatLabels = function(options, flipAxes = FALSE) {
+formatLabels = function(options, flipAxes = FALSE, legend = TRUE) {
     if (flipAxes) {
         xLabelFontSize <- options$yLabelFontSize
         xLabelAlign <- options$yLabelAlign
@@ -99,10 +122,16 @@ formatLabels = function(options, flipAxes = FALSE) {
             size = xAxisLabelFontSize,
             angle = xAxisLabelRotation
         ),
-        axis.text.y = ggplot2::element_text(size = yAxisLabelFontSize, angle = yAxisLabelRotation),
-        legend.title = ggplot2::element_text(size = options$legendTitleFontSize),
-        legend.text = ggplot2::element_text(size = options$legendLabelFontSize)
+        axis.text.y = ggplot2::element_text(size = yAxisLabelFontSize, angle = yAxisLabelRotation)
     )
+
+    if (legend) {
+        labels_theme <- labels_theme +
+            ggplot2::theme(
+                legend.title = ggplot2::element_text(size = options$legendTitleFontSize),
+                legend.text = ggplot2::element_text(size = options$legendLabelFontSize)
+            )
+    }
 
     return(labels_theme)
 }
@@ -244,12 +273,24 @@ getLabsCallList = function(options, defaults = list()) {
     yLabel <- options$yLabel
     groupLabel <- options$legendTitle
 
-    if (title == "") title <- defaults$title
-    if (subtitle == "") subtitle <- defaults$subtitle
-    if (caption == "") caption <- defaults$caption
-    if (xLabel == "") xLabel <- defaults$xLabel
-    if (yLabel == "") yLabel <- defaults$yLabel
-    if (groupLabel == "") groupLabel <- defaults$groupLabel
+    if (title == "") {
+        title <- defaults$title
+    }
+    if (subtitle == "") {
+        subtitle <- defaults$subtitle
+    }
+    if (caption == "") {
+        caption <- defaults$caption
+    }
+    if (xLabel == "") {
+        xLabel <- defaults$xLabel
+    }
+    if (yLabel == "") {
+        yLabel <- defaults$yLabel
+    }
+    if (groupLabel == "") {
+        groupLabel <- defaults$groupLabel
+    }
 
     args <- list(
         title = title,
