@@ -45,7 +45,7 @@ analyses:
   - title: Paretoplot
     name: pareto
     ns: scatr
-    menuGroup: .
+    menuGroup: More
     menuTitle: Paretoplot
     category: plots
 usesNative: true
