@@ -54,14 +54,14 @@ children:
                 label: Regression Line
                 children:
                   - type: CheckBox
-                    name: line
+                    name: regLine
                     children:
                       - type: ComboBox
                         name: lineMethod
-                        enable: (line)
+                        enable: (regLine)
                       - type: CheckBox
                         name: lineSE
-                        enable: (line)
+                        enable: (regLine)
           - type: LayoutBox
             cell:
               column: 1

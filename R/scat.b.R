@@ -46,15 +46,7 @@ scatClass <- if (requireNamespace('jmvcore', quietly = TRUE)) {
                 }
 
                 group <- self$options$group
-
-                # In previous version of scat, the `line` option was a string value ("none",
-                # "linear", or "smooth"). Because in the current version, the `line` option is
-                # a boolean we add a check and convert the string value to a boolean to remain
-                # backwards compatible.
-                line <- self$options$line
-                if (!is.logical(line)) {
-                    line <- line != "none"
-                }
+                line <- self$options$regLine
 
                 if (is.null(group)) {
                     p <- ggplot(image$state, aes(x = x, y = y)) +

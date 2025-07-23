@@ -11,7 +11,7 @@ scatOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             group = NULL,
             flipAxes = FALSE,
             pointSize = 2,
-            line = FALSE,
+            regLine = FALSE,
             lineMethod = "lm",
             lineSE = TRUE,
             width = 500,
@@ -35,13 +35,13 @@ scatOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             yAxisLabelFontSize = 12,
             yAxisLabelRotation = 0,
             yAxisRangeType = "auto",
-            yAxisRangeMin = NULL,
-            yAxisRangeMax = NULL,
+            yAxisRangeMin = 0,
+            yAxisRangeMax = 0,
             xAxisLabelFontSize = 12,
             xAxisLabelRotation = 0,
             xAxisRangeType = "auto",
-            xAxisRangeMin = NULL,
-            xAxisRangeMax = NULL,
+            xAxisRangeMin = 0,
+            xAxisRangeMax = 0,
             legendTitle = "",
             legendTitleFontSize = 16,
             legendLabelFontSize = 16,
@@ -80,7 +80,8 @@ scatOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 suggested=list(
                     "nominal"),
                 permitted=list(
-                    "factor"))
+                    "factor"),
+                default=NULL)
             private$..flipAxes <- jmvcore::OptionBool$new(
                 "flipAxes",
                 flipAxes,
@@ -89,9 +90,9 @@ scatOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 "pointSize",
                 pointSize,
                 default=2)
-            private$..line <- jmvcore::OptionBool$new(
-                "line",
-                line,
+            private$..regLine <- jmvcore::OptionBool$new(
+                "regLine",
+                regLine,
                 default=FALSE)
             private$..lineMethod <- jmvcore::OptionList$new(
                 "lineMethod",
@@ -221,10 +222,12 @@ scatOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 default="auto")
             private$..yAxisRangeMin <- jmvcore::OptionNumber$new(
                 "yAxisRangeMin",
-                yAxisRangeMin)
+                yAxisRangeMin,
+                default=0)
             private$..yAxisRangeMax <- jmvcore::OptionNumber$new(
                 "yAxisRangeMax",
-                yAxisRangeMax)
+                yAxisRangeMax,
+                default=0)
             private$..xAxisLabelFontSize <- jmvcore::OptionNumber$new(
                 "xAxisLabelFontSize",
                 xAxisLabelFontSize,
@@ -244,10 +247,12 @@ scatOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 default="auto")
             private$..xAxisRangeMin <- jmvcore::OptionNumber$new(
                 "xAxisRangeMin",
-                xAxisRangeMin)
+                xAxisRangeMin,
+                default=0)
             private$..xAxisRangeMax <- jmvcore::OptionNumber$new(
                 "xAxisRangeMax",
-                xAxisRangeMax)
+                xAxisRangeMax,
+                default=0)
             private$..legendTitle <- jmvcore::OptionString$new(
                 "legendTitle",
                 legendTitle,
@@ -322,7 +327,7 @@ scatOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             self$.addOption(private$..group)
             self$.addOption(private$..flipAxes)
             self$.addOption(private$..pointSize)
-            self$.addOption(private$..line)
+            self$.addOption(private$..regLine)
             self$.addOption(private$..lineMethod)
             self$.addOption(private$..lineSE)
             self$.addOption(private$..width)
@@ -371,7 +376,7 @@ scatOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
         group = function() private$..group$value,
         flipAxes = function() private$..flipAxes$value,
         pointSize = function() private$..pointSize$value,
-        line = function() private$..line$value,
+        regLine = function() private$..regLine$value,
         lineMethod = function() private$..lineMethod$value,
         lineSE = function() private$..lineSE$value,
         width = function() private$..width$value,
@@ -419,7 +424,7 @@ scatOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
         ..group = NA,
         ..flipAxes = NA,
         ..pointSize = NA,
-        ..line = NA,
+        ..regLine = NA,
         ..lineMethod = NA,
         ..lineSE = NA,
         ..width = NA,
@@ -513,7 +518,7 @@ scatBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 #' @param group .
 #' @param flipAxes .
 #' @param pointSize .
-#' @param line .
+#' @param regLine .
 #' @param lineMethod .
 #' @param lineSE .
 #' @param width .
@@ -565,10 +570,10 @@ scat <- function(
     data,
     x,
     y,
-    group,
+    group = NULL,
     flipAxes = FALSE,
     pointSize = 2,
-    line = FALSE,
+    regLine = FALSE,
     lineMethod = "lm",
     lineSE = TRUE,
     width = 500,
@@ -592,13 +597,13 @@ scat <- function(
     yAxisLabelFontSize = 12,
     yAxisLabelRotation = 0,
     yAxisRangeType = "auto",
-    yAxisRangeMin,
-    yAxisRangeMax,
+    yAxisRangeMin = 0,
+    yAxisRangeMax = 0,
     xAxisLabelFontSize = 12,
     xAxisLabelRotation = 0,
     xAxisRangeType = "auto",
-    xAxisRangeMin,
-    xAxisRangeMax,
+    xAxisRangeMin = 0,
+    xAxisRangeMax = 0,
     legendTitle = "",
     legendTitleFontSize = 16,
     legendLabelFontSize = 16,
@@ -632,7 +637,7 @@ scat <- function(
         group = group,
         flipAxes = flipAxes,
         pointSize = pointSize,
-        line = line,
+        regLine = regLine,
         lineMethod = lineMethod,
         lineSE = lineSE,
         width = width,
