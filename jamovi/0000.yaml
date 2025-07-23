@@ -1,7 +1,7 @@
 ---
-title: Create Elegant and Interactive Plots Built on 'ggplot2'
+title: Plots bundled with jamovi
 name: scatr
-version: 0.0.1
+version: 2.7.0
 jms: '1.0'
 authors:
   - Ravi Selker
@@ -10,19 +10,19 @@ date: '2025-04-01'
 type: R
 description: >-
   Create elegant and interactive plots built on 'ggplot2'. The package is
-  designed to provide a convencience layer to 'ggplot2' within jamovi.
+  designed to provide a convenience layer to 'ggplot2' within jamovi.
 analyses:
-  - title: Barplot
+  - title: Bar Plot
     name: jmvbar
     ns: scatr
     menuGroup: .
-    menuTitle: Barplot
+    menuTitle: Bar Plot
     category: plots
-  - title: Boxplot
+  - title: Box Plot
     name: jmvbox
     ns: scatr
     menuGroup: .
-    menuTitle: Boxplot
+    menuTitle: Box Plot
     category: plots
   - title: Histogram
     name: jmvhist
@@ -30,24 +30,38 @@ analyses:
     menuGroup: .
     menuTitle: Histogram
     category: plots
-  - title: Scatterplot
+  - title: Scatter Plot
     name: scat
     ns: scatr
     menuGroup: .
-    menuTitle: Scatterplot
+    menuTitle: Scatter Plot
     category: plots
-  - title: Lineplot
+  - title: Line Plot
     name: jmvline
     ns: scatr
     menuGroup: .
-    menuTitle: Lineplot
+    menuTitle: Line Plot
     category: plots
-  - title: Paretoplot
+  - title: Pareto Plot
     name: pareto
     ns: scatr
     menuGroup: More
-    menuTitle: Paretoplot
+    menuTitle: Pareto Plot
     category: plots
+  - title: Scatter Plot
+    name: scat
+    ns: scatr
+    menuGroup: Exploration
+    menuTitle: Scatter Plot
+    menuSubgroup: scatr
+    category: analyses
+  - title: Pareto Plot
+    name: pareto
+    ns: scatr
+    menuGroup: Exploration
+    menuTitle: Pareto Plot
+    menuSubgroup: scatr
+    category: analyses
 usesNative: true
 minApp: 1.0.8
 index: 1

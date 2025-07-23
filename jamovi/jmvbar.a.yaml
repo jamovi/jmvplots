@@ -1,6 +1,6 @@
 ---
 name:  jmvbar
-title: Barplot
+title: Bar Plot
 category: plots
 menuGroup: .
 version: '1.0.0'

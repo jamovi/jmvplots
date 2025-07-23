@@ -1,6 +1,6 @@
 ---
 name:  jmvbox
-title: Boxplot
+title: Box Plot
 category: plots
 menuGroup: .
 version: '1.0.0'
