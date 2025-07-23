@@ -1,6 +1,6 @@
 ---
 name:  scat
-title: Scatterplot
+title: Scatter Plot
 category: plots
 menuGroup: .
 version: '1.0.0'

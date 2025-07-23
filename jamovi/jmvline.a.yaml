@@ -1,6 +1,6 @@
 ---
 name:  jmvline
-title: Lineplot
+title: Line Plot
 category: plots
 menuGroup: .
 version: '1.0.0'

@@ -1,6 +1,6 @@
 ---
 name:  pareto
-title: Paretoplot
+title: Pareto Plot
 category: plots
 menuGroup: More
 version: '1.0.0'
@@ -21,9 +21,9 @@ options:
         - factor
       description:
           R: >
-            a string naming the variable from `data` that contains the 
+            a string naming the variable from `data` that contains the
             values used for the chart
-            
+
     - name: counts
       title: 'Counts (optional)'
       type: Variable
@@ -34,7 +34,7 @@ options:
         - numeric
       description:
           R: >
-            a string naming the variable from `data` that contains the 
+            a string naming the variable from `data` that contains the
             counts for the values (optional)
 
     - name: barWidth
