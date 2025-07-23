@@ -40,9 +40,9 @@ jmvlineOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             titleType = "title",
             yAxisLabelFontSize = 12,
             yAxisLabelRotation = 0,
-            yAxisRangeType = NULL,
-            yAxisRangeMin = NULL,
-            yAxisRangeMax = NULL,
+            yAxisRangeType = "auto",
+            yAxisRangeMin = 0,
+            yAxisRangeMax = 10,
             xAxisLabelFontSize = 12,
             xAxisLabelRotation = 0,
             legendTitle = "",
@@ -90,7 +90,8 @@ jmvlineOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 suggested=list(
                     "nominal"),
                 permitted=list(
-                    "factor"))
+                    "factor"),
+                default=NULL)
             private$..flipAxes <- jmvcore::OptionBool$new(
                 "flipAxes",
                 flipAxes,
@@ -256,13 +257,16 @@ jmvlineOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 yAxisRangeType,
                 options=list(
                     "auto",
-                    "manual"))
+                    "manual"),
+                default="auto")
             private$..yAxisRangeMin <- jmvcore::OptionNumber$new(
                 "yAxisRangeMin",
-                yAxisRangeMin)
+                yAxisRangeMin,
+                default=0)
             private$..yAxisRangeMax <- jmvcore::OptionNumber$new(
                 "yAxisRangeMax",
-                yAxisRangeMax)
+                yAxisRangeMax,
+                default=10)
             private$..xAxisLabelFontSize <- jmvcore::OptionNumber$new(
                 "xAxisLabelFontSize",
                 xAxisLabelFontSize,
@@ -536,7 +540,7 @@ jmvlineResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             super$initialize(
                 options=options,
                 name="",
-                title="Lineplot")
+                title="Line Plot")
             self$add(jmvcore::Image$new(
                 options=options,
                 name="plot",
@@ -566,7 +570,7 @@ jmvlineBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 weightsSupport = 'auto')
         }))
 
-#' Lineplot
+#' Line Plot
 #'
 #' 
 #' @param mode .
@@ -635,7 +639,7 @@ jmvline <- function(
     data,
     x,
     y,
-    group,
+    group = NULL,
     flipAxes = FALSE,
     line = TRUE,
     lineSize = 0.5,
@@ -666,9 +670,9 @@ jmvline <- function(
     titleType = "title",
     yAxisLabelFontSize = 12,
     yAxisLabelRotation = 0,
-    yAxisRangeType,
-    yAxisRangeMin,
-    yAxisRangeMax,
+    yAxisRangeType = "auto",
+    yAxisRangeMin = 0,
+    yAxisRangeMax = 10,
     xAxisLabelFontSize = 12,
     xAxisLabelRotation = 0,
     legendTitle = "",

@@ -25,6 +25,7 @@ options:
         - nominal
       permitted:
         - factor
+      default: null
 
     - name: group2
       title: Grouping Variable 2
@@ -33,6 +34,7 @@ options:
         - nominal
       permitted:
         - factor
+      default: null
 
     - name: flipAxes
       title: Flip axes
@@ -205,14 +207,17 @@ options:
           title: Auto
         - name: manual
           title: Manual
+      default: auto
 
     - name: yAxisRangeMin
       title: Min
       type: Number
+      default: 0
 
     - name: yAxisRangeMax
       title: Max
       type: Number
+      default: 10
 
     - name: yAxisLabelRotation
       title: Label rotation

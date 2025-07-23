@@ -309,7 +309,7 @@ options:
     - name: yAxisRangeMax
       title: Max
       type: Number
-      default: 0
+      default: 10
 
     - name: xAxisLabelFontSize
       title: Label font size

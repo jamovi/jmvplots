@@ -27,7 +27,7 @@ options:
     - name: counts
       title: 'Counts (optional)'
       type: Variable
-      default:
+      default: null
       suggested:
         - continuous
       permitted:

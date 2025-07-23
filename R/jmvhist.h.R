@@ -37,14 +37,14 @@ jmvhistOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             titleType = "title",
             yAxisLabelFontSize = 12,
             yAxisLabelRotation = 0,
-            yAxisRangeType = NULL,
-            yAxisRangeMin = NULL,
-            yAxisRangeMax = NULL,
+            yAxisRangeType = "auto",
+            yAxisRangeMin = 0,
+            yAxisRangeMax = 10,
             xAxisLabelFontSize = 12,
             xAxisLabelRotation = 0,
-            xAxisRangeType = NULL,
-            xAxisRangeMin = NULL,
-            xAxisRangeMax = NULL,
+            xAxisRangeType = "auto",
+            xAxisRangeMin = 0,
+            xAxisRangeMax = 10,
             legendTitle = "",
             legendTitleFontSize = 16,
             legendLabelFontSize = 16,
@@ -76,7 +76,8 @@ jmvhistOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 suggested=list(
                     "nominal"),
                 permitted=list(
-                    "factor"))
+                    "factor"),
+                default=NULL)
             private$..flipAxes <- jmvcore::OptionBool$new(
                 "flipAxes",
                 flipAxes,
@@ -231,13 +232,16 @@ jmvhistOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 yAxisRangeType,
                 options=list(
                     "auto",
-                    "manual"))
+                    "manual"),
+                default="auto")
             private$..yAxisRangeMin <- jmvcore::OptionNumber$new(
                 "yAxisRangeMin",
-                yAxisRangeMin)
+                yAxisRangeMin,
+                default=0)
             private$..yAxisRangeMax <- jmvcore::OptionNumber$new(
                 "yAxisRangeMax",
-                yAxisRangeMax)
+                yAxisRangeMax,
+                default=10)
             private$..xAxisLabelFontSize <- jmvcore::OptionNumber$new(
                 "xAxisLabelFontSize",
                 xAxisLabelFontSize,
@@ -253,13 +257,16 @@ jmvhistOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 xAxisRangeType,
                 options=list(
                     "auto",
-                    "manual"))
+                    "manual"),
+                default="auto")
             private$..xAxisRangeMin <- jmvcore::OptionNumber$new(
                 "xAxisRangeMin",
-                xAxisRangeMin)
+                xAxisRangeMin,
+                default=0)
             private$..xAxisRangeMax <- jmvcore::OptionNumber$new(
                 "xAxisRangeMax",
-                xAxisRangeMax)
+                xAxisRangeMax,
+                default=10)
             private$..legendTitle <- jmvcore::OptionString$new(
                 "legendTitle",
                 legendTitle,
@@ -588,7 +595,7 @@ jmvhistBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 jmvhist <- function(
     data,
     var,
-    group,
+    group = NULL,
     flipAxes = FALSE,
     bins = TRUE,
     binWidth = 0.5,
@@ -618,14 +625,14 @@ jmvhist <- function(
     titleType = "title",
     yAxisLabelFontSize = 12,
     yAxisLabelRotation = 0,
-    yAxisRangeType,
-    yAxisRangeMin,
-    yAxisRangeMax,
+    yAxisRangeType = "auto",
+    yAxisRangeMin = 0,
+    yAxisRangeMax = 10,
     xAxisLabelFontSize = 12,
     xAxisLabelRotation = 0,
-    xAxisRangeType,
-    xAxisRangeMin,
-    xAxisRangeMax,
+    xAxisRangeType = "auto",
+    xAxisRangeMin = 0,
+    xAxisRangeMax = 10,
     legendTitle = "",
     legendTitleFontSize = 16,
     legendLabelFontSize = 16,

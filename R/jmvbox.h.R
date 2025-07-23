@@ -32,9 +32,9 @@ jmvboxOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             yLabelFontSize = 16,
             titleType = "title",
             yAxisLabelFontSize = 12,
-            yAxisRangeType = NULL,
-            yAxisRangeMin = NULL,
-            yAxisRangeMax = NULL,
+            yAxisRangeType = "auto",
+            yAxisRangeMin = 0,
+            yAxisRangeMax = 10,
             yAxisLabelRotation = 0,
             xAxisLabelFontSize = 12,
             xAxisLabelFontSizeRevLabels = FALSE,
@@ -70,14 +70,16 @@ jmvboxOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 suggested=list(
                     "nominal"),
                 permitted=list(
-                    "factor"))
+                    "factor"),
+                default=NULL)
             private$..group2 <- jmvcore::OptionVariable$new(
                 "group2",
                 group2,
                 suggested=list(
                     "nominal"),
                 permitted=list(
-                    "factor"))
+                    "factor"),
+                default=NULL)
             private$..flipAxes <- jmvcore::OptionBool$new(
                 "flipAxes",
                 flipAxes,
@@ -203,13 +205,16 @@ jmvboxOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 yAxisRangeType,
                 options=list(
                     "auto",
-                    "manual"))
+                    "manual"),
+                default="auto")
             private$..yAxisRangeMin <- jmvcore::OptionNumber$new(
                 "yAxisRangeMin",
-                yAxisRangeMin)
+                yAxisRangeMin,
+                default=0)
             private$..yAxisRangeMax <- jmvcore::OptionNumber$new(
                 "yAxisRangeMax",
-                yAxisRangeMax)
+                yAxisRangeMax,
+                default=10)
             private$..yAxisLabelRotation <- jmvcore::OptionNumber$new(
                 "yAxisLabelRotation",
                 yAxisLabelRotation,
@@ -447,7 +452,7 @@ jmvboxResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             super$initialize(
                 options=options,
                 name="",
-                title="Boxplot")
+                title="Box Plot")
             self$add(jmvcore::Image$new(
                 options=options,
                 name="plot",
@@ -477,7 +482,7 @@ jmvboxBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 weightsSupport = 'auto')
         }))
 
-#' Boxplot
+#' Box Plot
 #'
 #' 
 #' @param data .
@@ -534,8 +539,8 @@ jmvboxBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 jmvbox <- function(
     data,
     var,
-    group1,
-    group2,
+    group1 = NULL,
+    group2 = NULL,
     flipAxes = FALSE,
     notch = FALSE,
     boxWidth = 0.5,
@@ -559,9 +564,9 @@ jmvbox <- function(
     yLabelFontSize = 16,
     titleType = "title",
     yAxisLabelFontSize = 12,
-    yAxisRangeType,
-    yAxisRangeMin,
-    yAxisRangeMax,
+    yAxisRangeType = "auto",
+    yAxisRangeMin = 0,
+    yAxisRangeMax = 10,
     yAxisLabelRotation = 0,
     xAxisLabelFontSize = 12,
     xAxisLabelFontSizeRevLabels = FALSE,
