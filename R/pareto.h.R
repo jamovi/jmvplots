@@ -29,8 +29,12 @@ paretoOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             titleType = "title",
             yAxisLabelFontSize = 12,
             yAxisLabelRotation = 0,
+            yAxisLabelVAlign = "center",
+            yAxisLabelHAlign = "center",
             xAxisLabelFontSize = 12,
-            xAxisLabelRotation = 0, ...) {
+            xAxisLabelRotation = 0,
+            xAxisLabelVAlign = "center",
+            xAxisLabelHAlign = "center", ...) {
 
             super$initialize(
                 package="scatr",
@@ -166,6 +170,22 @@ paretoOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 default=0,
                 min=0,
                 max=360)
+            private$..yAxisLabelVAlign <- jmvcore::OptionList$new(
+                "yAxisLabelVAlign",
+                yAxisLabelVAlign,
+                options=list(
+                    "bottom",
+                    "center",
+                    "top"),
+                default="center")
+            private$..yAxisLabelHAlign <- jmvcore::OptionList$new(
+                "yAxisLabelHAlign",
+                yAxisLabelHAlign,
+                options=list(
+                    "left",
+                    "center",
+                    "right"),
+                default="center")
             private$..xAxisLabelFontSize <- jmvcore::OptionNumber$new(
                 "xAxisLabelFontSize",
                 xAxisLabelFontSize,
@@ -176,6 +196,22 @@ paretoOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 default=0,
                 min=0,
                 max=360)
+            private$..xAxisLabelVAlign <- jmvcore::OptionList$new(
+                "xAxisLabelVAlign",
+                xAxisLabelVAlign,
+                options=list(
+                    "bottom",
+                    "center",
+                    "top"),
+                default="center")
+            private$..xAxisLabelHAlign <- jmvcore::OptionList$new(
+                "xAxisLabelHAlign",
+                xAxisLabelHAlign,
+                options=list(
+                    "left",
+                    "center",
+                    "right"),
+                default="center")
 
             self$.addOption(private$..x)
             self$.addOption(private$..counts)
@@ -200,8 +236,12 @@ paretoOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             self$.addOption(private$..titleType)
             self$.addOption(private$..yAxisLabelFontSize)
             self$.addOption(private$..yAxisLabelRotation)
+            self$.addOption(private$..yAxisLabelVAlign)
+            self$.addOption(private$..yAxisLabelHAlign)
             self$.addOption(private$..xAxisLabelFontSize)
             self$.addOption(private$..xAxisLabelRotation)
+            self$.addOption(private$..xAxisLabelVAlign)
+            self$.addOption(private$..xAxisLabelHAlign)
         }),
     active = list(
         x = function() private$..x$value,
@@ -227,8 +267,12 @@ paretoOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
         titleType = function() private$..titleType$value,
         yAxisLabelFontSize = function() private$..yAxisLabelFontSize$value,
         yAxisLabelRotation = function() private$..yAxisLabelRotation$value,
+        yAxisLabelVAlign = function() private$..yAxisLabelVAlign$value,
+        yAxisLabelHAlign = function() private$..yAxisLabelHAlign$value,
         xAxisLabelFontSize = function() private$..xAxisLabelFontSize$value,
-        xAxisLabelRotation = function() private$..xAxisLabelRotation$value),
+        xAxisLabelRotation = function() private$..xAxisLabelRotation$value,
+        xAxisLabelVAlign = function() private$..xAxisLabelVAlign$value,
+        xAxisLabelHAlign = function() private$..xAxisLabelHAlign$value),
     private = list(
         ..x = NA,
         ..counts = NA,
@@ -253,8 +297,12 @@ paretoOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
         ..titleType = NA,
         ..yAxisLabelFontSize = NA,
         ..yAxisLabelRotation = NA,
+        ..yAxisLabelVAlign = NA,
+        ..yAxisLabelHAlign = NA,
         ..xAxisLabelFontSize = NA,
-        ..xAxisLabelRotation = NA)
+        ..xAxisLabelRotation = NA,
+        ..xAxisLabelVAlign = NA,
+        ..xAxisLabelHAlign = NA)
 )
 
 paretoResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
@@ -327,8 +375,12 @@ paretoBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 #' @param titleType .
 #' @param yAxisLabelFontSize .
 #' @param yAxisLabelRotation .
+#' @param yAxisLabelVAlign .
+#' @param yAxisLabelHAlign .
 #' @param xAxisLabelFontSize .
 #' @param xAxisLabelRotation .
+#' @param xAxisLabelVAlign .
+#' @param xAxisLabelHAlign .
 #' @return A results object containing:
 #' \tabular{llllll}{
 #'   \code{results$plot} \tab \tab \tab \tab \tab a Pareto chart \cr
@@ -360,8 +412,12 @@ pareto <- function(
     titleType = "title",
     yAxisLabelFontSize = 12,
     yAxisLabelRotation = 0,
+    yAxisLabelVAlign = "center",
+    yAxisLabelHAlign = "center",
     xAxisLabelFontSize = 12,
-    xAxisLabelRotation = 0) {
+    xAxisLabelRotation = 0,
+    xAxisLabelVAlign = "center",
+    xAxisLabelHAlign = "center") {
 
     if ( ! requireNamespace("jmvcore", quietly=TRUE))
         stop("pareto requires jmvcore to be installed (restart may be required)")
@@ -400,8 +456,12 @@ pareto <- function(
         titleType = titleType,
         yAxisLabelFontSize = yAxisLabelFontSize,
         yAxisLabelRotation = yAxisLabelRotation,
+        yAxisLabelVAlign = yAxisLabelVAlign,
+        yAxisLabelHAlign = yAxisLabelHAlign,
         xAxisLabelFontSize = xAxisLabelFontSize,
-        xAxisLabelRotation = xAxisLabelRotation)
+        xAxisLabelRotation = xAxisLabelRotation,
+        xAxisLabelVAlign = xAxisLabelVAlign,
+        xAxisLabelHAlign = xAxisLabelHAlign)
 
     analysis <- paretoClass$new(
         options = options,

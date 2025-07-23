@@ -191,6 +191,31 @@ options:
       min: 0
       max: 360
 
+    - name: yAxisLabelVAlign
+      title: Verical align
+      type: List
+      options:
+        - name: bottom
+          title: Bottom
+        - name: center
+          title: Center
+        - name: top
+          title: Top
+      default: center
+
+
+    - name: yAxisLabelHAlign
+      title: Horizontal align
+      type: List
+      options:
+        - name: left
+          title: Left
+        - name: center
+          title: Center
+        - name: right
+          title: Right
+      default: right
+
     - name: xAxisLabelFontSize
       title: Label font size
       type: Number
@@ -202,4 +227,29 @@ options:
       default: 0
       min: 0
       max: 360
+
+    - name: xAxisLabelVAlign
+      title: Verical align
+      type: List
+      options:
+        - name: bottom
+          title: Bottom
+        - name: center
+          title: Center
+        - name: top
+          title: Top
+      default: center
+
+    - name: xAxisLabelHAlign
+      title: Horizontal align
+      type: List
+      options:
+        - name: left
+          title: Left
+        - name: center
+          title: Center
+        - name: right
+          title: Right
+      default: center
+
 ...

@@ -4,13 +4,13 @@
 #' @return The alignment number
 #' @keywords internal
 alignText2Number = function(text) {
-    if (text == "left") {
+    if (text == "left" || text == "bottom") {
         return(0)
     }
-    if (text == "center") {
-        return(0.5)
+    if (text == "right" || text == "top") {
+        return(1)
     }
-    if (text == "right") return(1)
+    return(0.5)
 }
 
 
@@ -84,8 +84,12 @@ formatLabels = function(options, flipAxes = FALSE, legend = TRUE) {
         yLabelAlign <- options$xLabelAlign
         xAxisLabelFontSize <- options$yAxisLabelFontSize
         xAxisLabelRotation <- options$yAxisLabelRotation
+        xAxisLabelHAlign <- options$yAxisLabelHAlign
+        xAxisLabelVAlign <- options$yAxisLabelVAlign
         yAxisLabelFontSize <- options$xAxisLabelFontSize
         yAxisLabelRotation <- options$xAxisLabelRotation
+        yAxisLabelHAlign <- options$xAxisLabelHAlign
+        yAxisLabelVAlign <- options$xAxisLabelVAlign
     } else {
         xLabelFontSize <- options$xLabelFontSize
         xLabelAlign <- options$xLabelAlign
@@ -93,8 +97,12 @@ formatLabels = function(options, flipAxes = FALSE, legend = TRUE) {
         yLabelAlign <- options$yLabelAlign
         xAxisLabelFontSize <- options$xAxisLabelFontSize
         xAxisLabelRotation <- options$xAxisLabelRotation
+        xAxisLabelHAlign <- options$xAxisLabelHAlign
+        xAxisLabelVAlign <- options$xAxisLabelVAlign
         yAxisLabelFontSize <- options$yAxisLabelFontSize
         yAxisLabelRotation <- options$yAxisLabelRotation
+        yAxisLabelHAlign <- options$yAxisLabelHAlign
+        yAxisLabelVAlign <- options$yAxisLabelVAlign
     }
 
     labels_theme <- ggplot2::theme(
@@ -120,9 +128,16 @@ formatLabels = function(options, flipAxes = FALSE, legend = TRUE) {
         ),
         axis.text.x = ggplot2::element_text(
             size = xAxisLabelFontSize,
-            angle = xAxisLabelRotation
+            angle = xAxisLabelRotation,
+            hjust = alignText2Number(xAxisLabelHAlign),
+            vjust = alignText2Number(xAxisLabelVAlign)
         ),
-        axis.text.y = ggplot2::element_text(size = yAxisLabelFontSize, angle = yAxisLabelRotation)
+        axis.text.y = ggplot2::element_text(
+            size = yAxisLabelFontSize,
+            angle = yAxisLabelRotation,
+            hjust = alignText2Number(yAxisLabelHAlign),
+            vjust = alignText2Number(yAxisLabelVAlign)
+        )
     )
 
     if (legend) {

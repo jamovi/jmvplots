@@ -152,6 +152,10 @@ children:
                     name: xAxisLabelRotation
                     suffix: "°"
                     format: number
+                  - type: ComboBox
+                    name: xAxisLabelHAlign
+                  - type: ComboBox
+                    name: xAxisLabelVAlign
           - type: LayoutBox
             cell:
               column: 1
@@ -168,3 +172,7 @@ children:
                     name: yAxisLabelRotation
                     suffix: "°"
                     format: number
+                  - type: ComboBox
+                    name: yAxisLabelHAlign
+                  - type: ComboBox
+                    name: yAxisLabelVAlign
