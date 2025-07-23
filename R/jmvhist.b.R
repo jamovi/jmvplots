@@ -37,6 +37,11 @@ jmvhistClass <- if (requireNamespace('jmvcore', quietly = TRUE)) {
                 }
 
                 group <- self$options$group
+                if (self$options$binWidthType == "manual") {
+                    binWidth <- self$options$binWidth
+                } else {
+                    binWidth <- private$.calculateBinWidth(image$state$y)
+                }
 
                 if (is.null(group)) {
                     p <- ggplot(image$state, aes(x = y))
@@ -44,7 +49,7 @@ jmvhistClass <- if (requireNamespace('jmvcore', quietly = TRUE)) {
                     if (self$options$bins) {
                         p <- p +
                             ggplot2::geom_histogram(
-                                binwidth = self$options$binWidth,
+                                binwidth = binWidth,
                                 color = theme$color[1],
                                 fill = theme$fill[2],
                                 alpha = self$options$binOpacity
@@ -54,7 +59,7 @@ jmvhistClass <- if (requireNamespace('jmvcore', quietly = TRUE)) {
                     if (self$options$line) {
                         p <- p +
                             ggplot2::geom_freqpoly(
-                                binwidth = self$options$binWidth,
+                                binwidth = binWidth,
                                 color = theme$color[1],
                                 fill = theme$fill[2],
                                 size = self$options$lineSize
@@ -64,7 +69,7 @@ jmvhistClass <- if (requireNamespace('jmvcore', quietly = TRUE)) {
                     if (self$options$density) {
                         p <- p +
                             ggplot2::geom_density(
-                                aes(y = ggplot2::after_stat(count) * self$options$binWidth),
+                                aes(y = ggplot2::after_stat(count) * binWidth),
                                 color = theme$color[1],
                                 fill = theme$fill[2],
                                 alpha = self$options$densityOpacity,
@@ -83,7 +88,7 @@ jmvhistClass <- if (requireNamespace('jmvcore', quietly = TRUE)) {
                         p <- p +
                             ggplot2::geom_histogram(
                                 position = "identity",
-                                binwidth = self$options$binWidth,
+                                binwidth = binWidth,
                                 color = theme$color[1],
                                 alpha = self$options$binOpacity
                             )
@@ -93,7 +98,7 @@ jmvhistClass <- if (requireNamespace('jmvcore', quietly = TRUE)) {
                         p <- p +
                             ggplot2::geom_freqpoly(
                                 position = "identity",
-                                binwidth = self$options$binWidth,
+                                binwidth = binWidth,
                                 size = self$options$lineSize
                             )
                     }
@@ -101,7 +106,7 @@ jmvhistClass <- if (requireNamespace('jmvcore', quietly = TRUE)) {
                     if (self$options$density) {
                         p <- p +
                             ggplot2::geom_density(
-                                aes(y = ggplot2::after_stat(count) * self$options$binWidth),
+                                aes(y = ggplot2::after_stat(count) * binWidth),
                                 position = "identity",
                                 alpha = self$options$densityOpacity,
                                 size = self$options$densityLineSize
@@ -133,6 +138,39 @@ jmvhistClass <- if (requireNamespace('jmvcore', quietly = TRUE)) {
                     formatLabels(options = self$options, flipAxes = self$options$flipAxes)
 
                 return(p)
+            },
+            # Calculates an optimal histogram bin width using the Freedman-Diaconis rule.
+            # Provides a robust fallback to Scott's rule if the Interquartile Range (IQR) is zero.
+            #
+            # @param x A numeric vector of data.
+            # @return A numeric value for the calculated bin width.
+            #
+            .calculateBinWidth = function(x) {
+                x <- x[!is.na(x)]
+
+                # Return a default binwidth if there is insufficient data for calculation
+                if (length(x) < 2) {
+                    return(1)
+                }
+
+                n <- length(x)
+                iqr_val <- IQR(x, type = 7)
+
+                # Use the Freedman-Diaconis rule if IQR is non-zero
+                if (iqr_val > 0) {
+                    return(2 * iqr_val / (n^(1 / 3)))
+                }
+
+                # Fallback for zero IQR (often occurs with discrete or constant data)
+                sd_val <- sd(x)
+
+                # If data is constant (sd is 0), return a default binwidth of 1
+                if (sd_val == 0) {
+                    return(1)
+                }
+
+                # As a final fallback, use Scott's rule, which is based on standard deviation
+                return(3.5 * sd_val / (n^(1 / 3)))
             }
         ),
         public = list(

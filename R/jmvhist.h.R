@@ -10,6 +10,7 @@ jmvhistOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             group = NULL,
             flipAxes = FALSE,
             bins = TRUE,
+            binWidthType = "auto",
             binWidth = 0.5,
             binOpacity = 1,
             line = FALSE,
@@ -86,6 +87,13 @@ jmvhistOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 "bins",
                 bins,
                 default=TRUE)
+            private$..binWidthType <- jmvcore::OptionList$new(
+                "binWidthType",
+                binWidthType,
+                options=list(
+                    "auto",
+                    "manual"),
+                default="auto")
             private$..binWidth <- jmvcore::OptionNumber$new(
                 "binWidth",
                 binWidth,
@@ -340,6 +348,7 @@ jmvhistOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             self$.addOption(private$..group)
             self$.addOption(private$..flipAxes)
             self$.addOption(private$..bins)
+            self$.addOption(private$..binWidthType)
             self$.addOption(private$..binWidth)
             self$.addOption(private$..binOpacity)
             self$.addOption(private$..line)
@@ -392,6 +401,7 @@ jmvhistOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
         group = function() private$..group$value,
         flipAxes = function() private$..flipAxes$value,
         bins = function() private$..bins$value,
+        binWidthType = function() private$..binWidthType$value,
         binWidth = function() private$..binWidth$value,
         binOpacity = function() private$..binOpacity$value,
         line = function() private$..line$value,
@@ -443,6 +453,7 @@ jmvhistOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
         ..group = NA,
         ..flipAxes = NA,
         ..bins = NA,
+        ..binWidthType = NA,
         ..binWidth = NA,
         ..binOpacity = NA,
         ..line = NA,
@@ -540,6 +551,7 @@ jmvhistBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 #' @param group .
 #' @param flipAxes .
 #' @param bins .
+#' @param binWidthType .
 #' @param binWidth .
 #' @param binOpacity .
 #' @param line .
@@ -598,6 +610,7 @@ jmvhist <- function(
     group = NULL,
     flipAxes = FALSE,
     bins = TRUE,
+    binWidthType = "auto",
     binWidth = 0.5,
     binOpacity = 1,
     line = FALSE,
@@ -663,6 +676,7 @@ jmvhist <- function(
         group = group,
         flipAxes = flipAxes,
         bins = bins,
+        binWidthType = binWidthType,
         binWidth = binWidth,
         binOpacity = binOpacity,
         line = line,
