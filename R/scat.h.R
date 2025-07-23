@@ -36,12 +36,12 @@ scatOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             yAxisLabelRotation = 0,
             yAxisRangeType = "auto",
             yAxisRangeMin = 0,
-            yAxisRangeMax = 0,
+            yAxisRangeMax = 10,
             xAxisLabelFontSize = 12,
             xAxisLabelRotation = 0,
             xAxisRangeType = "auto",
             xAxisRangeMin = 0,
-            xAxisRangeMax = 0,
+            xAxisRangeMax = 10,
             legendTitle = "",
             legendTitleFontSize = 16,
             legendLabelFontSize = 16,
@@ -227,7 +227,7 @@ scatOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             private$..yAxisRangeMax <- jmvcore::OptionNumber$new(
                 "yAxisRangeMax",
                 yAxisRangeMax,
-                default=0)
+                default=10)
             private$..xAxisLabelFontSize <- jmvcore::OptionNumber$new(
                 "xAxisLabelFontSize",
                 xAxisLabelFontSize,
@@ -252,7 +252,7 @@ scatOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             private$..xAxisRangeMax <- jmvcore::OptionNumber$new(
                 "xAxisRangeMax",
                 xAxisRangeMax,
-                default=0)
+                default=10)
             private$..legendTitle <- jmvcore::OptionString$new(
                 "legendTitle",
                 legendTitle,
@@ -479,7 +479,7 @@ scatResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             super$initialize(
                 options=options,
                 name="",
-                title="Scatterplot")
+                title="Scatter Plot")
             self$add(jmvcore::Image$new(
                 options=options,
                 name="plot",
@@ -509,7 +509,7 @@ scatBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 weightsSupport = 'auto')
         }))
 
-#' Scatterplot
+#' Scatter Plot
 #'
 #' 
 #' @param data .
@@ -598,12 +598,12 @@ scat <- function(
     yAxisLabelRotation = 0,
     yAxisRangeType = "auto",
     yAxisRangeMin = 0,
-    yAxisRangeMax = 0,
+    yAxisRangeMax = 10,
     xAxisLabelFontSize = 12,
     xAxisLabelRotation = 0,
     xAxisRangeType = "auto",
     xAxisRangeMin = 0,
-    xAxisRangeMax = 0,
+    xAxisRangeMax = 10,
     legendTitle = "",
     legendTitleFontSize = 16,
     legendLabelFontSize = 16,

@@ -44,7 +44,7 @@ jmvbarOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             yAxisLabelRotation = 0,
             yAxisRangeType = "auto",
             yAxisRangeMin = 0,
-            yAxisRangeMax = 0,
+            yAxisRangeMax = 10,
             xAxisLabelFontSize = 12,
             xAxisLabelRotation = 0,
             xAxisLabelFontSizeRevLabels = FALSE,
@@ -299,7 +299,7 @@ jmvbarOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             private$..yAxisRangeMax <- jmvcore::OptionNumber$new(
                 "yAxisRangeMax",
                 yAxisRangeMax,
-                default=0)
+                default=10)
             private$..xAxisLabelFontSize <- jmvcore::OptionNumber$new(
                 "xAxisLabelFontSize",
                 xAxisLabelFontSize,
@@ -568,7 +568,7 @@ jmvbarResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             super$initialize(
                 options=options,
                 name="",
-                title="Barplot")
+                title="Bar Plot")
             self$add(jmvcore::Image$new(
                 options=options,
                 name="plot",
@@ -598,7 +598,7 @@ jmvbarBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 weightsSupport = 'auto')
         }))
 
-#' Barplot
+#' Bar Plot
 #'
 #' 
 #' @param mode .
@@ -702,7 +702,7 @@ jmvbar <- function(
     yAxisLabelRotation = 0,
     yAxisRangeType = "auto",
     yAxisRangeMin = 0,
-    yAxisRangeMax = 0,
+    yAxisRangeMax = 10,
     xAxisLabelFontSize = 12,
     xAxisLabelRotation = 0,
     xAxisLabelFontSizeRevLabels = FALSE,

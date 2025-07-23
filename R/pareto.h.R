@@ -268,7 +268,7 @@ paretoResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             super$initialize(
                 options=options,
                 name="",
-                title="Paretoplot")
+                title="Pareto Plot")
             self$add(jmvcore::Image$new(
                 options=options,
                 name="plot",
@@ -298,14 +298,14 @@ paretoBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 weightsSupport = 'auto')
         }))
 
-#' Paretoplot
+#' Pareto Plot
 #'
 #' 
 #' @param data the data as a data frame
 #' @param x a string naming the variable from \code{data} that contains the
 #'   values used for the chart
 #' @param counts a string naming the variable from \code{data} that contains
-#'   the  counts for the values (optional)
+#'   the counts for the values (optional)
 #' @param barWidth .
 #' @param width .
 #' @param height .

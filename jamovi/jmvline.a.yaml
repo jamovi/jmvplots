@@ -39,6 +39,7 @@ options:
         - nominal
       permitted:
         - factor
+      default: null
 
     - name: flipAxes
       title: Flip axes
@@ -264,14 +265,17 @@ options:
           title: Auto
         - name: manual
           title: Manual
+      default: auto
 
     - name: yAxisRangeMin
       title: Min
       type: Number
+      default: 0
 
     - name: yAxisRangeMax
       title: Max
       type: Number
+      default: 10
 
     - name: xAxisLabelFontSize
       title: Label font size
