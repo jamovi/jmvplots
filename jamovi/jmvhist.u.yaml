@@ -38,11 +38,24 @@ children:
             stretchFactor: 1
             children:
               - type: Label
+                label: Bin Width
+                children:
+                  - type: RadioButton
+                    name: ybinWidth_auto
+                    optionName: binWidthType
+                    optionPart: auto
+                  - type: RadioButton
+                    name: binWidth_manual
+                    optionName: binWidthType
+                    optionPart: manual
+                    children:
+                      - type: TextBox
+                        name: binWidth
+                        format: number
+                        enable: (binWidthType:manual)
+              - type: Label
                 label: Histogram
                 children:
-                  - type: TextBox
-                    name: binWidth
-                    format: number
                   - type: CheckBox
                     name: bins
                     children:

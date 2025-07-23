@@ -37,6 +37,16 @@ options:
       type: Bool
       default: true
 
+    - name: binWidthType
+      title: Bin Width
+      type: List
+      options:
+        - name: auto
+          title: Auto
+        - name: manual
+          title: Manual
+      default: auto
+
     - name: binWidth
       title: Bin width
       type: Number
