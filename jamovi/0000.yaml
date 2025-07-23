@@ -1,7 +1,7 @@
 ---
-title: Create Elegant and Interactive Plots Built on 'ggplot2'
+title: Plots bundled with jamovi
 name: scatr
-version: 0.0.1
+version: 2.7.0
 jms: '1.0'
 authors:
   - Ravi Selker
@@ -10,7 +10,7 @@ date: '2025-04-01'
 type: R
 description: >-
   Create elegant and interactive plots built on 'ggplot2'. The package is
-  designed to provide a convencience layer to 'ggplot2' within jamovi.
+  designed to provide a convenience layer to 'ggplot2' within jamovi.
 analyses:
   - title: Bar Plot
     name: jmvbar
