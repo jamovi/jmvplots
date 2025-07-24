@@ -73,7 +73,7 @@ paretoClass <- if (requireNamespace('jmvcore', quietly = TRUE)) {
                     ggplot2::scale_y_continuous(
                         sec.axis = ggplot2::sec_axis(
                             formula,
-                            name = .("Cumalitive Percentage")
+                            name = .("Cumulative Percentage")
                         )
                     ) +
                     ggtheme
