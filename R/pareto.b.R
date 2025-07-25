@@ -4,6 +4,10 @@ paretoClass <- if (requireNamespace('jmvcore', quietly = TRUE)) {
         "paretoClass",
         inherit = paretoBase,
         private = list(
+            .init = function() {
+                image <- self$results$plot
+                image$setSize(self$options$width, self$options$height)
+            },
             .run = function() {
                 if (is.null(self$options$x)) {
                     return()
@@ -14,7 +18,6 @@ paretoClass <- if (requireNamespace('jmvcore', quietly = TRUE)) {
             #### Plot functions ----
             .preparePlotData = function() {
                 image <- self$results$plot
-                image$setSize(self$options$width, self$options$height)
 
                 x <- self$options$x
                 counts <- self$options$counts
