@@ -6,6 +6,10 @@ jmvlineClass <- if (requireNamespace('jmvcore', quietly = TRUE)) {
         "jmvlineClass",
         inherit = jmvlineBase,
         private = list(
+            .init = function() {
+                image <- self$results$plot
+                image$setSize(self$options$width, self$options$height)
+            },
             .run = function() {
                 if (is.null(self$options$x) || is.null(self$options$y)) {
                     return()
@@ -16,7 +20,6 @@ jmvlineClass <- if (requireNamespace('jmvcore', quietly = TRUE)) {
             #### Plot functions ----
             .preparePlotData = function() {
                 image <- self$results$plot
-                image$setSize(self$options$width, self$options$height)
 
                 mode <- self$options$mode
                 if (mode == "individual") {

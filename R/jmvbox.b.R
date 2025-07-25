@@ -6,6 +6,10 @@ jmvboxClass <- if (requireNamespace('jmvcore', quietly = TRUE)) {
         "jmvboxClass",
         inherit = jmvboxBase,
         private = list(
+            .init = function() {
+                image <- self$results$plot
+                image$setSize(self$options$width, self$options$height)
+            },
             .run = function() {
                 if (is.null(self$options$var)) {
                     return()
@@ -16,7 +20,6 @@ jmvboxClass <- if (requireNamespace('jmvcore', quietly = TRUE)) {
             #### Plot functions ----
             .preparePlotData = function() {
                 image <- self$results$plot
-                image$setSize(self$options$width, self$options$height)
 
                 var <- self$options$var
                 group1 <- self$options$group1

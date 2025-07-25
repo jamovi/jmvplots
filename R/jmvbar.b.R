@@ -34,6 +34,10 @@ jmvbarClass <- if (requireNamespace('jmvcore', quietly = TRUE)) {
         private = list(
             #### Member variables ----
             .grouped = NULL,
+            .init = function() {
+                image <- self$results$plot
+                image$setSize(self$options$width, self$options$height)
+            },
             .run = function() {
                 mode <- self$options$mode
                 if (
@@ -49,7 +53,6 @@ jmvbarClass <- if (requireNamespace('jmvcore', quietly = TRUE)) {
             #### Plot functions ----
             .preparePlotData = function() {
                 image <- self$results$plot
-                image$setSize(self$options$width, self$options$height)
 
                 mode <- self$options$mode
                 if (mode == "continuous") {

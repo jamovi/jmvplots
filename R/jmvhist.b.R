@@ -6,6 +6,10 @@ jmvhistClass <- if (requireNamespace('jmvcore', quietly = TRUE)) {
         "jmvhistClass",
         inherit = jmvhistBase,
         private = list(
+            .init = function() {
+                image <- self$results$plot
+                image$setSize(self$options$width, self$options$height)
+            },
             .run = function() {
                 if (is.null(self$options$var)) {
                     return()
@@ -16,7 +20,6 @@ jmvhistClass <- if (requireNamespace('jmvcore', quietly = TRUE)) {
             #### Plot functions ----
             .preparePlotData = function() {
                 image <- self$results$plot
-                image$setSize(self$options$width, self$options$height)
 
                 group <- self$options$group
                 if (is.null(group)) {

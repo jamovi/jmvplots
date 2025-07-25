@@ -6,6 +6,10 @@ scatClass <- if (requireNamespace('jmvcore', quietly = TRUE)) {
         "scatClass",
         inherit = scatBase,
         private = list(
+            .init = function() {
+                image <- self$results$plot
+                image$setSize(self$options$width, self$options$height)
+            },
             .run = function() {
                 if (is.null(self$options$x) || is.null(self$options$y)) {
                     return()
@@ -16,7 +20,6 @@ scatClass <- if (requireNamespace('jmvcore', quietly = TRUE)) {
             #### Plot functions ----
             .preparePlotData = function() {
                 image <- self$results$plot
-                image$setSize(self$options$width, self$options$height)
 
                 group <- self$options$group
 
