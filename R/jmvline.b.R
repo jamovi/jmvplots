@@ -46,8 +46,9 @@ jmvlineClass <- if (requireNamespace('jmvcore', quietly = TRUE)) {
                             y = !!sym(self$options$y),
                             group = !!sym(group)
                         ) |>
+                        dplyr::mutate(group = factor(group)) |>
                         dplyr::group_by(group) |>
-                        dplyr::mutate(y = jmvcore::toNumeric(y), group = factor(group))
+                        dplyr::mutate(y = jmvcore::toNumeric(y))
                 }
 
                 return(df)
@@ -56,44 +57,49 @@ jmvlineClass <- if (requireNamespace('jmvcore', quietly = TRUE)) {
                 group <- self$options$group
                 if (is.null(group)) {
                     df <- self$data |>
-                        dplyr::group_by(!!sym(self$options$x)) |>
+                        dplyr::select(
+                            x = !!sym(self$options$x),
+                            y = !!sym(self$options$y),
+                        ) |>
+                        dplyr::mutate(yOld = jmvcore::toNumeric(y)) |>
+                        dplyr::group_by(x) |>
                         dplyr::summarize(
                             y = ifelse(
                                 self$options$aggregateType == "median",
-                                median(!!sym(self$options$y), na.rm = TRUE),
-                                mean(!!sym(self$options$y), na.rm = TRUE)
+                                median(yOld, na.rm = TRUE),
+                                mean(yOld, na.rm = TRUE)
                             ),
                             n = dplyr::n(),
-                            sd = sd(!!sym(self$options$y), na.rm = TRUE),
+                            sd = sd(yOld, na.rm = TRUE),
                         ) |>
                         dplyr::mutate(se = sd / sqrt(n)) |>
                         dplyr::mutate(ci = se * qt((self$options$ciWidth / 100) / 2 + .5, n - 1)) |>
-                        dplyr::ungroup() |>
-                        dplyr::rename(x = !!sym(self$options$x))
+                        dplyr::ungroup()
                 } else {
                     df <- self$data |>
-                        dplyr::group_by(!!sym(self$options$x), !!sym(group)) |>
+                        dplyr::select(
+                            x = !!sym(self$options$x),
+                            y = !!sym(self$options$y),
+                            group = !!sym(group)
+                        ) |>
+                        dplyr::mutate(
+                            yOld = jmvcore::toNumeric(y),
+                            group = factor(group)
+                        ) |>
+                        dplyr::group_by(x, group) |>
                         dplyr::summarize(
                             y = ifelse(
                                 self$options$aggregateType == "median",
-                                median(!!sym(self$options$y), na.rm = TRUE),
-                                mean(!!sym(self$options$y), na.rm = TRUE)
+                                median(yOld, na.rm = TRUE),
+                                mean(yOld, na.rm = TRUE)
                             ),
                             n = dplyr::n(),
-                            sd = sd(!!sym(self$options$y), na.rm = TRUE),
+                            sd = sd(yOld, na.rm = TRUE),
                         ) |>
                         dplyr::mutate(se = sd / sqrt(n)) |>
                         dplyr::mutate(ci = se * qt((self$options$ciWidth / 100) / 2 + .5, n - 1)) |>
                         dplyr::ungroup() |>
-                        dplyr::select(
-                            group = !!sym(group),
-                            x = !!sym(self$options$x),
-                            y,
-                            se,
-                            sd,
-                            ci
-                        ) |>
-                        dplyr::mutate(y = jmvcore::toNumeric(y), group = factor(group))
+                        dplyr::select(group, x, y, se, sd, ci)
                 }
                 return(df)
             },
