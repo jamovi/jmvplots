@@ -61,7 +61,7 @@ options:
       default: lm
 
     - name: lineSE
-      title: Standard error
+      title: Confidence interval
       type: Bool
       default: true
 
