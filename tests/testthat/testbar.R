@@ -1,10 +1,17 @@
-testthat::test_that("mode categorical, no grouping variable", {
+#' Bar plot in categorical mode with no grouping
+testthat::test_that("jmvbar: mode categorical, no grouping variable", {
+    # GIVEN categorical data
+    # WHEN the bar plot is generated in categorical mode
     disp_bar_jmvplot <- scatr::jmvbar(data = ToothGrowth, mode = "categorical", catvar = dose)
 
-    vdiffr::expect_doppelganger("cat-no-group", disp_bar_jmvplot)
+    # THEN the plot should match the snapshot
+    vdiffr::expect_doppelganger("jmvbar-categorical-no-group", disp_bar_jmvplot)
 })
 
-testthat::test_that("mode categorical, grouping variable", {
+#' Bar plot in categorical mode with grouping
+testthat::test_that("jmvbar: mode categorical, grouping variable", {
+    # GIVEN categorical data with grouping
+    # WHEN the bar plot is generated in categorical mode with grouping
     disp_bar_jmvplot <- scatr::jmvbar(
         data = ToothGrowth,
         mode = "categorical",
@@ -12,20 +19,28 @@ testthat::test_that("mode categorical, grouping variable", {
         catgroup = supp
     )
 
-    vdiffr::expect_doppelganger("cat-group", disp_bar_jmvplot)
+    # THEN the plot should show grouped bars and match the snapshot
+    vdiffr::expect_doppelganger("jmvbar-categorical-group", disp_bar_jmvplot)
 })
 
-testthat::test_that("mode continuous, no grouping variable", {
+#' Bar plot in continuous mode with no grouping
+testthat::test_that("jmvbar: mode continuous, no grouping variable", {
+    # GIVEN continuous data
+    # WHEN the bar plot is generated in continuous mode
     disp_bar_jmvplot <- scatr::jmvbar(
         data = ToothGrowth,
         mode = "continuous",
         convar = len
     )
 
-    vdiffr::expect_doppelganger("con-no-group", disp_bar_jmvplot)
+    # THEN the plot should match the snapshot
+    vdiffr::expect_doppelganger("jmvbar-continuous-no-group", disp_bar_jmvplot)
 })
 
-testthat::test_that("mode continuous, 1 grouping variable", {
+#' Bar plot in continuous mode with 1 grouping variable
+testthat::test_that("jmvbar: mode continuous, 1 grouping variable", {
+    # GIVEN continuous data with one grouping variable
+    # WHEN the bar plot is generated
     disp_bar_jmvplot <- scatr::jmvbar(
         data = ToothGrowth,
         mode = "continuous",
@@ -33,10 +48,14 @@ testthat::test_that("mode continuous, 1 grouping variable", {
         congroup1 = dose
     )
 
-    vdiffr::expect_doppelganger("con-1-group", disp_bar_jmvplot)
+    # THEN the plot should match the snapshot
+    vdiffr::expect_doppelganger("jmvbar-continuous-1-group", disp_bar_jmvplot)
 })
 
-testthat::test_that("mode continuous, 2 grouping variable", {
+#' Bar plot in continuous mode with 2 grouping variables
+testthat::test_that("jmvbar: mode continuous, 2 grouping variable", {
+    # GIVEN continuous data with two grouping variables
+    # WHEN the bar plot is generated
     disp_bar_jmvplot <- scatr::jmvbar(
         data = ToothGrowth,
         mode = "continuous",
@@ -45,10 +64,14 @@ testthat::test_that("mode continuous, 2 grouping variable", {
         congroup2 = supp
     )
 
-    vdiffr::expect_doppelganger("con-2-group", disp_bar_jmvplot)
+    # THEN the plot should match the snapshot
+    vdiffr::expect_doppelganger("jmvbar-continuous-2-group", disp_bar_jmvplot)
 })
 
-testthat::test_that("mode continuous, no grouping variable, error bars", {
+#' Bar plot in continuous mode with no grouping and error bars (CI)
+testthat::test_that("jmvbar: mode continuous, no grouping variable, error bars", {
+    # GIVEN continuous data
+    # WHEN the bar plot is generated with CI error bars
     disp_bar_jmvplot <- scatr::jmvbar(
         data = ToothGrowth,
         mode = "continuous",
@@ -57,10 +80,14 @@ testthat::test_that("mode continuous, no grouping variable, error bars", {
         ciWidth = 95,
     )
 
-    vdiffr::expect_doppelganger("con-no-group-ci", disp_bar_jmvplot)
+    # THEN the plot should display CI bars and match the snapshot
+    vdiffr::expect_doppelganger("jmvbar-continuous-no-group-ci", disp_bar_jmvplot)
 })
 
-testthat::test_that("mode continuous, 1 grouping variable, error bars", {
+#' Bar plot in continuous mode with 1 grouping variable and error bars (CI)
+testthat::test_that("jmvbar: mode continuous, 1 grouping variable, error bars", {
+    # GIVEN continuous data with grouping
+    # WHEN the bar plot is generated with CI error bars
     disp_bar_jmvplot <- scatr::jmvbar(
         data = ToothGrowth,
         mode = "continuous",
@@ -70,10 +97,14 @@ testthat::test_that("mode continuous, 1 grouping variable, error bars", {
         ciWidth = 95,
     )
 
-    vdiffr::expect_doppelganger("con-1-group-ci", disp_bar_jmvplot)
+    # THEN the plot should display CI bars on grouped data and match the snapshot
+    vdiffr::expect_doppelganger("jmvbar-continuous-1-group-ci", disp_bar_jmvplot)
 })
 
-testthat::test_that("mode continuous, 2 grouping variable, error bars", {
+#' Bar plot in continuous mode with 2 grouping variables and error bars (CI)
+testthat::test_that("jmvbar: mode continuous, 2 grouping variable, error bars", {
+    # GIVEN continuous data with two grouping variables
+    # WHEN the bar plot is generated with CI error bars
     disp_bar_jmvplot <- scatr::jmvbar(
         data = ToothGrowth,
         mode = "continuous",
@@ -84,20 +115,28 @@ testthat::test_that("mode continuous, 2 grouping variable, error bars", {
         ciWidth = 95,
     )
 
-    vdiffr::expect_doppelganger("con-2-group-ci", disp_bar_jmvplot)
+    # THEN the plot should match the snapshot
+    vdiffr::expect_doppelganger("jmvbar-continuous-2-group-ci", disp_bar_jmvplot)
 })
 
-testthat::test_that("mode counts, no labels", {
+#' Bar plot in counts mode with no labels
+testthat::test_that("jmvbar: mode counts, no labels", {
+    # GIVEN counts data
+    # WHEN the bar plot is generated in counts mode
     df <- data.frame(
         counts = c(1, 2, 3)
     )
 
     disp_bar_jmvplot <- scatr::jmvbar(data = df, mode = "counts", counts = counts)
 
-    vdiffr::expect_doppelganger("counts-no-labels", disp_bar_jmvplot)
+    # THEN the plot should match the snapshot
+    vdiffr::expect_doppelganger("jmvbar-counts-no-labels", disp_bar_jmvplot)
 })
 
-testthat::test_that("mode counts, with labels", {
+#' Bar plot in counts mode with labels
+testthat::test_that("jmvbar: mode counts, with labels", {
+    # GIVEN counts data with labels
+    # WHEN the bar plot is generated
     df <- data.frame(
         counts = c(1, 2, 3),
         labels = c("A", "B", "C")
@@ -110,15 +149,20 @@ testthat::test_that("mode counts, with labels", {
         countsLabels = labels
     )
 
-    vdiffr::expect_doppelganger("counts-with-labels", disp_bar_jmvplot)
+    # THEN the plot should show labels and match the snapshot
+    vdiffr::expect_doppelganger("jmvbar-counts-with-labels", disp_bar_jmvplot)
 })
 
-testthat::test_that("mode counts, no labels, grouping variable", {
+#' Bar plot in counts mode with no labels and grouping
+testthat::test_that("jmvbar: mode counts, no labels, grouping variable", {
+    # GIVEN counts data with grouping
+    # WHEN the bar plot is generated
     df <- data.frame(
         counts = c(1, 2, 3),
         group = c("A", "B", "C")
     )
 
+    # WHEN the bar plot is generated
     disp_bar_jmvplot <- scatr::jmvbar(
         data = df,
         mode = "counts",
@@ -126,16 +170,20 @@ testthat::test_that("mode counts, no labels, grouping variable", {
         countsgroup = group
     )
 
-    vdiffr::expect_doppelganger("counts-no-labels-group", disp_bar_jmvplot)
+    # THEN the plot should show grouped bars and match the snapshot
+    vdiffr::expect_doppelganger("jmvbar-counts-no-labels-group", disp_bar_jmvplot)
 })
 
-testthat::test_that("mode counts, with labels, grouping variable", {
+#' Bar plot in counts mode with labels and grouping
+testthat::test_that("jmvbar: mode counts, with labels, grouping variable", {
+    # GIVEN counts data with labels and grouping
     df <- data.frame(
         counts = c(1, 2, 3, 4, 5, 6),
         labels = c("A", "A", "A", "B", "B", "B"),
         group = c("A", "B", "C", "A", "B", "C")
     )
 
+    # WHEN the bar plot is generated
     disp_bar_jmvplot <- scatr::jmvbar(
         data = df,
         mode = "counts",
@@ -144,5 +192,40 @@ testthat::test_that("mode counts, with labels, grouping variable", {
         countsgroup = group
     )
 
-    vdiffr::expect_doppelganger("counts-with-labels-group", disp_bar_jmvplot)
+    # THEN the plot should match the snapshot
+    vdiffr::expect_doppelganger("jmvbar-counts-with-labels-group", disp_bar_jmvplot)
+})
+
+#' Bar plot with manual limits
+testthat::test_that("jmvbar: manual limits", {
+    # GIVEN data suitable for bar plot
+
+    # WHEN the bar plot is generated with manual Y-axis limits
+    disp_bar_limits <- scatr::jmvbar(
+        data = ToothGrowth,
+        mode = "continuous",
+        convar = "len",
+        yAxisRangeType = "manual",
+        yAxisRangeMin = 0,
+        yAxisRangeMax = 40
+    )
+
+    # THEN the Y-axis should be constrained and match the snapshot
+    vdiffr::expect_doppelganger("jmvbar-manual-limits", disp_bar_limits)
+})
+
+#' Bar plot with flipped axes
+testthat::test_that("jmvbar: flipped axes", {
+    # GIVEN data suitable for bar plot
+
+    # WHEN the bar plot is generated with flipped axes
+    disp_bar_flip <- scatr::jmvbar(
+        data = ToothGrowth,
+        mode = "continuous",
+        convar = "len",
+        flipAxes = TRUE
+    )
+
+    # THEN the axes should be flipped and match the snapshot
+    vdiffr::expect_doppelganger("jmvbar-flipped", disp_bar_flip)
 })
