@@ -41,6 +41,12 @@ jobs:
           curl -LO https://mac.r-project.org/bin/darwin20/arm64/libpng-1.6.38-darwin.20-arm64.tar.xz
           sudo tar -xvf libpng-1.6.38-darwin.20-arm64.tar.xz -C /
 
+      - name: Install system dependencies (macOS)
+        if: runner.os == 'macOS'
+        run: |
+          brew install gettext
+          brew link --force gettext
+
       - uses: r-lib/actions/setup-r-dependencies@v2
         with:
           extra-packages: any::rcmdcheck, any::roxygen2, github::jamovi/jmvcore
