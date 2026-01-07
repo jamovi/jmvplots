@@ -1,7 +1,7 @@
 #' @importFrom ggplot2 ggplot aes
 #' @importFrom rlang sym
 #' @importFrom jmvcore .
-scatClass <- if (requireNamespace('jmvcore', quietly = TRUE)) {
+scatClass <- if (requireNamespace("jmvcore", quietly = TRUE)) {
     R6::R6Class(
         "scatClass",
         inherit = scatBase,
