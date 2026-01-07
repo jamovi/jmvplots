@@ -142,3 +142,27 @@ testthat::test_that("jmvbox: flipped axes with manual limits", {
     # THEN the plot should have flipped axes, correct limits, and match the snapshot
     vdiffr::expect_doppelganger("jmvbox-flipped-manual-limits", plot_flip_limits)
 })
+
+#' Box plot with manual limits (zoom behavior)
+testthat::test_that("jmvbox: limits do not alter box statistics", {
+    # GIVEN data with outliers that affect the median/quartiles
+    # Median of 1,2,3,4,100 is 3.
+    # If 100 is removed (ylim), median of 1,2,3,4 is 2.5.
+    data <- data.frame(
+        x = factor(rep("A", 5)),
+        y = c(1, 2, 3, 4, 100)
+    )
+
+    # WHEN box plot is generated with limits excluding 100
+    disp_box_zoom <- scatr::jmvbox(
+        data = data,
+        var = "y",
+        group1 = "x",
+        yAxisRangeType = "manual",
+        yAxisRangeMin = 0,
+        yAxisRangeMax = 10
+    )
+
+    # THEN the box plot stats should reflect the full data (median=3)
+    vdiffr::expect_doppelganger("jmvbox-manual-limits-zoom", disp_box_zoom)
+})

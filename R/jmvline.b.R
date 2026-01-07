@@ -176,12 +176,15 @@ jmvlineClass <- if (requireNamespace("jmvcore", quietly = TRUE)) {
                     }
                 }
 
-                if (self$options$flipAxes) {
-                    p <- p + ggplot2::coord_flip()
+                ylims <- NULL
+                if (self$options$yAxisRangeType == "manual") {
+                    ylims <- c(self$options$yAxisRangeMin, self$options$yAxisRangeMax)
                 }
 
-                if (self$options$yAxisRangeType == "manual") {
-                    p <- p + ggplot2::ylim(self$options$yAxisRangeMin, self$options$yAxisRangeMax)
+                if (self$options$flipAxes) {
+                    p <- p + ggplot2::coord_flip(ylim = ylims)
+                } else {
+                    p <- p + ggplot2::coord_cartesian(ylim = ylims)
                 }
 
                 labelDefaults <- list(

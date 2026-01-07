@@ -76,10 +76,6 @@ jmvboxClass <- if (requireNamespace("jmvcore", quietly = TRUE)) {
                         formatLegend(self$options)
                 }
 
-                if (self$options$yAxisRangeType == "manual") {
-                    p <- p + ggplot2::ylim(self$options$yAxisRangeMin, self$options$yAxisRangeMax)
-                }
-
                 if (self$options$xAxisLabelFontSizeRevLabels) {
                     p <- p + ggplot2::scale_x_discrete(limits = rev)
                 }
@@ -89,8 +85,15 @@ jmvboxClass <- if (requireNamespace("jmvcore", quietly = TRUE)) {
                     setLabels(options = self$options, defaults = labelDefaults) +
                     formatLabels(options = self$options, flipAxes = self$options$flipAxes)
 
+                ylims <- NULL
+                if (self$options$yAxisRangeType == "manual") {
+                    ylims <- c(self$options$yAxisRangeMin, self$options$yAxisRangeMax)
+                }
+
                 if (self$options$flipAxes) {
-                    p <- p + ggplot2::coord_flip()
+                    p <- p + ggplot2::coord_flip(ylim = ylims)
+                } else {
+                    p <- p + ggplot2::coord_cartesian(ylim = ylims)
                 }
 
                 return(p)

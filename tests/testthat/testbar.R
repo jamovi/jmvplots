@@ -229,3 +229,26 @@ testthat::test_that("jmvbar: flipped axes", {
     # THEN the axes should be flipped and match the snapshot
     vdiffr::expect_doppelganger("jmvbar-flipped", disp_bar_flip)
 })
+
+#' Bar plot with manual limits (zoom behavior)
+testthat::test_that("jmvbar: manual limits do not remove bars", {
+    # GIVEN data with a high value (N=3 to avoid CI warnings)
+    data <- data.frame(
+        x = factor(rep(c("A", "B"), each = 3)),
+        y = c(rep(10, 3), rep(100, 3))
+    )
+
+    # WHEN bar plot is generated with limits smaller than the high value
+    disp_bar_zoom <- scatr::jmvbar(
+        data = data,
+        mode = "continuous",
+        convar = "y",
+        congroup1 = "x",
+        yAxisRangeType = "manual",
+        yAxisRangeMin = 0,
+        yAxisRangeMax = 20
+    )
+
+    # THEN the bar should still be drawn (cropped)
+    vdiffr::expect_doppelganger("jmvbar-manual-limits-zoom", disp_bar_zoom)
+})

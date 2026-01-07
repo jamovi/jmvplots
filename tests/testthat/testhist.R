@@ -71,3 +71,21 @@ testthat::test_that("jmvhist: flipped axes", {
     # THEN the axes should be flipped in the snapshot
     vdiffr::expect_doppelganger("jmvhist-flipped", disp_hist_flip)
 })
+
+#' Histogram with manual limits (zoom behavior)
+testthat::test_that("jmvhist: bins are not removed by zoom", {
+    # GIVEN data spanning 0-100 (N=10)
+    data <- data.frame(val = c(rep(10, 5), rep(90, 5)))
+
+    # WHEN histogram is zoomed into 0-50 range
+    disp_hist_zoom <- scatr::jmvhist(
+        data = data,
+        var = "val",
+        xAxisRangeType = "manual",
+        xAxisRangeMin = 0,
+        xAxisRangeMax = 50
+    )
+
+    # THEN the bin at 10 should be visible, unmodified by the missing 90s
+    vdiffr::expect_doppelganger("jmvhist-manual-limits-zoom", disp_hist_zoom)
+})
