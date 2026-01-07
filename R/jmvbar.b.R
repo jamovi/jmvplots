@@ -1,7 +1,7 @@
 #' @importFrom ggplot2 ggplot aes
 #' @importFrom rlang sym
 #' @importFrom jmvcore .
-jmvbarClass <- if (requireNamespace('jmvcore', quietly = TRUE)) {
+jmvbarClass <- if (requireNamespace("jmvcore", quietly = TRUE)) {
     R6::R6Class(
         "jmvbarClass",
         inherit = jmvbarBase,
@@ -66,8 +66,8 @@ jmvbarClass <- if (requireNamespace('jmvcore', quietly = TRUE)) {
                 image$setState(df)
             },
             .prepareCategoricalPlotData = function() {
-                var = self$options$catvar
-                group = self$options$catgroup
+                var <- self$options$catvar
+                group <- self$options$catgroup
 
                 if (is.null(group)) {
                     df <- self$data |>
@@ -84,14 +84,14 @@ jmvbarClass <- if (requireNamespace('jmvcore', quietly = TRUE)) {
                 return(df)
             },
             .prepareContinuousPlotData = function() {
-                var = self$options$convar
+                var <- self$options$convar
 
                 if (is.null(self$options$congroup1)) {
-                    group1 = self$options$congroup2
-                    group2 = NULL
+                    group1 <- self$options$congroup2
+                    group2 <- NULL
                 } else {
-                    group1 = self$options$congroup1
-                    group2 = self$options$congroup2
+                    group1 <- self$options$congroup1
+                    group2 <- self$options$congroup2
                 }
 
                 if (is.null(group1)) {
@@ -136,9 +136,9 @@ jmvbarClass <- if (requireNamespace('jmvcore', quietly = TRUE)) {
                 return(df)
             },
             .prepareCountsPlotData = function() {
-                var = self$options$counts
-                labels = self$options$countsLabels
-                group = self$options$countsgroup
+                var <- self$options$counts
+                labels <- self$options$countsLabels
+                group <- self$options$countsgroup
 
                 if (is.null(group)) {
                     if (is.null(labels)) {

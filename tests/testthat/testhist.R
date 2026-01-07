@@ -32,7 +32,12 @@ testthat::test_that("jmvhist: density and normal curve", {
 testthat::test_that("jmvhist: manual bins", {
     # GIVEN standard dataset
     # WHEN function is called with manual bin width
-    disp_hist_bins <- scatr::jmvhist(data = ToothGrowth, var = "len", binWidthType = "manual", binWidth = 2)
+    disp_hist_bins <- scatr::jmvhist(
+        data = ToothGrowth,
+        var = "len",
+        binWidthType = "manual",
+        binWidth = 2
+    )
 
     # THEN the bins should be sized accordingly in the snapshot
     vdiffr::expect_doppelganger("jmvhist-manual-bins", disp_hist_bins)

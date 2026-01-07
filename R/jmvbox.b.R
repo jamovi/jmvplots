@@ -1,7 +1,7 @@
 #' @importFrom ggplot2 ggplot aes
 #' @importFrom rlang sym
 #' @importFrom jmvcore .
-jmvboxClass <- if (requireNamespace('jmvcore', quietly = TRUE)) {
+jmvboxClass <- if (requireNamespace("jmvcore", quietly = TRUE)) {
     R6::R6Class(
         "jmvboxClass",
         inherit = jmvboxBase,
