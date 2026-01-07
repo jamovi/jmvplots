@@ -218,16 +218,6 @@ jmvbarClass <- if (requireNamespace("jmvcore", quietly = TRUE)) {
                     plot_call_list$geom_text <- private$.getGeomTextCallList()
                 }
 
-                if (self$options$yAxisRangeType == "manual") {
-                    plot_call_list$ylim <- list(
-                        ggplot2::ylim,
-                        list(
-                            min = self$options$yAxisRangeMin,
-                            max = self$options$yAxisRangeMax
-                        )
-                    )
-                }
-
                 if (
                     !self$grouped &&
                         self$options$mode == "counts" &&
@@ -247,8 +237,18 @@ jmvbarClass <- if (requireNamespace("jmvcore", quietly = TRUE)) {
                 labelDefaults <- private$.getDefaultLabels()
                 plot_call_list$labs <- getLabsCallList(self$options, labelDefaults)
 
+                ylims <- NULL
+                if (self$options$yAxisRangeType == "manual") {
+                    ylims <- c(self$options$yAxisRangeMin, self$options$yAxisRangeMax)
+                }
+
                 if (self$options$flipAxes) {
-                    plot_call_list$coord_flip <- list(ggplot2::coord_flip, list())
+                    plot_call_list$coord_flip <- list(ggplot2::coord_flip, list(ylim = ylims))
+                } else {
+                    plot_call_list$coord_cartesian <- list(
+                        ggplot2::coord_cartesian,
+                        list(ylim = ylims)
+                    )
                 }
 
                 theme_call_list_args <- list()

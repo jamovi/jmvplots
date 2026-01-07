@@ -98,3 +98,28 @@ testthat::test_that("scat: flipped axes", {
     # THEN the axes should be flipped and match the snapshot
     vdiffr::expect_doppelganger("scat-flipped", plot_flip)
 })
+
+#' Scatter plot with manual limits (zoom behavior)
+testthat::test_that("scat: smooth line calculated on full data (zoom)", {
+    # GIVEN data with an outlier affecting the trend
+    data <- data.frame(
+        x = c(1, 2, 3, 10),
+        y = c(1, 2, 3, 100)
+    )
+
+    # WHEN scatter plot is zoomed to exclude the outlier
+    # If filtered (ylim), regression on 1,2,3 is perfect line y=x.
+    # If zoomed (coord_cartesian), regression includes (10,100), pulling the line up.
+    disp_scat_zoom <- scatr::scat(
+        data = data,
+        x = "x",
+        y = "y",
+        regLine = TRUE,
+        yAxisRangeType = "manual",
+        yAxisRangeMin = 0,
+        yAxisRangeMax = 5
+    )
+
+    # THEN the smooth line should reflect the influence of the outlier
+    vdiffr::expect_doppelganger("scat-manual-limits-zoom", disp_scat_zoom)
+})

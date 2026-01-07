@@ -112,3 +112,27 @@ testthat::test_that("jmvline: flipped axes", {
     # THEN the axes should be flipped and match the snapshot
     vdiffr::expect_doppelganger("jmvline-flipped", plot_flip)
 })
+
+#' Line plot with manual limits (zoom behavior)
+testthat::test_that("jmvline: manual limits do not clip data (zoom)", {
+    # GIVEN data with an outlier off-screen
+    data <- data.frame(
+        x = factor(c("A", "A", "B", "B")),
+        y = c(10, 10, 10, 100),
+        group = factor(c("G1", "G1", "G1", "G1"))
+    )
+
+    # WHEN line plot is generated with limits smaller than the outlier
+    disp_line_zoom <- scatr::jmvline(
+        data = data,
+        x = "x",
+        y = "y",
+        group = "group",
+        yAxisRangeType = "manual",
+        yAxisRangeMin = 0,
+        yAxisRangeMax = 20
+    )
+
+    # THEN the line should still be drawn towards the outlier (zoomed in)
+    vdiffr::expect_doppelganger("jmvline-manual-limits-zoom", disp_line_zoom)
+})

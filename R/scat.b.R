@@ -88,16 +88,20 @@ scatClass <- if (requireNamespace("jmvcore", quietly = TRUE)) {
                     }
                 }
 
-                if (self$options$flipAxes) {
-                    p <- p + ggplot2::coord_flip()
-                }
-
+                ylims <- NULL
                 if (self$options$yAxisRangeType == "manual") {
-                    p <- p + ggplot2::ylim(self$options$yAxisRangeMin, self$options$yAxisRangeMax)
+                    ylims <- c(self$options$yAxisRangeMin, self$options$yAxisRangeMax)
                 }
 
+                xlims <- NULL
                 if (self$options$xAxisRangeType == "manual") {
-                    p <- p + ggplot2::xlim(self$options$xAxisRangeMin, self$options$xAxisRangeMax)
+                    xlims <- c(self$options$xAxisRangeMin, self$options$xAxisRangeMax)
+                }
+
+                if (self$options$flipAxes) {
+                    p <- p + ggplot2::coord_flip(ylim = ylims, xlim = xlims)
+                } else {
+                    p <- p + ggplot2::coord_cartesian(ylim = ylims, xlim = xlims)
                 }
 
                 labelDefaults <- list(
