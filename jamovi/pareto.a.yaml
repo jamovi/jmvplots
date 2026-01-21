@@ -75,6 +75,20 @@ options:
       type: Number
       default: 16
 
+    - name: titleFontFace
+      title: Font face
+      type: List
+      options:
+        - name: plain
+          title: Plain
+        - name: bold
+          title: Bold
+        - name: italic
+          title: Italic
+        - name: bold-italic
+          title: Bold Italic
+      default: plain
+
     - name: subtitle
       title: Title text
       type: String
@@ -96,6 +110,20 @@ options:
       title: Font size
       type: Number
       default: 16
+
+    - name: subtitleFontFace
+      title: Font face
+      type: List
+      options:
+        - name: plain
+          title: Plain
+        - name: bold
+          title: Bold
+        - name: italic
+          title: Italic
+        - name: bold-italic
+          title: Bold Italic
+      default: plain
 
     - name: caption
       title: Title text
@@ -119,6 +147,20 @@ options:
       type: Number
       default: 12
 
+    - name: captionFontFace
+      title: Font face
+      type: List
+      options:
+        - name: plain
+          title: Plain
+        - name: bold
+          title: Bold
+        - name: italic
+          title: Italic
+        - name: bold-italic
+          title: Bold Italic
+      default: plain
+
     - name: xLabel
       title: Title text
       type: String
@@ -141,6 +183,20 @@ options:
       type: Number
       default: 16
 
+    - name: xLabelFontFace
+      title: Font face
+      type: List
+      options:
+        - name: plain
+          title: Plain
+        - name: bold
+          title: Bold
+        - name: italic
+          title: Italic
+        - name: bold-italic
+          title: Bold Italic
+      default: plain
+
     - name: yLabel
       title: Title text
       type: String
@@ -162,6 +218,20 @@ options:
       title: Font size
       type: Number
       default: 16
+
+    - name: yLabelFontFace
+      title: Font face
+      type: List
+      options:
+        - name: plain
+          title: Plain
+        - name: bold
+          title: Bold
+        - name: italic
+          title: Italic
+        - name: bold-italic
+          title: Bold Italic
+      default: plain
 
     - name: titleType
       title: ""

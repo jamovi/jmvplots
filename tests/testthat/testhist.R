@@ -89,3 +89,36 @@ testthat::test_that("jmvhist: bins are not removed by zoom", {
     # THEN the bin at 10 should be visible, unmodified by the missing 90s
     vdiffr::expect_doppelganger("jmvhist-manual-limits-zoom", disp_hist_zoom)
 })
+
+#' Histogram with custom font faces
+testthat::test_that("jmvhist: custom font faces, sizes, and alignment", {
+    # GIVEN standard dataset
+    # WHEN the histogram is generated with custom font faces, sizes, and alignment
+    disp_hist_jmvplot <- scatr::jmvhist(
+        data = ToothGrowth,
+        var = "len",
+        title = "Bold Center 20",
+        titleFontFace = "bold",
+        titleFontSize = 20,
+        titleAlign = "center",
+        subtitle = "Italic Left 14",
+        subtitleFontFace = "italic",
+        subtitleFontSize = 14,
+        subtitleAlign = "left",
+        xLabel = "Bold Italic Right 18",
+        xLabelFontFace = "bold-italic",
+        xLabelFontSize = 18,
+        xLabelAlign = "right",
+        yLabel = "Plain Center 12",
+        yLabelFontFace = "plain",
+        yLabelFontSize = 12,
+        yLabelAlign = "center",
+        caption = "Bold Right 10",
+        captionFontFace = "bold",
+        captionFontSize = 10,
+        captionAlign = "right"
+    )
+
+    # THEN the plot should match the snapshot
+    vdiffr::expect_doppelganger("jmvhist-custom-styling", disp_hist_jmvplot)
+})

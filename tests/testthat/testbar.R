@@ -252,3 +252,36 @@ testthat::test_that("jmvbar: manual limits do not remove bars", {
     # THEN the bar should still be drawn (cropped)
     vdiffr::expect_doppelganger("jmvbar-manual-limits-zoom", disp_bar_zoom)
 })
+#' Font Face Tests
+testthat::test_that("jmvbar: custom font faces, sizes, and alignment", {
+    # GIVEN categorical data with custom font faces, sizes, and alignment
+    # WHEN the bar plot is generated
+    disp_bar_jmvplot <- scatr::jmvbar(
+        data = ToothGrowth,
+        mode = "categorical",
+        catvar = "dose",
+        title = "Bold Center 20",
+        titleFontFace = "bold",
+        titleFontSize = 20,
+        titleAlign = "center",
+        subtitle = "Italic Left 14",
+        subtitleFontFace = "italic",
+        subtitleFontSize = 14,
+        subtitleAlign = "left",
+        xLabel = "Bold Italic Right 18",
+        xLabelFontFace = "bold-italic",
+        xLabelFontSize = 18,
+        xLabelAlign = "right",
+        yLabel = "Plain Center 12",
+        yLabelFontFace = "plain",
+        yLabelFontSize = 12,
+        yLabelAlign = "center",
+        caption = "Bold Right 10",
+        captionFontFace = "bold",
+        captionFontSize = 10,
+        captionAlign = "right"
+    )
+
+    # THEN the plot should match the snapshot
+    vdiffr::expect_doppelganger("jmvbar-custom-styling", disp_bar_jmvplot)
+})

@@ -3,14 +3,31 @@
 #' @param text The alignment text, one of "left", "center", "right"
 #' @return The alignment number
 #' @keywords internal
-alignText2Number = function(text) {
+alignText2Number <- function(text) {
     if (text == "left") {
         return(0)
     }
     if (text == "center") {
         return(0.5)
     }
-    if (text == "right") return(1)
+    if (text == "right") {
+        return(1)
+    }
+}
+
+#' Translate jamovi option values to ggplot2 option values
+#'
+#' @param value The value to translate
+#' @return The translated value
+#' @keywords internal
+toGgplot <- function(value) {
+    translations <- list(
+        "bold-italic" = "bold.italic"
+    )
+    if (!is.null(value) && as.character(value) %in% names(translations)) {
+        return(translations[[as.character(value)]])
+    }
+    return(value)
 }
 
 
@@ -21,7 +38,7 @@ alignText2Number = function(text) {
 #' @param legend Whether there is a legend or not
 #' @return A ggplot2::labs object
 #' @keywords internal
-setLabels = function(options, defaults = list(), legend = TRUE) {
+setLabels <- function(options, defaults = list(), legend = TRUE) {
     title <- options$title
     subtitle <- options$subtitle
     caption <- options$caption
@@ -76,7 +93,7 @@ setLabels = function(options, defaults = list(), legend = TRUE) {
 #' @param legend Whether there is a legend or not
 #' @return A ggplot2::theme object
 #' @keywords internal
-formatLabels = function(options, flipAxes = FALSE, legend = TRUE) {
+formatLabels <- function(options, flipAxes = FALSE, legend = TRUE) {
     if (flipAxes) {
         xLabelFontSize <- options$yLabelFontSize
         xLabelAlign <- options$yLabelAlign
@@ -100,23 +117,28 @@ formatLabels = function(options, flipAxes = FALSE, legend = TRUE) {
     labels_theme <- ggplot2::theme(
         plot.title = ggplot2::element_text(
             size = options$titleFontSize,
-            hjust = alignText2Number(options$titleAlign)
+            hjust = alignText2Number(options$titleAlign),
+            face = toGgplot(options$titleFontFace)
         ),
         plot.subtitle = ggplot2::element_text(
             size = options$subtitleFontSize,
-            hjust = alignText2Number(options$subtitleAlign)
+            hjust = alignText2Number(options$subtitleAlign),
+            face = toGgplot(options$subtitleFontFace)
         ),
         plot.caption = ggplot2::element_text(
             size = options$captionFontSize,
-            hjust = alignText2Number(options$captionAlign)
+            hjust = alignText2Number(options$captionAlign),
+            face = toGgplot(options$captionFontFace)
         ),
         axis.title.x = ggplot2::element_text(
             size = xLabelFontSize,
-            hjust = alignText2Number(xLabelAlign)
+            hjust = alignText2Number(xLabelAlign),
+            face = toGgplot(options$xLabelFontFace)
         ),
         axis.title.y = ggplot2::element_text(
             size = yLabelFontSize,
-            hjust = alignText2Number(yLabelAlign)
+            hjust = alignText2Number(yLabelAlign),
+            face = toGgplot(options$yLabelFontFace)
         ),
         axis.text.x = ggplot2::element_text(
             size = xAxisLabelFontSize,
@@ -128,8 +150,14 @@ formatLabels = function(options, flipAxes = FALSE, legend = TRUE) {
     if (legend) {
         labels_theme <- labels_theme +
             ggplot2::theme(
-                legend.title = ggplot2::element_text(size = options$legendTitleFontSize),
-                legend.text = ggplot2::element_text(size = options$legendLabelFontSize)
+                legend.title = ggplot2::element_text(
+                    size = options$legendTitleFontSize,
+                    face = toGgplot(options$legendTitleFontFace)
+                ),
+                legend.text = ggplot2::element_text(
+                    size = options$legendLabelFontSize,
+                    face = toGgplot(options$legendLabelFontFace)
+                )
             )
     }
 
@@ -141,7 +169,7 @@ formatLabels = function(options, flipAxes = FALSE, legend = TRUE) {
 #' @param options The options list; needs to contain the appropriate fields
 #' @return A ggplot2::theme object
 #' @keywords internal
-formatLegend = function(options) {
+formatLegend <- function(options) {
     if (options$legenPositionType == "hide") {
         legend_theme <- ggplot2::theme(
             legend.position = "none"
@@ -177,7 +205,7 @@ formatLegend = function(options) {
 #' @param options The options list; needs to contain the appropriate fields
 #' @return A list of legend specific theme arguments
 #' @keywords internal
-getLegendThemeCallArgs = function(options) {
+getLegendThemeCallArgs <- function(options) {
     args <- list()
     if (options$legenPositionType == "hide") {
         args$legend.position <- "none"
@@ -206,7 +234,7 @@ getLegendThemeCallArgs = function(options) {
 #' @param flipAxes Whether the axes are flipped or not
 #' @return A list of legend specific theme arguments
 #' @keywords internal
-getLabelsThemeCallArgs = function(options, flipAxes = FALSE) {
+getLabelsThemeCallArgs <- function(options, flipAxes = FALSE) {
     if (flipAxes) {
         xLabelFontSize <- options$yLabelFontSize
         xLabelAlign <- options$yLabelAlign
@@ -227,33 +255,44 @@ getLabelsThemeCallArgs = function(options, flipAxes = FALSE) {
         yAxisLabelRotation <- options$yAxisLabelRotation
     }
     args <- list()
-    args$plot.title = ggplot2::element_text(
+    args$plot.title <- ggplot2::element_text(
         size = options$titleFontSize,
-        hjust = alignText2Number(options$titleAlign)
+        hjust = alignText2Number(options$titleAlign),
+        face = toGgplot(options$titleFontFace)
     )
-    args$plot.subtitle = ggplot2::element_text(
+    args$plot.subtitle <- ggplot2::element_text(
         size = options$subtitleFontSize,
-        hjust = alignText2Number(options$subtitleAlign)
+        hjust = alignText2Number(options$subtitleAlign),
+        face = toGgplot(options$subtitleFontFace)
     )
-    args$plot.caption = ggplot2::element_text(
+    args$plot.caption <- ggplot2::element_text(
         size = options$captionFontSize,
-        hjust = alignText2Number(options$captionAlign)
+        hjust = alignText2Number(options$captionAlign),
+        face = toGgplot(options$captionFontFace)
     )
-    args$axis.title.x = ggplot2::element_text(
+    args$axis.title.x <- ggplot2::element_text(
         size = xLabelFontSize,
-        hjust = alignText2Number(xLabelAlign)
+        hjust = alignText2Number(xLabelAlign),
+        face = toGgplot(options$xLabelFontFace)
     )
-    args$axis.title.y = ggplot2::element_text(
+    args$axis.title.y <- ggplot2::element_text(
         size = yLabelFontSize,
-        hjust = alignText2Number(yLabelAlign)
+        hjust = alignText2Number(yLabelAlign),
+        face = toGgplot(options$yLabelFontFace)
     )
-    args$axis.text.x = ggplot2::element_text(
+    args$axis.text.x <- ggplot2::element_text(
         size = xAxisLabelFontSize,
         angle = xAxisLabelRotation
     )
-    args$axis.text.y = ggplot2::element_text(size = yAxisLabelFontSize, angle = yAxisLabelRotation)
-    args$legend.title = ggplot2::element_text(size = options$legendTitleFontSize)
-    args$legend.text = ggplot2::element_text(size = options$legendLabelFontSize)
+    args$axis.text.y <- ggplot2::element_text(size = yAxisLabelFontSize, angle = yAxisLabelRotation)
+    args$legend.title <- ggplot2::element_text(
+        size = options$legendTitleFontSize,
+        face = toGgplot(options$legendTitleFontFace)
+    )
+    args$legend.text <- ggplot2::element_text(
+        size = options$legendLabelFontSize,
+        face = toGgplot(options$legendLabelFontFace)
+    )
 
     return(args)
 }
@@ -265,7 +304,7 @@ getLabelsThemeCallArgs = function(options, flipAxes = FALSE) {
 #' @param defaults The default values for the labels
 #' @return A list containing the function and arguments to create the labels
 #' @keywords internal
-getLabsCallList = function(options, defaults = list()) {
+getLabsCallList <- function(options, defaults = list()) {
     title <- options$title
     subtitle <- options$subtitle
     caption <- options$caption
@@ -314,7 +353,7 @@ getLabsCallList = function(options, defaults = list()) {
 #' @param callStack The call stack to apply
 #' @return A ggplot2::ggplot object
 #' @keywords internal
-createPlotFromCallStack = function(callStack) {
+createPlotFromCallStack <- function(callStack) {
     init_call_spec <- callStack[[1]]
     p <- do.call(init_call_spec[[1]], init_call_spec[[2]])
 

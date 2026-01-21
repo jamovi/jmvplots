@@ -14,18 +14,23 @@ paretoOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             title = "",
             titleAlign = "center",
             titleFontSize = 16,
+            titleFontFace = "plain",
             subtitle = "",
             subtitleAlign = "left",
             subtitleFontSize = 16,
+            subtitleFontFace = "plain",
             caption = "",
             captionAlign = "right",
             captionFontSize = 12,
+            captionFontFace = "plain",
             xLabel = "",
             xLabelAlign = "center",
             xLabelFontSize = 16,
+            xLabelFontFace = "plain",
             yLabel = "",
             yLabelAlign = "center",
             yLabelFontSize = 16,
+            yLabelFontFace = "plain",
             titleType = "title",
             yAxisLabelFontSize = 12,
             yAxisLabelRotation = 0,
@@ -82,6 +87,15 @@ paretoOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 "titleFontSize",
                 titleFontSize,
                 default=16)
+            private$..titleFontFace <- jmvcore::OptionList$new(
+                "titleFontFace",
+                titleFontFace,
+                options=list(
+                    "plain",
+                    "bold",
+                    "italic",
+                    "bold-italic"),
+                default="plain")
             private$..subtitle <- jmvcore::OptionString$new(
                 "subtitle",
                 subtitle,
@@ -98,6 +112,15 @@ paretoOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 "subtitleFontSize",
                 subtitleFontSize,
                 default=16)
+            private$..subtitleFontFace <- jmvcore::OptionList$new(
+                "subtitleFontFace",
+                subtitleFontFace,
+                options=list(
+                    "plain",
+                    "bold",
+                    "italic",
+                    "bold-italic"),
+                default="plain")
             private$..caption <- jmvcore::OptionString$new(
                 "caption",
                 caption,
@@ -114,6 +137,15 @@ paretoOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 "captionFontSize",
                 captionFontSize,
                 default=12)
+            private$..captionFontFace <- jmvcore::OptionList$new(
+                "captionFontFace",
+                captionFontFace,
+                options=list(
+                    "plain",
+                    "bold",
+                    "italic",
+                    "bold-italic"),
+                default="plain")
             private$..xLabel <- jmvcore::OptionString$new(
                 "xLabel",
                 xLabel,
@@ -130,6 +162,15 @@ paretoOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 "xLabelFontSize",
                 xLabelFontSize,
                 default=16)
+            private$..xLabelFontFace <- jmvcore::OptionList$new(
+                "xLabelFontFace",
+                xLabelFontFace,
+                options=list(
+                    "plain",
+                    "bold",
+                    "italic",
+                    "bold-italic"),
+                default="plain")
             private$..yLabel <- jmvcore::OptionString$new(
                 "yLabel",
                 yLabel,
@@ -146,6 +187,15 @@ paretoOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 "yLabelFontSize",
                 yLabelFontSize,
                 default=16)
+            private$..yLabelFontFace <- jmvcore::OptionList$new(
+                "yLabelFontFace",
+                yLabelFontFace,
+                options=list(
+                    "plain",
+                    "bold",
+                    "italic",
+                    "bold-italic"),
+                default="plain")
             private$..titleType <- jmvcore::OptionList$new(
                 "titleType",
                 titleType,
@@ -185,18 +235,23 @@ paretoOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             self$.addOption(private$..title)
             self$.addOption(private$..titleAlign)
             self$.addOption(private$..titleFontSize)
+            self$.addOption(private$..titleFontFace)
             self$.addOption(private$..subtitle)
             self$.addOption(private$..subtitleAlign)
             self$.addOption(private$..subtitleFontSize)
+            self$.addOption(private$..subtitleFontFace)
             self$.addOption(private$..caption)
             self$.addOption(private$..captionAlign)
             self$.addOption(private$..captionFontSize)
+            self$.addOption(private$..captionFontFace)
             self$.addOption(private$..xLabel)
             self$.addOption(private$..xLabelAlign)
             self$.addOption(private$..xLabelFontSize)
+            self$.addOption(private$..xLabelFontFace)
             self$.addOption(private$..yLabel)
             self$.addOption(private$..yLabelAlign)
             self$.addOption(private$..yLabelFontSize)
+            self$.addOption(private$..yLabelFontFace)
             self$.addOption(private$..titleType)
             self$.addOption(private$..yAxisLabelFontSize)
             self$.addOption(private$..yAxisLabelRotation)
@@ -212,18 +267,23 @@ paretoOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
         title = function() private$..title$value,
         titleAlign = function() private$..titleAlign$value,
         titleFontSize = function() private$..titleFontSize$value,
+        titleFontFace = function() private$..titleFontFace$value,
         subtitle = function() private$..subtitle$value,
         subtitleAlign = function() private$..subtitleAlign$value,
         subtitleFontSize = function() private$..subtitleFontSize$value,
+        subtitleFontFace = function() private$..subtitleFontFace$value,
         caption = function() private$..caption$value,
         captionAlign = function() private$..captionAlign$value,
         captionFontSize = function() private$..captionFontSize$value,
+        captionFontFace = function() private$..captionFontFace$value,
         xLabel = function() private$..xLabel$value,
         xLabelAlign = function() private$..xLabelAlign$value,
         xLabelFontSize = function() private$..xLabelFontSize$value,
+        xLabelFontFace = function() private$..xLabelFontFace$value,
         yLabel = function() private$..yLabel$value,
         yLabelAlign = function() private$..yLabelAlign$value,
         yLabelFontSize = function() private$..yLabelFontSize$value,
+        yLabelFontFace = function() private$..yLabelFontFace$value,
         titleType = function() private$..titleType$value,
         yAxisLabelFontSize = function() private$..yAxisLabelFontSize$value,
         yAxisLabelRotation = function() private$..yAxisLabelRotation$value,
@@ -238,18 +298,23 @@ paretoOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
         ..title = NA,
         ..titleAlign = NA,
         ..titleFontSize = NA,
+        ..titleFontFace = NA,
         ..subtitle = NA,
         ..subtitleAlign = NA,
         ..subtitleFontSize = NA,
+        ..subtitleFontFace = NA,
         ..caption = NA,
         ..captionAlign = NA,
         ..captionFontSize = NA,
+        ..captionFontFace = NA,
         ..xLabel = NA,
         ..xLabelAlign = NA,
         ..xLabelFontSize = NA,
+        ..xLabelFontFace = NA,
         ..yLabel = NA,
         ..yLabelAlign = NA,
         ..yLabelFontSize = NA,
+        ..yLabelFontFace = NA,
         ..titleType = NA,
         ..yAxisLabelFontSize = NA,
         ..yAxisLabelRotation = NA,
@@ -312,18 +377,23 @@ paretoBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 #' @param title .
 #' @param titleAlign .
 #' @param titleFontSize .
+#' @param titleFontFace .
 #' @param subtitle .
 #' @param subtitleAlign .
 #' @param subtitleFontSize .
+#' @param subtitleFontFace .
 #' @param caption .
 #' @param captionAlign .
 #' @param captionFontSize .
+#' @param captionFontFace .
 #' @param xLabel .
 #' @param xLabelAlign .
 #' @param xLabelFontSize .
+#' @param xLabelFontFace .
 #' @param yLabel .
 #' @param yLabelAlign .
 #' @param yLabelFontSize .
+#' @param yLabelFontFace .
 #' @param titleType .
 #' @param yAxisLabelFontSize .
 #' @param yAxisLabelRotation .
@@ -345,18 +415,23 @@ pareto <- function(
     title = "",
     titleAlign = "center",
     titleFontSize = 16,
+    titleFontFace = "plain",
     subtitle = "",
     subtitleAlign = "left",
     subtitleFontSize = 16,
+    subtitleFontFace = "plain",
     caption = "",
     captionAlign = "right",
     captionFontSize = 12,
+    captionFontFace = "plain",
     xLabel = "",
     xLabelAlign = "center",
     xLabelFontSize = 16,
+    xLabelFontFace = "plain",
     yLabel = "",
     yLabelAlign = "center",
     yLabelFontSize = 16,
+    yLabelFontFace = "plain",
     titleType = "title",
     yAxisLabelFontSize = 12,
     yAxisLabelRotation = 0,
@@ -385,18 +460,23 @@ pareto <- function(
         title = title,
         titleAlign = titleAlign,
         titleFontSize = titleFontSize,
+        titleFontFace = titleFontFace,
         subtitle = subtitle,
         subtitleAlign = subtitleAlign,
         subtitleFontSize = subtitleFontSize,
+        subtitleFontFace = subtitleFontFace,
         caption = caption,
         captionAlign = captionAlign,
         captionFontSize = captionFontSize,
+        captionFontFace = captionFontFace,
         xLabel = xLabel,
         xLabelAlign = xLabelAlign,
         xLabelFontSize = xLabelFontSize,
+        xLabelFontFace = xLabelFontFace,
         yLabel = yLabel,
         yLabelAlign = yLabelAlign,
         yLabelFontSize = yLabelFontSize,
+        yLabelFontFace = yLabelFontFace,
         titleType = titleType,
         yAxisLabelFontSize = yAxisLabelFontSize,
         yAxisLabelRotation = yAxisLabelRotation,
