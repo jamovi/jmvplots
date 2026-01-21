@@ -123,3 +123,42 @@ testthat::test_that("scat: smooth line calculated on full data (zoom)", {
     # THEN the smooth line should reflect the influence of the outlier
     vdiffr::expect_doppelganger("scat-manual-limits-zoom", disp_scat_zoom)
 })
+
+#' Scatter plot with custom font faces
+testthat::test_that("scat: custom font faces, sizes, and alignment", {
+    # GIVEN a simple dataset
+    df <- data.frame(
+        x = c(1, 2, 3, 4, 5),
+        y = c(2, 4, 6, 8, 10)
+    )
+
+    # WHEN the scatter plot is generated with custom font faces, sizes, and alignment
+    plot <- scatr::scat(
+        data = df,
+        x = "x",
+        y = "y",
+        title = "Bold Center 20",
+        titleFontFace = "bold",
+        titleFontSize = 20,
+        titleAlign = "center",
+        subtitle = "Italic Left 14",
+        subtitleFontFace = "italic",
+        subtitleFontSize = 14,
+        subtitleAlign = "left",
+        xLabel = "Bold Italic Right 18",
+        xLabelFontFace = "bold-italic",
+        xLabelFontSize = 18,
+        xLabelAlign = "right",
+        yLabel = "Plain Center 12",
+        yLabelFontFace = "plain",
+        yLabelFontSize = 12,
+        yLabelAlign = "center",
+        caption = "Bold Right 10",
+        captionFontFace = "bold",
+        captionFontSize = 10,
+        captionAlign = "right"
+    )
+
+    # THEN the plot should match the snapshot
+    vdiffr::expect_doppelganger("scat-custom-styling", plot)
+})

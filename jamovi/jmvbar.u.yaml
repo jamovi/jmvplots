@@ -235,6 +235,8 @@ children:
                 name: titleFontSize
                 format: number
               - type: ComboBox
+                name: titleFontFace
+              - type: ComboBox
                 name: titleAlign
           - type: Content
             name: subtitle
@@ -246,6 +248,8 @@ children:
               - type: TextBox
                 name: subtitleFontSize
                 format: number
+              - type: ComboBox
+                name: subtitleFontFace
               - type: ComboBox
                 name: subtitleAlign
           - type: Content
@@ -259,6 +263,8 @@ children:
                 name: captionFontSize
                 format: number
               - type: ComboBox
+                name: captionFontFace
+              - type: ComboBox
                 name: captionAlign
           - type: Content
             name: xTitle
@@ -271,6 +277,8 @@ children:
                 name: xLabelFontSize
                 format: number
               - type: ComboBox
+                name: xLabelFontFace
+              - type: ComboBox
                 name: xLabelAlign
           - type: Content
             name: yTitle
@@ -282,6 +290,8 @@ children:
               - type: TextBox
                 name: yLabelFontSize
                 format: number
+              - type: ComboBox
+                name: yLabelFontFace
               - type: ComboBox
                 name: yLabelAlign
   - type: CollapseBox
@@ -372,9 +382,13 @@ children:
                   - type: TextBox
                     name: legendTitleFontSize
                     format: number
+                  - type: ComboBox
+                    name: legendTitleFontFace
                   - type: TextBox
                     name: legendLabelFontSize
                     format: number
+                  - type: ComboBox
+                    name: legendLabelFontFace
               - type: Label
                 label: Legend Style
                 children:

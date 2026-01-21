@@ -136,3 +136,42 @@ testthat::test_that("jmvline: manual limits do not clip data (zoom)", {
     # THEN the line should still be drawn towards the outlier (zoomed in)
     vdiffr::expect_doppelganger("jmvline-manual-limits-zoom", disp_line_zoom)
 })
+
+#' Line plot with custom font faces
+testthat::test_that("jmvline: custom font faces, sizes, and alignment", {
+    # GIVEN data suitable for line plot
+    data <- data.frame(
+        x = factor(c("A", "B", "C")),
+        y = c(1, 3, 5)
+    )
+
+    # WHEN the line plot is generated with custom font faces, sizes, and alignment
+    plot <- scatr::jmvline(
+        data = data,
+        x = "x",
+        y = "y",
+        title = "Bold Center 20",
+        titleFontFace = "bold",
+        titleFontSize = 20,
+        titleAlign = "center",
+        subtitle = "Italic Left 14",
+        subtitleFontFace = "italic",
+        subtitleFontSize = 14,
+        subtitleAlign = "left",
+        xLabel = "Bold Italic Right 18",
+        xLabelFontFace = "bold-italic",
+        xLabelFontSize = 18,
+        xLabelAlign = "right",
+        yLabel = "Plain Center 12",
+        yLabelFontFace = "plain",
+        yLabelFontSize = 12,
+        yLabelAlign = "center",
+        caption = "Bold Right 10",
+        captionFontFace = "bold",
+        captionFontSize = 10,
+        captionAlign = "right"
+    )
+
+    # THEN the plot should match the snapshot
+    vdiffr::expect_doppelganger("jmvline-custom-styling", plot)
+})
