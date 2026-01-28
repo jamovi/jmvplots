@@ -97,10 +97,11 @@ jmvbarClass <- if (requireNamespace("jmvcore", quietly = TRUE)) {
                 if (is.null(group1)) {
                     df <- self$data |>
                         dplyr::mutate("{var}" := jmvcore::toNumeric(!!sym(var))) |>
+                        dplyr::rename(y_full = !!sym(var)) |>
                         dplyr::summarize(
-                            y = mean(!!sym(var), na.rm = TRUE),
+                            y = mean(y_full, na.rm = TRUE),
                             n = dplyr::n(),
-                            sd = sd(!!sym(var), na.rm = TRUE),
+                            sd = sd(y_full, na.rm = TRUE),
                         ) |>
                         dplyr::mutate(se = sd / sqrt(n)) |>
                         dplyr::mutate(ci = se * qt((self$options$ciWidth / 100) / 2 + .5, n - 1)) |>
@@ -109,28 +110,32 @@ jmvbarClass <- if (requireNamespace("jmvcore", quietly = TRUE)) {
                     df <- self$data |>
                         dplyr::mutate("{var}" := jmvcore::toNumeric(!!sym(var))) |>
                         dplyr::group_by(!!sym(group1)) |>
+                        dplyr::rename(y_full = !!sym(var), x = !!sym(group1)) |>
                         dplyr::summarize(
-                            y = mean(!!sym(var), na.rm = TRUE),
+                            y = mean(y_full, na.rm = TRUE),
                             n = dplyr::n(),
-                            sd = sd(!!sym(var), na.rm = TRUE),
+                            sd = sd(y_full, na.rm = TRUE),
                         ) |>
                         dplyr::mutate(se = sd / sqrt(n)) |>
                         dplyr::mutate(ci = se * qt((self$options$ciWidth / 100) / 2 + .5, n - 1)) |>
-                        dplyr::ungroup() |>
-                        dplyr::rename(x = !!sym(group1))
+                        dplyr::ungroup()
                 } else {
                     df <- self$data |>
                         dplyr::mutate("{var}" := jmvcore::toNumeric(!!sym(var))) |>
                         dplyr::group_by(!!sym(group1), !!sym(group2)) |>
+                        dplyr::rename(
+                            y_full = !!sym(var),
+                            x = !!sym(group1),
+                            group = !!sym(group2)
+                        ) |>
                         dplyr::summarize(
-                            y = mean(!!sym(var), na.rm = TRUE),
+                            y = mean(y_full, na.rm = TRUE),
                             n = dplyr::n(),
-                            sd = sd(!!sym(var), na.rm = TRUE),
+                            sd = sd(y_full, na.rm = TRUE),
                         ) |>
                         dplyr::mutate(se = sd / sqrt(n)) |>
                         dplyr::mutate(ci = se * qt((self$options$ciWidth / 100) / 2 + .5, n - 1)) |>
-                        dplyr::ungroup() |>
-                        dplyr::rename(x = !!sym(group1), group = !!sym(group2))
+                        dplyr::ungroup()
                 }
 
                 return(df)
