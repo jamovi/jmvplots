@@ -252,6 +252,7 @@ testthat::test_that("jmvbar: manual limits do not remove bars", {
     # THEN the bar should still be drawn (cropped)
     vdiffr::expect_doppelganger("jmvbar-manual-limits-zoom", disp_bar_zoom)
 })
+
 #' Font Face Tests
 testthat::test_that("jmvbar: custom font faces, sizes, and alignment", {
     # GIVEN categorical data with custom font faces, sizes, and alignment
@@ -284,4 +285,26 @@ testthat::test_that("jmvbar: custom font faces, sizes, and alignment", {
 
     # THEN the plot should match the snapshot
     vdiffr::expect_doppelganger("jmvbar-custom-styling", disp_bar_jmvplot)
+})
+
+#' Bar plot shows SEs
+testthat::test_that("jmvbar: SEs are shown (regression test)", {
+    # GIVEN grouped continuous data
+    df <- data.frame(
+        # The name "y" previously caused problems
+        y = c(94, 59, 84, 100, 61, 62, 30, 24, 11, 86),
+        group = rep(c("Group_A", "Group_B"), each = 5)
+    )
+
+    # WHEN a continuous bar plot with SEs is created
+    disp_bar_ses <- scatr::jmvbar(
+        data = df,
+        mode = "continuous",
+        convar = "y",
+        congroup1 = "group",
+        errorBars = "se"
+    )
+
+    # THEN the plot should show SE bars and match the snapshot
+    vdiffr::expect_doppelganger("jmvbar-ses", disp_bar_ses)
 })
