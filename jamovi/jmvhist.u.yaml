@@ -70,6 +70,12 @@ children:
                         name: lineSize
                         format: number
                         enable: (line)
+          - type: LayoutBox
+            cell:
+              column: 1
+              row: 0
+            stretchFactor: 1
+            children:
               - type: Label
                 label: Density
                 children:
@@ -84,21 +90,6 @@ children:
                         name: densityLineSize
                         format: number
                         enable: (density)
-          - type: LayoutBox
-            cell:
-              column: 1
-              row: 0
-            stretchFactor: 1
-            children:
-              - type: Label
-                label: Plot Size
-                children:
-                  - type: TextBox
-                    name: width
-                    format: number
-                  - type: TextBox
-                    name: height
-                    format: number
               - type: Label
                 label: Plot Orientation
                 children:

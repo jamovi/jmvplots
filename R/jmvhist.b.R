@@ -8,7 +8,6 @@ jmvhistClass <- if (requireNamespace("jmvcore", quietly = TRUE)) {
         private = list(
             .init = function() {
                 image <- self$results$plot
-                image$setSize(self$options$width, self$options$height)
             },
             .run = function() {
                 if (is.null(self$options$var)) {

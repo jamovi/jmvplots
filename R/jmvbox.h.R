@@ -13,8 +13,6 @@ jmvboxOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             notch = FALSE,
             boxWidth = 0.5,
             outliers = TRUE,
-            width = 500,
-            height = 500,
             title = "",
             titleAlign = "center",
             titleFontSize = 16,
@@ -105,14 +103,6 @@ jmvboxOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 "outliers",
                 outliers,
                 default=TRUE)
-            private$..width <- jmvcore::OptionNumber$new(
-                "width",
-                width,
-                default=500)
-            private$..height <- jmvcore::OptionNumber$new(
-                "height",
-                height,
-                default=500)
             private$..title <- jmvcore::OptionString$new(
                 "title",
                 title,
@@ -381,8 +371,6 @@ jmvboxOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             self$.addOption(private$..notch)
             self$.addOption(private$..boxWidth)
             self$.addOption(private$..outliers)
-            self$.addOption(private$..width)
-            self$.addOption(private$..height)
             self$.addOption(private$..title)
             self$.addOption(private$..titleAlign)
             self$.addOption(private$..titleFontSize)
@@ -434,8 +422,6 @@ jmvboxOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
         notch = function() private$..notch$value,
         boxWidth = function() private$..boxWidth$value,
         outliers = function() private$..outliers$value,
-        width = function() private$..width$value,
-        height = function() private$..height$value,
         title = function() private$..title$value,
         titleAlign = function() private$..titleAlign$value,
         titleFontSize = function() private$..titleFontSize$value,
@@ -486,8 +472,6 @@ jmvboxOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
         ..notch = NA,
         ..boxWidth = NA,
         ..outliers = NA,
-        ..width = NA,
-        ..height = NA,
         ..title = NA,
         ..titleAlign = NA,
         ..titleFontSize = NA,
@@ -584,8 +568,6 @@ jmvboxBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 #' @param notch .
 #' @param boxWidth .
 #' @param outliers .
-#' @param width .
-#' @param height .
 #' @param title .
 #' @param titleAlign .
 #' @param titleFontSize .
@@ -643,8 +625,6 @@ jmvbox <- function(
     notch = FALSE,
     boxWidth = 0.5,
     outliers = TRUE,
-    width = 500,
-    height = 500,
     title = "",
     titleAlign = "center",
     titleFontSize = 16,
@@ -712,8 +692,6 @@ jmvbox <- function(
         notch = notch,
         boxWidth = boxWidth,
         outliers = outliers,
-        width = width,
-        height = height,
         title = title,
         titleAlign = titleAlign,
         titleFontSize = titleFontSize,

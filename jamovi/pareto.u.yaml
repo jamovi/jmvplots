@@ -43,21 +43,6 @@ children:
                   - type: TextBox
                     name: barWidth
                     format: number
-          - type: LayoutBox
-            cell:
-              column: 1
-              row: 0
-            stretchFactor: 1
-            children:
-              - type: Label
-                label: Plot Size
-                children:
-                  - type: TextBox
-                    name: width
-                    format: number
-                  - type: TextBox
-                    name: height
-                    format: number
   - type: CollapseBox
     label: Plot & Axis Titles
     collapsed: true

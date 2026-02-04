@@ -66,15 +66,7 @@ options:
       type: Number
       default: 2
 
-    - name: width
-      title: Width
-      type: Number
-      default: 500
 
-    - name: height
-      title: Height
-      type: Number
-      default: 500
 
     - name: aggregateType
       title: Aggregate

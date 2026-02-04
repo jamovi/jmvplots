@@ -18,8 +18,6 @@ jmvbarOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             flipAxes = FALSE,
             barWidth = 0.9,
             valueLabels = FALSE,
-            width = 500,
-            height = 500,
             errorBars = "none",
             ciWidth = 95,
             errorBarWidth = 0.1,
@@ -159,14 +157,6 @@ jmvbarOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 "valueLabels",
                 valueLabels,
                 default=FALSE)
-            private$..width <- jmvcore::OptionNumber$new(
-                "width",
-                width,
-                default=500)
-            private$..height <- jmvcore::OptionNumber$new(
-                "height",
-                height,
-                default=500)
             private$..errorBars <- jmvcore::OptionList$new(
                 "errorBars",
                 errorBars,
@@ -472,8 +462,6 @@ jmvbarOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             self$.addOption(private$..flipAxes)
             self$.addOption(private$..barWidth)
             self$.addOption(private$..valueLabels)
-            self$.addOption(private$..width)
-            self$.addOption(private$..height)
             self$.addOption(private$..errorBars)
             self$.addOption(private$..ciWidth)
             self$.addOption(private$..errorBarWidth)
@@ -535,8 +523,6 @@ jmvbarOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
         flipAxes = function() private$..flipAxes$value,
         barWidth = function() private$..barWidth$value,
         valueLabels = function() private$..valueLabels$value,
-        width = function() private$..width$value,
-        height = function() private$..height$value,
         errorBars = function() private$..errorBars$value,
         ciWidth = function() private$..ciWidth$value,
         errorBarWidth = function() private$..errorBarWidth$value,
@@ -597,8 +583,6 @@ jmvbarOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
         ..flipAxes = NA,
         ..barWidth = NA,
         ..valueLabels = NA,
-        ..width = NA,
-        ..height = NA,
         ..errorBars = NA,
         ..ciWidth = NA,
         ..errorBarWidth = NA,
@@ -705,8 +689,6 @@ jmvbarBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 #' @param flipAxes .
 #' @param barWidth .
 #' @param valueLabels .
-#' @param width .
-#' @param height .
 #' @param errorBars .
 #' @param ciWidth .
 #' @param errorBarWidth .
@@ -774,8 +756,6 @@ jmvbar <- function(
     flipAxes = FALSE,
     barWidth = 0.9,
     valueLabels = FALSE,
-    width = 500,
-    height = 500,
     errorBars = "none",
     ciWidth = 95,
     errorBarWidth = 0.1,
@@ -867,8 +847,6 @@ jmvbar <- function(
         flipAxes = flipAxes,
         barWidth = barWidth,
         valueLabels = valueLabels,
-        width = width,
-        height = height,
         errorBars = errorBars,
         ciWidth = ciWidth,
         errorBarWidth = errorBarWidth,

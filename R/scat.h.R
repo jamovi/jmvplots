@@ -14,8 +14,6 @@ scatOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             regLine = FALSE,
             lineMethod = "lm",
             lineSE = TRUE,
-            width = 500,
-            height = 500,
             title = "",
             titleAlign = "center",
             titleFontSize = 16,
@@ -112,14 +110,6 @@ scatOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 "lineSE",
                 lineSE,
                 default=TRUE)
-            private$..width <- jmvcore::OptionNumber$new(
-                "width",
-                width,
-                default=500)
-            private$..height <- jmvcore::OptionNumber$new(
-                "height",
-                height,
-                default=500)
             private$..title <- jmvcore::OptionString$new(
                 "title",
                 title,
@@ -400,8 +390,6 @@ scatOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             self$.addOption(private$..regLine)
             self$.addOption(private$..lineMethod)
             self$.addOption(private$..lineSE)
-            self$.addOption(private$..width)
-            self$.addOption(private$..height)
             self$.addOption(private$..title)
             self$.addOption(private$..titleAlign)
             self$.addOption(private$..titleFontSize)
@@ -456,8 +444,6 @@ scatOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
         regLine = function() private$..regLine$value,
         lineMethod = function() private$..lineMethod$value,
         lineSE = function() private$..lineSE$value,
-        width = function() private$..width$value,
-        height = function() private$..height$value,
         title = function() private$..title$value,
         titleAlign = function() private$..titleAlign$value,
         titleFontSize = function() private$..titleFontSize$value,
@@ -511,8 +497,6 @@ scatOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
         ..regLine = NA,
         ..lineMethod = NA,
         ..lineSE = NA,
-        ..width = NA,
-        ..height = NA,
         ..title = NA,
         ..titleAlign = NA,
         ..titleFontSize = NA,
@@ -612,8 +596,6 @@ scatBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 #' @param regLine .
 #' @param lineMethod .
 #' @param lineSE .
-#' @param width .
-#' @param height .
 #' @param title .
 #' @param titleAlign .
 #' @param titleFontSize .
@@ -674,8 +656,6 @@ scat <- function(
     regLine = FALSE,
     lineMethod = "lm",
     lineSE = TRUE,
-    width = 500,
-    height = 500,
     title = "",
     titleAlign = "center",
     titleFontSize = 16,
@@ -745,8 +725,6 @@ scat <- function(
         regLine = regLine,
         lineMethod = lineMethod,
         lineSE = lineSE,
-        width = width,
-        height = height,
         title = title,
         titleAlign = titleAlign,
         titleFontSize = titleFontSize,

@@ -9,8 +9,6 @@ paretoOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             x = NULL,
             counts = NULL,
             barWidth = 0.6,
-            width = 550,
-            height = 500,
             title = "",
             titleAlign = "center",
             titleFontSize = 16,
@@ -63,14 +61,6 @@ paretoOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 barWidth,
                 default=0.6,
                 min=0)
-            private$..width <- jmvcore::OptionNumber$new(
-                "width",
-                width,
-                default=550)
-            private$..height <- jmvcore::OptionNumber$new(
-                "height",
-                height,
-                default=500)
             private$..title <- jmvcore::OptionString$new(
                 "title",
                 title,
@@ -230,8 +220,6 @@ paretoOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             self$.addOption(private$..x)
             self$.addOption(private$..counts)
             self$.addOption(private$..barWidth)
-            self$.addOption(private$..width)
-            self$.addOption(private$..height)
             self$.addOption(private$..title)
             self$.addOption(private$..titleAlign)
             self$.addOption(private$..titleFontSize)
@@ -262,8 +250,6 @@ paretoOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
         x = function() private$..x$value,
         counts = function() private$..counts$value,
         barWidth = function() private$..barWidth$value,
-        width = function() private$..width$value,
-        height = function() private$..height$value,
         title = function() private$..title$value,
         titleAlign = function() private$..titleAlign$value,
         titleFontSize = function() private$..titleFontSize$value,
@@ -293,8 +279,6 @@ paretoOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
         ..x = NA,
         ..counts = NA,
         ..barWidth = NA,
-        ..width = NA,
-        ..height = NA,
         ..title = NA,
         ..titleAlign = NA,
         ..titleFontSize = NA,
@@ -372,8 +356,6 @@ paretoBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 #' @param counts a string naming the variable from \code{data} that contains
 #'   the counts for the values (optional)
 #' @param barWidth .
-#' @param width .
-#' @param height .
 #' @param title .
 #' @param titleAlign .
 #' @param titleFontSize .
@@ -410,8 +392,6 @@ pareto <- function(
     x,
     counts = NULL,
     barWidth = 0.6,
-    width = 550,
-    height = 500,
     title = "",
     titleAlign = "center",
     titleFontSize = 16,
@@ -455,8 +435,6 @@ pareto <- function(
         x = x,
         counts = counts,
         barWidth = barWidth,
-        width = width,
-        height = height,
         title = title,
         titleAlign = titleAlign,
         titleFontSize = titleFontSize,

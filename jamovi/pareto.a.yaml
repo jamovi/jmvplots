@@ -43,15 +43,7 @@ options:
       default: 0.6
       min: 0
 
-    - name: width
-      title: Width
-      type: Number
-      default: 550
 
-    - name: height
-      title: Height
-      type: Number
-      default: 500
 
     - name: title
       title: Title text
