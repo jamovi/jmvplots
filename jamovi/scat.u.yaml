@@ -69,15 +69,6 @@ children:
             stretchFactor: 1
             children:
               - type: Label
-                label: Plot Size
-                children:
-                  - type: TextBox
-                    name: width
-                    format: number
-                  - type: TextBox
-                    name: height
-                    format: number
-              - type: Label
                 label: Plot Orientation
                 children:
                   - type: CheckBox

@@ -15,8 +15,6 @@ jmvlineOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             lineSize = 0.5,
             point = TRUE,
             pointSize = 2,
-            width = 500,
-            height = 500,
             aggregateType = "mean",
             errorBars = "none",
             ciWidth = 95,
@@ -119,14 +117,6 @@ jmvlineOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 "pointSize",
                 pointSize,
                 default=2)
-            private$..width <- jmvcore::OptionNumber$new(
-                "width",
-                width,
-                default=500)
-            private$..height <- jmvcore::OptionNumber$new(
-                "height",
-                height,
-                default=500)
             private$..aggregateType <- jmvcore::OptionList$new(
                 "aggregateType",
                 aggregateType,
@@ -441,8 +431,6 @@ jmvlineOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             self$.addOption(private$..lineSize)
             self$.addOption(private$..point)
             self$.addOption(private$..pointSize)
-            self$.addOption(private$..width)
-            self$.addOption(private$..height)
             self$.addOption(private$..aggregateType)
             self$.addOption(private$..errorBars)
             self$.addOption(private$..ciWidth)
@@ -504,8 +492,6 @@ jmvlineOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
         lineSize = function() private$..lineSize$value,
         point = function() private$..point$value,
         pointSize = function() private$..pointSize$value,
-        width = function() private$..width$value,
-        height = function() private$..height$value,
         aggregateType = function() private$..aggregateType$value,
         errorBars = function() private$..errorBars$value,
         ciWidth = function() private$..ciWidth$value,
@@ -566,8 +552,6 @@ jmvlineOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
         ..lineSize = NA,
         ..point = NA,
         ..pointSize = NA,
-        ..width = NA,
-        ..height = NA,
         ..aggregateType = NA,
         ..errorBars = NA,
         ..ciWidth = NA,
@@ -674,8 +658,6 @@ jmvlineBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 #' @param lineSize .
 #' @param point .
 #' @param pointSize .
-#' @param width .
-#' @param height .
 #' @param aggregateType .
 #' @param errorBars .
 #' @param ciWidth .
@@ -743,8 +725,6 @@ jmvline <- function(
     lineSize = 0.5,
     point = TRUE,
     pointSize = 2,
-    width = 500,
-    height = 500,
     aggregateType = "mean",
     errorBars = "none",
     ciWidth = 95,
@@ -821,8 +801,6 @@ jmvline <- function(
         lineSize = lineSize,
         point = point,
         pointSize = pointSize,
-        width = width,
-        height = height,
         aggregateType = aggregateType,
         errorBars = errorBars,
         ciWidth = ciWidth,

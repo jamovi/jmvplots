@@ -18,8 +18,6 @@ jmvhistOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             density = FALSE,
             densityOpacity = 0.2,
             densityLineSize = 0.5,
-            width = 500,
-            height = 500,
             title = "",
             titleAlign = "center",
             titleFontSize = 16,
@@ -134,14 +132,6 @@ jmvhistOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 "densityLineSize",
                 densityLineSize,
                 default=0.5)
-            private$..width <- jmvcore::OptionNumber$new(
-                "width",
-                width,
-                default=500)
-            private$..height <- jmvcore::OptionNumber$new(
-                "height",
-                height,
-                default=500)
             private$..title <- jmvcore::OptionString$new(
                 "title",
                 title,
@@ -426,8 +416,6 @@ jmvhistOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             self$.addOption(private$..density)
             self$.addOption(private$..densityOpacity)
             self$.addOption(private$..densityLineSize)
-            self$.addOption(private$..width)
-            self$.addOption(private$..height)
             self$.addOption(private$..title)
             self$.addOption(private$..titleAlign)
             self$.addOption(private$..titleFontSize)
@@ -486,8 +474,6 @@ jmvhistOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
         density = function() private$..density$value,
         densityOpacity = function() private$..densityOpacity$value,
         densityLineSize = function() private$..densityLineSize$value,
-        width = function() private$..width$value,
-        height = function() private$..height$value,
         title = function() private$..title$value,
         titleAlign = function() private$..titleAlign$value,
         titleFontSize = function() private$..titleFontSize$value,
@@ -545,8 +531,6 @@ jmvhistOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
         ..density = NA,
         ..densityOpacity = NA,
         ..densityLineSize = NA,
-        ..width = NA,
-        ..height = NA,
         ..title = NA,
         ..titleAlign = NA,
         ..titleFontSize = NA,
@@ -650,8 +634,6 @@ jmvhistBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 #' @param density .
 #' @param densityOpacity .
 #' @param densityLineSize .
-#' @param width .
-#' @param height .
 #' @param title .
 #' @param titleAlign .
 #' @param titleFontSize .
@@ -716,8 +698,6 @@ jmvhist <- function(
     density = FALSE,
     densityOpacity = 0.2,
     densityLineSize = 0.5,
-    width = 500,
-    height = 500,
     title = "",
     titleAlign = "center",
     titleFontSize = 16,
@@ -789,8 +769,6 @@ jmvhist <- function(
         density = density,
         densityOpacity = densityOpacity,
         densityLineSize = densityLineSize,
-        width = width,
-        height = height,
         title = title,
         titleAlign = titleAlign,
         titleFontSize = titleFontSize,

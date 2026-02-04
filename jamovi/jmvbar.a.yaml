@@ -110,15 +110,7 @@ options:
       type: Bool
       default: false
 
-    - name: width
-      title: Width
-      type: Number
-      default: 500
 
-    - name: height
-      title: Height
-      type: Number
-      default: 500
 
     - name: errorBars
       title: Error bars

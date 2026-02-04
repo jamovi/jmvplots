@@ -58,15 +58,7 @@ options:
       type: Bool
       default: true
 
-    - name: width
-      title: Width
-      type: Number
-      default: 500
 
-    - name: height
-      title: Height
-      type: Number
-      default: 500
 
     - name: title
       title: Title text

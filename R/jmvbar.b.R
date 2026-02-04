@@ -36,7 +36,6 @@ jmvbarClass <- if (requireNamespace("jmvcore", quietly = TRUE)) {
             .grouped = NULL,
             .init = function() {
                 image <- self$results$plot
-                image$setSize(self$options$width, self$options$height)
             },
             .run = function() {
                 mode <- self$options$mode

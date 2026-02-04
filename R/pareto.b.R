@@ -1,12 +1,11 @@
 #' @importFrom jmvcore .
-paretoClass <- if (requireNamespace('jmvcore', quietly = TRUE)) {
+paretoClass <- if (requireNamespace("jmvcore", quietly = TRUE)) {
     R6::R6Class(
         "paretoClass",
         inherit = paretoBase,
         private = list(
             .init = function() {
                 image <- self$results$plot
-                image$setSize(self$options$width, self$options$height)
             },
             .run = function() {
                 if (is.null(self$options$x)) {
@@ -32,10 +31,10 @@ paretoClass <- if (requireNamespace('jmvcore', quietly = TRUE)) {
                     labels <- list(x = x, y = counts)
                 } else {
                     df <- as.data.frame(table(valuesCol))
-                    labels <- list(x = x, y = .('Frequency (N)'))
+                    labels <- list(x = x, y = .("Frequency (N)"))
                 }
 
-                names(df) <- c('x', 'counts')
+                names(df) <- c("x", "counts")
 
                 df <- df[order(df$counts, decreasing = TRUE), ]
                 df$x <- factor(df$x, levels = df$x)
