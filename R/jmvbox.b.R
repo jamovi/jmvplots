@@ -95,6 +95,7 @@ jmvboxClass <- if (requireNamespace("jmvcore", quietly = TRUE)) {
                     p <- p + ggplot2::coord_cartesian(ylim = ylims)
                 }
 
+                p <- autoscalePlotBreaks(p, image$width, image$height)
                 return(p)
             },
             #### Helper functions ----

@@ -85,6 +85,7 @@ paretoClass <- if (requireNamespace("jmvcore", quietly = TRUE)) {
                     setLabels(options = self$options, defaults = labelDefaults, legend = FALSE) +
                     formatLabels(options = self$options, legend = FALSE)
 
+                p <- autoscalePlotBreaks(p, image$width, image$height)
                 return(p)
             }
         ),

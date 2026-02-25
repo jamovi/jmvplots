@@ -271,6 +271,7 @@ jmvbarClass <- if (requireNamespace("jmvcore", quietly = TRUE)) {
                     ggtheme +
                     do.call(ggplot2::theme, theme_call_list_args)
 
+                p <- autoscalePlotBreaks(p, image$width, image$height)
                 return(p)
             },
             #### Helper functions ----
