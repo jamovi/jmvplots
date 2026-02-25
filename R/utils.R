@@ -364,3 +364,45 @@ createPlotFromCallStack <- function(callStack) {
 
     return(p)
 }
+
+#' Autoscale plot breaks
+#'
+#' @param p The ggplot object
+#' @param width_px The width of the plot in pixels
+#' @param height_px The height of the plot in pixels
+#' @return A ggplot2::ggplot object
+#' @keywords internal
+autoscalePlotBreaks <- function(p, width_px, height_px) {
+    pxPerXLabel <- 120
+    pxPerYLabel <- 80
+
+    nX <- max(2, floor(width_px / pxPerXLabel))
+    nY <- max(2, floor(height_px / pxPerYLabel))
+
+    xBreaks <- scales::breaks_pretty(n = nX)
+    yBreaks <- scales::breaks_pretty(n = nY)
+
+    xScaleExplicit <- p$scales$get_scales("x")
+    yScaleExplicit <- p$scales$get_scales("y")
+
+    if (!is.null(xScaleExplicit) && inherits(xScaleExplicit, "ScaleContinuousPosition")) {
+        # Mutate in-place to preserve limits, name, etc.
+        xScaleExplicit$breaks <- xBreaks
+    } else if (is.null(xScaleExplicit)) {
+        pb <- ggplot2::ggplot_build(p)
+        if (inherits(pb$layout$panel_scales_x[[1]], "ScaleContinuousPosition")) {
+            p <- p + ggplot2::scale_x_continuous(breaks = xBreaks)
+        }
+    }
+
+    if (!is.null(yScaleExplicit) && inherits(yScaleExplicit, "ScaleContinuousPosition")) {
+        yScaleExplicit$breaks <- yBreaks
+    } else if (is.null(yScaleExplicit)) {
+        pb <- ggplot2::ggplot_build(p)
+        if (inherits(pb$layout$panel_scales_y[[1]], "ScaleContinuousPosition")) {
+            p <- p + ggplot2::scale_y_continuous(breaks = yBreaks)
+        }
+    }
+
+    return(p)
+}

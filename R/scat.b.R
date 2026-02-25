@@ -112,6 +112,8 @@ scatClass <- if (requireNamespace("jmvcore", quietly = TRUE)) {
                     setLabels(options = self$options, defaults = labelDefaults) +
                     formatLabels(options = self$options, flipAxes = self$options$flipAxes)
 
+                p <- autoscalePlotBreaks(p, image$width, image$height)
+
                 return(p)
             }
         ),
