@@ -7,6 +7,7 @@ authors:
   - Ravi Selker
 maintainer: Ravi Selker <selker.ravi@gmail.com>
 date: '2025-04-01'
+category: plots
 type: R
 description: >-
   Create elegant and interactive plots built on 'ggplot2'. The package is
