@@ -1,7 +1,7 @@
 Package: scatr
 Type: Package
 Title: Create Elegant and Interactive Plots Built on 'ggplot2'
-Version: 2.7.0
+Version: 2.8.0
 Author: Ravi Selker
 Maintainer: Ravi Selker <selker.ravi@gmail.com>
 Description: Create elegant and interactive plots built on 'ggplot2'. The package
