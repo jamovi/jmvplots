@@ -175,3 +175,49 @@ testthat::test_that("jmvline: custom font faces, sizes, and alignment", {
     # THEN the plot should match the snapshot
     vdiffr::expect_doppelganger("jmvline-custom-styling", plot)
 })
+
+#' Line plot missing value exclusion
+testthat::test_that("jmvline: naOmit = TRUE", {
+    # GIVEN data with missing values
+    data <- data.frame(
+        x = factor(c("A", "A", "B", "B", NA, NA)),
+        y = c(3, 3, 1, 2, NA, NA),
+        group = factor(c("X", "Y", "X", "Y", NA, NA))
+    )
+
+    # WHEN the line plot is generated with naOmit = TRUE
+    disp_line <- scatr::jmvline(
+        data = data,
+        x = "x",
+        y = "y",
+        group = "group",
+        naOmit = TRUE,
+        mode = "aggregate"
+    )
+
+    # THEN the plot should match the snapshot
+    vdiffr::expect_doppelganger("jmvline-naOmit-true", disp_line)
+})
+
+#' Line plot missing value exclusion (naOmit=FALSE)
+testthat::test_that("jmvline: naOmit = FALSE", {
+    # GIVEN data with missing values
+    data <- data.frame(
+        x = factor(c("A", "A", "B", "B", NA, NA)),
+        y = c(3, 3, 1, 2, NA, NA),
+        group = factor(c("X", "Y", "X", "Y", NA, NA))
+    )
+
+    # WHEN the line plot is generated with naOmit = FALSE
+    disp_line <- scatr::jmvline(
+        data = data,
+        x = "x",
+        y = "y",
+        group = "group",
+        naOmit = FALSE,
+        mode = "aggregate"
+    )
+
+    # THEN the plot should match the snapshot
+    vdiffr::expect_doppelganger("jmvline-naOmit-false", disp_line)
+})

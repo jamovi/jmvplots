@@ -10,6 +10,7 @@ jmvboxOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             group1 = NULL,
             group2 = NULL,
             flipAxes = FALSE,
+            naOmit = FALSE,
             notch = FALSE,
             boxWidth = 0.5,
             outliers = TRUE,
@@ -88,6 +89,10 @@ jmvboxOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             private$..flipAxes <- jmvcore::OptionBool$new(
                 "flipAxes",
                 flipAxes,
+                default=FALSE)
+            private$..naOmit <- jmvcore::OptionBool$new(
+                "naOmit",
+                naOmit,
                 default=FALSE)
             private$..notch <- jmvcore::OptionBool$new(
                 "notch",
@@ -368,6 +373,7 @@ jmvboxOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             self$.addOption(private$..group1)
             self$.addOption(private$..group2)
             self$.addOption(private$..flipAxes)
+            self$.addOption(private$..naOmit)
             self$.addOption(private$..notch)
             self$.addOption(private$..boxWidth)
             self$.addOption(private$..outliers)
@@ -419,6 +425,7 @@ jmvboxOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
         group1 = function() private$..group1$value,
         group2 = function() private$..group2$value,
         flipAxes = function() private$..flipAxes$value,
+        naOmit = function() private$..naOmit$value,
         notch = function() private$..notch$value,
         boxWidth = function() private$..boxWidth$value,
         outliers = function() private$..outliers$value,
@@ -469,6 +476,7 @@ jmvboxOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
         ..group1 = NA,
         ..group2 = NA,
         ..flipAxes = NA,
+        ..naOmit = NA,
         ..notch = NA,
         ..boxWidth = NA,
         ..outliers = NA,
@@ -565,6 +573,7 @@ jmvboxBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 #' @param group1 .
 #' @param group2 .
 #' @param flipAxes .
+#' @param naOmit .
 #' @param notch .
 #' @param boxWidth .
 #' @param outliers .
@@ -622,6 +631,7 @@ jmvbox <- function(
     group1 = NULL,
     group2 = NULL,
     flipAxes = FALSE,
+    naOmit = FALSE,
     notch = FALSE,
     boxWidth = 0.5,
     outliers = TRUE,
@@ -689,6 +699,7 @@ jmvbox <- function(
         group1 = group1,
         group2 = group2,
         flipAxes = flipAxes,
+        naOmit = naOmit,
         notch = notch,
         boxWidth = boxWidth,
         outliers = outliers,

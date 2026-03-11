@@ -99,7 +99,7 @@ jmvbarClass <- if (requireNamespace("jmvcore", quietly = TRUE)) {
                         dplyr::rename(y_full = !!sym(var)) |>
                         dplyr::summarize(
                             y = mean(y_full, na.rm = TRUE),
-                            n = dplyr::n(),
+                            n = sum(!is.na(y_full)),
                             sd = sd(y_full, na.rm = TRUE),
                         ) |>
                         dplyr::mutate(se = sd / sqrt(n)) |>
@@ -112,7 +112,7 @@ jmvbarClass <- if (requireNamespace("jmvcore", quietly = TRUE)) {
                         dplyr::rename(y_full = !!sym(var), x = !!sym(group1)) |>
                         dplyr::summarize(
                             y = mean(y_full, na.rm = TRUE),
-                            n = dplyr::n(),
+                            n = sum(!is.na(y_full)),
                             sd = sd(y_full, na.rm = TRUE),
                         ) |>
                         dplyr::mutate(se = sd / sqrt(n)) |>
@@ -129,7 +129,7 @@ jmvbarClass <- if (requireNamespace("jmvcore", quietly = TRUE)) {
                         ) |>
                         dplyr::summarize(
                             y = mean(y_full, na.rm = TRUE),
-                            n = dplyr::n(),
+                            n = sum(!is.na(y_full)),
                             sd = sd(y_full, na.rm = TRUE),
                         ) |>
                         dplyr::mutate(se = sd / sqrt(n)) |>
@@ -209,8 +209,22 @@ jmvbarClass <- if (requireNamespace("jmvcore", quietly = TRUE)) {
                     return(FALSE)
                 }
 
+                data <- image$state
+                if (self$options$naOmit) {
+                    data <- data |>
+                        dplyr::filter(!is.na(x))
+
+                    if ("y" %in% colnames(data)) {
+                        data <- data |> dplyr::filter(!is.na(y))
+                    }
+
+                    if ("group" %in% colnames(data)) {
+                        data <- data |> dplyr::filter(!is.na(group))
+                    }
+                }
+
                 plot_call_list <- list(
-                    "ggplot" = private$.getInitPlotCallList(image$state),
+                    "ggplot" = private$.getInitPlotCallList(data),
                     "geom_bar" = private$.getGeomBarCallList(theme)
                 )
 
@@ -229,7 +243,7 @@ jmvbarClass <- if (requireNamespace("jmvcore", quietly = TRUE)) {
                 ) {
                     plot_call_list$scale_x_discrete <- list(
                         ggplot2::scale_x_discrete,
-                        list(labels = image$state$label_text)
+                        list(labels = data$label_text)
                     )
                 } else if (self$options$xAxisLabelFontSizeRevLabels) {
                     plot_call_list$scale_x_discrete <- list(

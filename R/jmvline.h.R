@@ -11,6 +11,7 @@ jmvlineOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             y = NULL,
             group = NULL,
             flipAxes = FALSE,
+            naOmit = FALSE,
             line = TRUE,
             lineSize = 0.5,
             point = TRUE,
@@ -100,6 +101,10 @@ jmvlineOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             private$..flipAxes <- jmvcore::OptionBool$new(
                 "flipAxes",
                 flipAxes,
+                default=FALSE)
+            private$..naOmit <- jmvcore::OptionBool$new(
+                "naOmit",
+                naOmit,
                 default=FALSE)
             private$..line <- jmvcore::OptionBool$new(
                 "line",
@@ -427,6 +432,7 @@ jmvlineOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             self$.addOption(private$..y)
             self$.addOption(private$..group)
             self$.addOption(private$..flipAxes)
+            self$.addOption(private$..naOmit)
             self$.addOption(private$..line)
             self$.addOption(private$..lineSize)
             self$.addOption(private$..point)
@@ -488,6 +494,7 @@ jmvlineOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
         y = function() private$..y$value,
         group = function() private$..group$value,
         flipAxes = function() private$..flipAxes$value,
+        naOmit = function() private$..naOmit$value,
         line = function() private$..line$value,
         lineSize = function() private$..lineSize$value,
         point = function() private$..point$value,
@@ -548,6 +555,7 @@ jmvlineOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
         ..y = NA,
         ..group = NA,
         ..flipAxes = NA,
+        ..naOmit = NA,
         ..line = NA,
         ..lineSize = NA,
         ..point = NA,
@@ -654,6 +662,7 @@ jmvlineBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 #' @param y .
 #' @param group .
 #' @param flipAxes .
+#' @param naOmit .
 #' @param line .
 #' @param lineSize .
 #' @param point .
@@ -721,6 +730,7 @@ jmvline <- function(
     y,
     group = NULL,
     flipAxes = FALSE,
+    naOmit = FALSE,
     line = TRUE,
     lineSize = 0.5,
     point = TRUE,
@@ -797,6 +807,7 @@ jmvline <- function(
         y = y,
         group = group,
         flipAxes = flipAxes,
+        naOmit = naOmit,
         line = line,
         lineSize = lineSize,
         point = point,

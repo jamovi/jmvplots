@@ -48,8 +48,18 @@ jmvboxClass <- if (requireNamespace("jmvcore", quietly = TRUE)) {
                     return(FALSE)
                 }
 
+                data <- image$state
+                if (self$options$naOmit) {
+                    data <- data |>
+                        dplyr::filter(!is.na(x) & !is.na(y))
+
+                    if ("group" %in% colnames(data)) {
+                        data <- data |> dplyr::filter(!is.na(group))
+                    }
+                }
+
                 if (is.null(self$options$group1) || is.null(self$options$group2)) {
-                    p <- ggplot(image$state, aes(x = x, y = y)) +
+                    p <- ggplot(data, aes(x = x, y = y)) +
                         ggplot2::geom_boxplot(
                             notch = self$options$notch,
                             width = self$options$boxWidth,
@@ -59,7 +69,7 @@ jmvboxClass <- if (requireNamespace("jmvcore", quietly = TRUE)) {
                         ) +
                         ggtheme
                 } else {
-                    p <- ggplot(image$state, aes(x = x, y = y, fill = group)) +
+                    p <- ggplot(data, aes(x = x, y = y, fill = group)) +
                         ggplot2::geom_boxplot(
                             notch = self$options$notch,
                             width = self$options$boxWidth,

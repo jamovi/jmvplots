@@ -16,6 +16,7 @@ jmvbarOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             countsLabels = NULL,
             countsgroup = NULL,
             flipAxes = FALSE,
+            naOmit = FALSE,
             barWidth = 0.9,
             valueLabels = FALSE,
             errorBars = "none",
@@ -147,6 +148,10 @@ jmvbarOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             private$..flipAxes <- jmvcore::OptionBool$new(
                 "flipAxes",
                 flipAxes,
+                default=FALSE)
+            private$..naOmit <- jmvcore::OptionBool$new(
+                "naOmit",
+                naOmit,
                 default=FALSE)
             private$..barWidth <- jmvcore::OptionNumber$new(
                 "barWidth",
@@ -460,6 +465,7 @@ jmvbarOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             self$.addOption(private$..countsLabels)
             self$.addOption(private$..countsgroup)
             self$.addOption(private$..flipAxes)
+            self$.addOption(private$..naOmit)
             self$.addOption(private$..barWidth)
             self$.addOption(private$..valueLabels)
             self$.addOption(private$..errorBars)
@@ -521,6 +527,7 @@ jmvbarOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
         countsLabels = function() private$..countsLabels$value,
         countsgroup = function() private$..countsgroup$value,
         flipAxes = function() private$..flipAxes$value,
+        naOmit = function() private$..naOmit$value,
         barWidth = function() private$..barWidth$value,
         valueLabels = function() private$..valueLabels$value,
         errorBars = function() private$..errorBars$value,
@@ -581,6 +588,7 @@ jmvbarOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
         ..countsLabels = NA,
         ..countsgroup = NA,
         ..flipAxes = NA,
+        ..naOmit = NA,
         ..barWidth = NA,
         ..valueLabels = NA,
         ..errorBars = NA,
@@ -687,6 +695,7 @@ jmvbarBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 #' @param countsLabels .
 #' @param countsgroup .
 #' @param flipAxes .
+#' @param naOmit .
 #' @param barWidth .
 #' @param valueLabels .
 #' @param errorBars .
@@ -754,6 +763,7 @@ jmvbar <- function(
     countsLabels = NULL,
     countsgroup = NULL,
     flipAxes = FALSE,
+    naOmit = FALSE,
     barWidth = 0.9,
     valueLabels = FALSE,
     errorBars = "none",
@@ -845,6 +855,7 @@ jmvbar <- function(
         countsLabels = countsLabels,
         countsgroup = countsgroup,
         flipAxes = flipAxes,
+        naOmit = naOmit,
         barWidth = barWidth,
         valueLabels = valueLabels,
         errorBars = errorBars,
