@@ -308,3 +308,91 @@ testthat::test_that("jmvbar: SEs are shown (regression test)", {
     # THEN the plot should show SE bars and match the snapshot
     vdiffr::expect_doppelganger("jmvbar-ses", disp_bar_ses)
 })
+
+#' Bar plot missing value exclusion (Categorical)
+testthat::test_that("jmvbar: naOmit = TRUE (Categorical)", {
+    # GIVEN data with missing values
+    data <- data.frame(
+        x = factor(c("A", "A", "B", "B", NA, NA)),
+        group = factor(c("X", "Y", "X", "Y", NA, NA))
+    )
+
+    # WHEN a categorical bar plot with naOmit = TRUE is created
+    disp_bar <- scatr::jmvbar(
+        data = data,
+        mode = "categorical",
+        catvar = "x",
+        catgroup = "group",
+        naOmit = TRUE
+    )
+
+    # THEN the plot should match the snapshot
+    vdiffr::expect_doppelganger("jmvbar-categorical-naOmit-true", disp_bar)
+})
+
+#' Bar plot missing value exclusion (Categorical, naOmit=FALSE)
+testthat::test_that("jmvbar: naOmit = FALSE (Categorical)", {
+    # GIVEN data with missing values
+    data <- data.frame(
+        x = factor(c("A", "A", "B", "B", NA, NA)),
+        group = factor(c("X", "Y", "X", "Y", NA, NA))
+    )
+
+    # WHEN a categorical bar plot with naOmit = FALSE is created
+    disp_bar <- scatr::jmvbar(
+        data = data,
+        mode = "categorical",
+        catvar = "x",
+        catgroup = "group",
+        naOmit = FALSE
+    )
+
+    # THEN the plot should match the snapshot
+    vdiffr::expect_doppelganger("jmvbar-categorical-naOmit-false", disp_bar)
+})
+
+#' Bar plot missing value exclusion (Continuous)
+testthat::test_that("jmvbar: naOmit = TRUE (Continuous)", {
+    # GIVEN data with missing values
+    data <- data.frame(
+        x = factor(c("A", "A", "B", "B", NA, NA)),
+        y = c(3, 3, 1, 2, NA, NA),
+        group = factor(c("X", "Y", "X", "Y", NA, NA))
+    )
+
+    # WHEN a continuous bar plot with naOmit = TRUE is created
+    disp_bar <- scatr::jmvbar(
+        data = data,
+        mode = "continuous",
+        convar = "y",
+        congroup1 = "x",
+        congroup2 = "group",
+        naOmit = TRUE
+    )
+
+    # THEN the plot should match the snapshot
+    vdiffr::expect_doppelganger("jmvbar-continuous-naOmit-true", disp_bar)
+})
+
+#' Bar plot missing value exclusion (Continuous, naOmit=FALSE)
+testthat::test_that("jmvbar: naOmit = FALSE (Continuous)", {
+    # GIVEN data with missing values
+    data <- data.frame(
+        x = factor(c("A", "A", "B", "B", NA, NA)),
+        y = c(3, 3, 1, 2, NA, NA),
+        group = factor(c("X", "Y", "X", "Y", NA, NA))
+    )
+
+    # WHEN a continuous bar plot with naOmit = FALSE is created
+    disp_bar <- scatr::jmvbar(
+        data = data,
+        mode = "continuous",
+        convar = "y",
+        congroup1 = "x",
+        congroup2 = "group",
+        naOmit = FALSE
+    )
+
+    # THEN the plot should match the snapshot
+    vdiffr::expect_doppelganger("jmvbar-continuous-naOmit-false", disp_bar)
+})

@@ -45,9 +45,11 @@ jmvlineClass <- if (requireNamespace("jmvcore", quietly = TRUE)) {
                             y = !!sym(self$options$y),
                             group = !!sym(group)
                         ) |>
-                        dplyr::mutate(group = factor(group)) |>
-                        dplyr::group_by(group) |>
-                        dplyr::mutate(y = jmvcore::toNumeric(y))
+                        dplyr::mutate(
+                            group = factor(group),
+                            y = jmvcore::toNumeric(y)
+                        ) |>
+                        dplyr::group_by(group)
                 }
 
                 return(df)
@@ -68,7 +70,7 @@ jmvlineClass <- if (requireNamespace("jmvcore", quietly = TRUE)) {
                                 median(yOld, na.rm = TRUE),
                                 mean(yOld, na.rm = TRUE)
                             ),
-                            n = dplyr::n(),
+                            n = sum(!is.na(yOld)),
                             sd = sd(yOld, na.rm = TRUE),
                         ) |>
                         dplyr::mutate(se = sd / sqrt(n)) |>
@@ -92,7 +94,7 @@ jmvlineClass <- if (requireNamespace("jmvcore", quietly = TRUE)) {
                                 median(yOld, na.rm = TRUE),
                                 mean(yOld, na.rm = TRUE)
                             ),
-                            n = dplyr::n(),
+                            n = sum(!is.na(yOld)),
                             sd = sd(yOld, na.rm = TRUE),
                         ) |>
                         dplyr::mutate(se = sd / sqrt(n)) |>
@@ -107,8 +109,18 @@ jmvlineClass <- if (requireNamespace("jmvcore", quietly = TRUE)) {
                     return(FALSE)
                 }
 
+                data <- image$state
+                if (self$options$naOmit) {
+                    data <- data |>
+                        dplyr::filter(!is.na(x) & !is.na(y))
+
+                    if ("group" %in% colnames(data)) {
+                        data <- data |> dplyr::filter(!is.na(group))
+                    }
+                }
+
                 if (is.null(self$options$group)) {
-                    p <- ggplot(image$state, aes(x = x, y = y, group = 1))
+                    p <- ggplot(data, aes(x = x, y = y, group = 1))
 
                     if (self$options$line) {
                         p <- p +
@@ -125,7 +137,7 @@ jmvlineClass <- if (requireNamespace("jmvcore", quietly = TRUE)) {
 
                     p <- p + ggtheme
                 } else {
-                    p <- ggplot(image$state, aes(x = x, y = y, group = group))
+                    p <- ggplot(data, aes(x = x, y = y, group = group))
 
                     if (self$options$groupColor) {
                         p <- p + aes(color = group)

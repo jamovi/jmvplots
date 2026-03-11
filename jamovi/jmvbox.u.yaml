@@ -65,6 +65,11 @@ children:
                 children:
                   - type: CheckBox
                     name: flipAxes
+              - type: Label
+                label: Missing Values
+                children:
+                  - type: CheckBox
+                    name: naOmit
   - type: CollapseBox
     label: Plot & Axis Titles
     collapsed: true

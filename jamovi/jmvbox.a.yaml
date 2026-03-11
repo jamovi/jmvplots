@@ -41,6 +41,11 @@ options:
       type: Bool
       default: false
 
+    - name: naOmit
+      title: Exclude cases listwise
+      type: Bool
+      default: false
+
     - name: notch
       title: Notch
       type: Bool

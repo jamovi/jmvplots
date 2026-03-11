@@ -99,6 +99,11 @@ options:
       type: Bool
       default: false
 
+    - name: naOmit
+      title: Exclude cases listwise
+      type: Bool
+      default: false
+
     - name: barWidth
       title: Width
       type: Number

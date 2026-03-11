@@ -46,6 +46,11 @@ options:
       type: Bool
       default: false
 
+    - name: naOmit
+      title: Exclude cases listwise
+      type: Bool
+      default: false
+
     - name: line
       title: Show lines
       type: Bool
@@ -65,8 +70,6 @@ options:
       title: Point size
       type: Number
       default: 2
-
-
 
     - name: aggregateType
       title: Aggregate

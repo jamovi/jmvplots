@@ -205,3 +205,47 @@ testthat::test_that("jmvbox: custom font faces, sizes, and alignment", {
     # THEN the plot should match the snapshot
     vdiffr::expect_doppelganger("jmvbox-custom-styling", plot)
 })
+
+#' Box plot missing value exclusion
+testthat::test_that("jmvbox: naOmit = TRUE", {
+    # GIVEN data with missing values
+    data <- data.frame(
+        x = factor(c("A", "A", "B", "B", NA, NA)),
+        y = c(3, 3, 1, 2, NA, NA),
+        group = factor(c("X", "Y", "X", "Y", NA, NA))
+    )
+
+    # WHEN a box plot with naOmit = TRUE is created
+    disp_box <- scatr::jmvbox(
+        data = data,
+        var = "y",
+        group1 = "x",
+        group2 = "group",
+        naOmit = TRUE
+    )
+
+    # THEN the plot should match the snapshot
+    vdiffr::expect_doppelganger("jmvbox-naOmit-true", disp_box)
+})
+
+#' Box plot missing value exclusion (naOmit=FALSE)
+testthat::test_that("jmvbox: naOmit = FALSE", {
+    # GIVEN data with missing values
+    data <- data.frame(
+        x = factor(c("A", "A", "B", "B", NA, NA)),
+        y = c(3, 3, 1, 2, NA, NA),
+        group = factor(c("X", "Y", "X", "Y", NA, NA))
+    )
+
+    # WHEN a box plot with naOmit = FALSE is created
+    disp_box <- scatr::jmvbox(
+        data = data,
+        var = "y",
+        group1 = "x",
+        group2 = "group",
+        naOmit = FALSE
+    )
+
+    # THEN the plot should match the snapshot
+    vdiffr::expect_doppelganger("jmvbox-naOmit-false", disp_box)
+})
