@@ -374,6 +374,46 @@ testthat::test_that("jmvbar: naOmit = TRUE (Continuous)", {
     vdiffr::expect_doppelganger("jmvbar-continuous-naOmit-true", disp_bar)
 })
 
+#' Bar plot with reversed x-axis labels (categorical mode)
+testthat::test_that("jmvbar: xAxisLabelFontSizeRevLabels reverses data and labels together (categorical)", {
+    # GIVEN categorical data with unequal counts per level (A=1, B=2, C=3)
+    # so that a labels-only reversal would produce visibly wrong bar heights
+    df <- data.frame(x = factor(c("A", "B", "B", "C", "C", "C")))
+
+    # WHEN the bar plot is generated with reverse labels enabled
+    disp_bar_rev <- scatr::jmvbar(
+        data = df,
+        mode = "categorical",
+        catvar = x,
+        xAxisLabelFontSizeRevLabels = TRUE
+    )
+
+    # THEN the tallest bar (C, count=3) should appear leftmost and carry the label "C"
+    vdiffr::expect_doppelganger("jmvbar-categorical-rev-labels", disp_bar_rev)
+})
+
+#' Bar plot with reversed x-axis labels (counts mode with custom labels)
+testthat::test_that("jmvbar: xAxisLabelFontSizeRevLabels reverses data and labels together (counts with labels)", {
+    # GIVEN counts data with distinct heights (A=1, B=2, C=3) and custom labels
+    # so that a labels-only reversal would show "C" over the bar of height 1
+    df <- data.frame(
+        counts = c(1, 2, 3),
+        labels = factor(c("A", "B", "C"))
+    )
+
+    # WHEN the bar plot is generated with reverse labels enabled
+    disp_bar_rev <- scatr::jmvbar(
+        data = df,
+        mode = "counts",
+        counts = counts,
+        countsLabels = labels,
+        xAxisLabelFontSizeRevLabels = TRUE
+    )
+
+    # THEN the tallest bar (height=3) should appear leftmost with label "C"
+    vdiffr::expect_doppelganger("jmvbar-counts-labels-rev", disp_bar_rev)
+})
+
 #' Bar plot missing value exclusion (Continuous, naOmit=FALSE)
 testthat::test_that("jmvbar: naOmit = FALSE (Continuous)", {
     # GIVEN data with missing values
