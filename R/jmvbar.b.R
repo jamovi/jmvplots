@@ -241,14 +241,19 @@ jmvbarClass <- if (requireNamespace("jmvcore", quietly = TRUE)) {
                         self$options$mode == "counts" &&
                         !is.null(self$options$countsLabels)
                 ) {
+                    scale_args <- list(labels = data$label_text)
+                    if (self$options$xAxisLabelFontSizeRevLabels) {
+                        scale_args$limits <- rev
+                        scale_args$labels <- rev(data$label_text)
+                    }
                     plot_call_list$scale_x_discrete <- list(
                         ggplot2::scale_x_discrete,
-                        list(labels = data$label_text)
+                        scale_args
                     )
                 } else if (self$options$xAxisLabelFontSizeRevLabels) {
                     plot_call_list$scale_x_discrete <- list(
                         ggplot2::scale_x_discrete,
-                        list(labels = rev)
+                        list(limits = rev)
                     )
                 }
 
