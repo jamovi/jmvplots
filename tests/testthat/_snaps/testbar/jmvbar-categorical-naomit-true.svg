@@ -27,10 +27,10 @@
 </defs>
 <g clip-path='url(#cpNjQuODl8NjMyLjI1fDE0Ljk0fDUxNy4wNA==)'>
 <rect x='64.89' y='14.94' width='567.36' height='502.10' style='stroke-width: 1.55; stroke: none;' />
-<rect x='109.37' y='37.77' width='104.45' height='456.46' style='stroke-width: 1.07; stroke: #333333; stroke-linecap: butt; stroke-linejoin: miter; fill: #A6C4F1;' />
-<rect x='367.27' y='37.77' width='104.45' height='456.46' style='stroke-width: 1.07; stroke: #333333; stroke-linecap: butt; stroke-linejoin: miter; fill: #A6C4F1;' />
-<rect x='225.43' y='37.77' width='104.45' height='456.46' style='stroke-width: 1.07; stroke: #333333; stroke-linecap: butt; stroke-linejoin: miter; fill: #F0CD8C;' />
-<rect x='483.32' y='37.77' width='104.45' height='456.46' style='stroke-width: 1.07; stroke: #333333; stroke-linecap: butt; stroke-linejoin: miter; fill: #F0CD8C;' />
+<rect x='109.37' y='37.77' width='104.45' height='456.46' style='stroke-width: 1.55; stroke: #333333; stroke-linecap: butt; stroke-linejoin: miter; fill: #A6C4F1;' />
+<rect x='367.27' y='37.77' width='104.45' height='456.46' style='stroke-width: 1.55; stroke: #333333; stroke-linecap: butt; stroke-linejoin: miter; fill: #A6C4F1;' />
+<rect x='225.43' y='37.77' width='104.45' height='456.46' style='stroke-width: 1.55; stroke: #333333; stroke-linecap: butt; stroke-linejoin: miter; fill: #F0CD8C;' />
+<rect x='483.32' y='37.77' width='104.45' height='456.46' style='stroke-width: 1.55; stroke: #333333; stroke-linecap: butt; stroke-linejoin: miter; fill: #F0CD8C;' />
 </g>
 <g clip-path='url(#cpMC4wMHw3MjAuMDB8MC4wMHw1NzYuMDA=)'>
 <polyline points='64.89,517.04 64.89,14.94 ' style='stroke-width: 1.07; stroke: #333333; stroke-linecap: butt;' />
@@ -55,8 +55,8 @@
 <text transform='translate(27.62,265.99) rotate(-90)' text-anchor='middle' style='font-size: 16.00px; fill: #333333; font-family: sans;' textLength='102.27px' lengthAdjust='spacingAndGlyphs'>Frequency (N)</text>
 <rect x='648.19' y='229.86' width='56.87' height='72.26' style='stroke-width: 1.55; stroke: none;' />
 <text x='656.16' y='250.51' style='font-size: 16.00px; fill: #333333; font-family: sans;' textLength='40.92px' lengthAdjust='spacingAndGlyphs'>group</text>
-<rect x='656.87' y='260.85' width='15.59' height='15.59' style='stroke-width: 1.07; stroke: #333333; stroke-linecap: butt; stroke-linejoin: miter; fill: #A6C4F1;' />
-<rect x='656.87' y='277.85' width='15.59' height='15.59' style='stroke-width: 1.07; stroke: #333333; stroke-linecap: butt; stroke-linejoin: miter; fill: #F0CD8C;' />
+<rect x='657.19' y='261.17' width='14.95' height='14.95' style='stroke-width: 1.55; stroke: #333333; stroke-linecap: butt; stroke-linejoin: miter; fill: #A6C4F1;' />
+<rect x='657.19' y='278.18' width='14.95' height='14.95' style='stroke-width: 1.55; stroke: #333333; stroke-linecap: butt; stroke-linejoin: miter; fill: #F0CD8C;' />
 <text x='681.14' y='274.15' style='font-size: 16.00px; fill: #333333; font-family: sans;' textLength='10.68px' lengthAdjust='spacingAndGlyphs'>X</text>
 <text x='681.14' y='291.16' style='font-size: 16.00px; fill: #333333; font-family: sans;' textLength='10.68px' lengthAdjust='spacingAndGlyphs'>Y</text>
 </g>

@@ -27,12 +27,12 @@
 </defs>
 <g clip-path='url(#cpNTQuODh8NjMyLjI1fDE0Ljk0fDUxNy4wNA==)'>
 <rect x='54.88' y='14.94' width='577.37' height='502.10' style='stroke-width: 1.55; stroke: none;' />
-<rect x='98.18' y='418.15' width='70.86' height='76.08' style='stroke-width: 1.07; stroke: #333333; stroke-linecap: butt; stroke-linejoin: miter; fill: #A6C4F1;' />
-<rect x='176.92' y='342.07' width='70.86' height='152.15' style='stroke-width: 1.07; stroke: #333333; stroke-linecap: butt; stroke-linejoin: miter; fill: #C5C5C5;' />
-<rect x='255.65' y='265.99' width='70.86' height='228.23' style='stroke-width: 1.07; stroke: #333333; stroke-linecap: butt; stroke-linejoin: miter; fill: #F0CD8C;' />
-<rect x='360.62' y='189.92' width='70.86' height='304.30' style='stroke-width: 1.07; stroke: #333333; stroke-linecap: butt; stroke-linejoin: miter; fill: #A6C4F1;' />
-<rect x='439.36' y='113.84' width='70.86' height='380.38' style='stroke-width: 1.07; stroke: #333333; stroke-linecap: butt; stroke-linejoin: miter; fill: #C5C5C5;' />
-<rect x='518.09' y='37.77' width='70.86' height='456.46' style='stroke-width: 1.07; stroke: #333333; stroke-linecap: butt; stroke-linejoin: miter; fill: #F0CD8C;' />
+<rect x='98.18' y='418.15' width='70.86' height='76.08' style='stroke-width: 1.55; stroke: #333333; stroke-linecap: butt; stroke-linejoin: miter; fill: #A6C4F1;' />
+<rect x='176.92' y='342.07' width='70.86' height='152.15' style='stroke-width: 1.55; stroke: #333333; stroke-linecap: butt; stroke-linejoin: miter; fill: #C5C5C5;' />
+<rect x='255.65' y='265.99' width='70.86' height='228.23' style='stroke-width: 1.55; stroke: #333333; stroke-linecap: butt; stroke-linejoin: miter; fill: #F0CD8C;' />
+<rect x='360.62' y='189.92' width='70.86' height='304.30' style='stroke-width: 1.55; stroke: #333333; stroke-linecap: butt; stroke-linejoin: miter; fill: #A6C4F1;' />
+<rect x='439.36' y='113.84' width='70.86' height='380.38' style='stroke-width: 1.55; stroke: #333333; stroke-linecap: butt; stroke-linejoin: miter; fill: #C5C5C5;' />
+<rect x='518.09' y='37.77' width='70.86' height='456.46' style='stroke-width: 1.55; stroke: #333333; stroke-linecap: butt; stroke-linejoin: miter; fill: #F0CD8C;' />
 </g>
 <g clip-path='url(#cpMC4wMHw3MjAuMDB8MC4wMHw1NzYuMDA=)'>
 <polyline points='54.88,517.04 54.88,14.94 ' style='stroke-width: 1.07; stroke: #333333; stroke-linecap: butt;' />
@@ -59,9 +59,9 @@
 <text transform='translate(27.62,265.99) rotate(-90)' text-anchor='middle' style='font-size: 16.00px; fill: #333333; font-family: sans;' textLength='47.16px' lengthAdjust='spacingAndGlyphs'>counts</text>
 <rect x='648.19' y='221.36' width='56.87' height='89.27' style='stroke-width: 1.55; stroke: none;' />
 <text x='656.16' y='242.00' style='font-size: 16.00px; fill: #333333; font-family: sans;' textLength='40.92px' lengthAdjust='spacingAndGlyphs'>group</text>
-<rect x='656.87' y='252.34' width='15.59' height='15.59' style='stroke-width: 1.07; stroke: #333333; stroke-linecap: butt; stroke-linejoin: miter; fill: #A6C4F1;' />
-<rect x='656.87' y='269.35' width='15.59' height='15.59' style='stroke-width: 1.07; stroke: #333333; stroke-linecap: butt; stroke-linejoin: miter; fill: #C5C5C5;' />
-<rect x='656.87' y='286.36' width='15.59' height='15.59' style='stroke-width: 1.07; stroke: #333333; stroke-linecap: butt; stroke-linejoin: miter; fill: #F0CD8C;' />
+<rect x='657.19' y='252.66' width='14.95' height='14.95' style='stroke-width: 1.55; stroke: #333333; stroke-linecap: butt; stroke-linejoin: miter; fill: #A6C4F1;' />
+<rect x='657.19' y='269.67' width='14.95' height='14.95' style='stroke-width: 1.55; stroke: #333333; stroke-linecap: butt; stroke-linejoin: miter; fill: #C5C5C5;' />
+<rect x='657.19' y='286.68' width='14.95' height='14.95' style='stroke-width: 1.55; stroke: #333333; stroke-linecap: butt; stroke-linejoin: miter; fill: #F0CD8C;' />
 <text x='681.14' y='265.64' style='font-size: 16.00px; fill: #333333; font-family: sans;' textLength='10.68px' lengthAdjust='spacingAndGlyphs'>A</text>
 <text x='681.14' y='282.65' style='font-size: 16.00px; fill: #333333; font-family: sans;' textLength='10.68px' lengthAdjust='spacingAndGlyphs'>B</text>
 <text x='681.14' y='299.66' style='font-size: 16.00px; fill: #333333; font-family: sans;' textLength='11.56px' lengthAdjust='spacingAndGlyphs'>C</text>
