@@ -27,11 +27,11 @@
 </defs>
 <g clip-path='url(#cpNTQuODh8NzA1LjA2fDE0Ljk0fDUxNy4wNA==)'>
 <rect x='54.88' y='14.94' width='650.18' height='502.10' style='stroke-width: 1.55; stroke: none;' />
-<circle cx='84.43' cy='494.22' r='2.49' style='stroke-width: 0.71; stroke: #333333; fill: #333333;' />
-<circle cx='232.20' cy='380.11' r='2.49' style='stroke-width: 0.71; stroke: #333333; fill: #333333;' />
-<circle cx='379.97' cy='265.99' r='2.49' style='stroke-width: 0.71; stroke: #333333; fill: #333333;' />
-<circle cx='527.74' cy='151.88' r='2.49' style='stroke-width: 0.71; stroke: #333333; fill: #333333;' />
-<circle cx='675.50' cy='37.77' r='2.49' style='stroke-width: 0.71; stroke: #333333; fill: #333333;' />
+<circle cx='84.43' cy='494.22' r='2.65' style='stroke-width: 1.03; stroke: #333333; fill: #333333;' />
+<circle cx='232.20' cy='380.11' r='2.65' style='stroke-width: 1.03; stroke: #333333; fill: #333333;' />
+<circle cx='379.97' cy='265.99' r='2.65' style='stroke-width: 1.03; stroke: #333333; fill: #333333;' />
+<circle cx='527.74' cy='151.88' r='2.65' style='stroke-width: 1.03; stroke: #333333; fill: #333333;' />
+<circle cx='675.50' cy='37.77' r='2.65' style='stroke-width: 1.03; stroke: #333333; fill: #333333;' />
 </g>
 <g clip-path='url(#cpMC4wMHw3MjAuMDB8MC4wMHw1NzYuMDA=)'>
 <polyline points='54.88,517.04 54.88,14.94 ' style='stroke-width: 1.07; stroke: #333333; stroke-linecap: butt;' />

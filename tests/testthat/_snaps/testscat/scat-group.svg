@@ -27,12 +27,12 @@
 </defs>
 <g clip-path='url(#cpNjEuNTV8NjM3LjUyfDE0Ljk0fDUxNy4wNA==)'>
 <rect x='61.55' y='14.94' width='575.97' height='502.10' style='stroke-width: 1.55; stroke: none;' />
-<circle cx='87.73' cy='494.22' r='2.49' style='stroke-width: 0.71; stroke: #79A6EA; fill: #79A6EA;' />
-<circle cx='192.46' cy='402.93' r='2.49' style='stroke-width: 0.71; stroke: #79A6EA; fill: #79A6EA;' />
-<circle cx='297.18' cy='311.64' r='2.49' style='stroke-width: 0.71; stroke: #79A6EA; fill: #79A6EA;' />
-<circle cx='401.90' cy='220.35' r='2.49' style='stroke-width: 0.71; stroke: #E8B453; fill: #E8B453;' />
-<circle cx='506.62' cy='129.06' r='2.49' style='stroke-width: 0.71; stroke: #E8B453; fill: #E8B453;' />
-<circle cx='611.34' cy='37.77' r='2.49' style='stroke-width: 0.71; stroke: #E8B453; fill: #E8B453;' />
+<circle cx='87.73' cy='494.22' r='2.65' style='stroke-width: 1.03; stroke: #79A6EA; fill: #79A6EA;' />
+<circle cx='192.46' cy='402.93' r='2.65' style='stroke-width: 1.03; stroke: #79A6EA; fill: #79A6EA;' />
+<circle cx='297.18' cy='311.64' r='2.65' style='stroke-width: 1.03; stroke: #79A6EA; fill: #79A6EA;' />
+<circle cx='401.90' cy='220.35' r='2.65' style='stroke-width: 1.03; stroke: #E8B453; fill: #E8B453;' />
+<circle cx='506.62' cy='129.06' r='2.65' style='stroke-width: 1.03; stroke: #E8B453; fill: #E8B453;' />
+<circle cx='611.34' cy='37.77' r='2.65' style='stroke-width: 1.03; stroke: #E8B453; fill: #E8B453;' />
 </g>
 <g clip-path='url(#cpMC4wMHw3MjAuMDB8MC4wMHw1NzYuMDA=)'>
 <polyline points='61.55,517.04 61.55,14.94 ' style='stroke-width: 1.07; stroke: #333333; stroke-linecap: butt;' />
@@ -65,8 +65,8 @@
 <text transform='translate(27.62,265.99) rotate(-90)' text-anchor='middle' style='font-size: 16.00px; fill: #333333; font-family: sans;' textLength='8.01px' lengthAdjust='spacingAndGlyphs'>y</text>
 <rect x='653.46' y='229.86' width='51.59' height='72.26' style='stroke-width: 1.55; stroke: none;' />
 <text x='661.43' y='250.51' style='font-size: 16.00px; fill: #333333; font-family: sans;' textLength='23.13px' lengthAdjust='spacingAndGlyphs'>grp</text>
-<circle cx='669.94' cy='268.64' r='2.49' style='stroke-width: 0.71; stroke: #79A6EA; fill: #79A6EA;' />
-<circle cx='669.94' cy='285.65' r='2.49' style='stroke-width: 0.71; stroke: #E8B453; fill: #E8B453;' />
+<circle cx='669.94' cy='268.64' r='2.65' style='stroke-width: 1.03; stroke: #79A6EA; fill: #79A6EA;' />
+<circle cx='669.94' cy='285.65' r='2.65' style='stroke-width: 1.03; stroke: #E8B453; fill: #E8B453;' />
 <text x='686.41' y='274.15' style='font-size: 16.00px; fill: #333333; font-family: sans;' textLength='10.68px' lengthAdjust='spacingAndGlyphs'>A</text>
 <text x='686.41' y='291.16' style='font-size: 16.00px; fill: #333333; font-family: sans;' textLength='10.68px' lengthAdjust='spacingAndGlyphs'>B</text>
 </g>

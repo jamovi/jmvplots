@@ -28,9 +28,9 @@
 <g clip-path='url(#cpNjEuNTV8NzA1LjA2fDE0Ljk0fDUxNy4wNA==)'>
 <rect x='61.55' y='14.94' width='643.50' height='502.10' style='stroke-width: 1.55; stroke: none;' />
 <polyline points='182.21,444.59 383.31,229.41 584.40,79.40 ' style='stroke-width: 1.07; stroke: #333333; stroke-linecap: butt;' />
-<circle cx='182.21' cy='444.59' r='2.49' style='stroke-width: 0.71; stroke: #333333; fill: #333333;' />
-<circle cx='383.31' cy='229.41' r='2.49' style='stroke-width: 0.71; stroke: #333333; fill: #333333;' />
-<circle cx='584.40' cy='79.40' r='2.49' style='stroke-width: 0.71; stroke: #333333; fill: #333333;' />
+<circle cx='182.21' cy='444.59' r='2.65' style='stroke-width: 1.03; stroke: #333333; fill: #333333;' />
+<circle cx='383.31' cy='229.41' r='2.65' style='stroke-width: 1.03; stroke: #333333; fill: #333333;' />
+<circle cx='584.40' cy='79.40' r='2.65' style='stroke-width: 1.03; stroke: #333333; fill: #333333;' />
 <polyline points='172.16,394.95 192.27,394.95 ' style='stroke-width: 1.07; stroke-linecap: butt;' />
 <polyline points='182.21,394.95 182.21,494.22 ' style='stroke-width: 1.07; stroke-linecap: butt;' />
 <polyline points='172.16,494.22 192.27,494.22 ' style='stroke-width: 1.07; stroke-linecap: butt;' />
