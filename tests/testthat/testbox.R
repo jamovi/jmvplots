@@ -286,3 +286,16 @@ testthat::test_that("jmvbox syntax: flipAxes is reproduced", {
 
     expect_plot_equivalent(res, df, ".boxPlot")
 })
+
+testthat::test_that("jmvbox syntax: no error when required variables are missing", {
+    # GIVEN an analysis with no variables assigned (jamovi's pre-data state)
+    analysis <- scatr:::jmvboxClass$new(
+        options = scatr:::jmvboxOptions$new(),
+        data = ToothGrowth
+    )
+
+    # WHEN the R syntax is requested
+    # THEN it returns an empty string rather than erroring
+    testthat::expect_no_error(syntax <- analysis$asSource())
+    testthat::expect_identical(syntax, "")
+})

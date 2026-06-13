@@ -59,3 +59,16 @@ testthat::test_that("pareto syntax: without counts", {
     res <- scatr::pareto(data = df, x = "x")
     expect_plot_equivalent(res, df, ".pareto")
 })
+
+testthat::test_that("pareto syntax: no error when required variables are missing", {
+    # GIVEN an analysis with no variables assigned (jamovi's pre-data state)
+    analysis <- scatr:::paretoClass$new(
+        options = scatr:::paretoOptions$new(),
+        data = ToothGrowth
+    )
+
+    # WHEN the R syntax is requested
+    # THEN it returns an empty string rather than erroring
+    testthat::expect_no_error(syntax <- analysis$asSource())
+    testthat::expect_identical(syntax, "")
+})

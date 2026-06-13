@@ -449,6 +449,15 @@ jmvbarClass <- if (requireNamespace("jmvcore", quietly = TRUE)) {
         ),
         public = list(
             asSource = function() {
+                mode <- self$options$mode
+                if (
+                    (mode == "categorical" && is.null(self$options$catvar)) ||
+                        (mode == "continuous" && is.null(self$options$convar)) ||
+                        (mode == "counts" && is.null(self$options$counts))
+                ) {
+                    return("")
+                }
+
                 data_prep_code <- generateDataPrepCode(self$options)
                 call_list <- private$.getPlotCallList(
                     data = self$data,

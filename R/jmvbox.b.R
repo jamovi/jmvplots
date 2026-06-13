@@ -165,6 +165,10 @@ jmvboxClass <- if (requireNamespace("jmvcore", quietly = TRUE)) {
         ),
         public = list(
             asSource = function() {
+                if (is.null(self$options$var)) {
+                    return("")
+                }
+
                 data_prep_code <- generateDataPrepCode(self$options, "box")
                 call_list <- private$.getPlotCallList(
                     data = self$data,

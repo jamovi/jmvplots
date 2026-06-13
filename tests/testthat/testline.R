@@ -257,3 +257,16 @@ testthat::test_that("jmvline syntax: aggregate mode, grouped with error bars", {
 
     expect_plot_equivalent(res, df, ".linePlot")
 })
+
+testthat::test_that("jmvline syntax: no error when required variables are missing", {
+    # GIVEN an analysis with no variables assigned (jamovi's pre-data state)
+    analysis <- scatr:::jmvlineClass$new(
+        options = scatr:::jmvlineOptions$new(),
+        data = ToothGrowth
+    )
+
+    # WHEN the R syntax is requested
+    # THEN it returns an empty string rather than erroring
+    testthat::expect_no_error(syntax <- analysis$asSource())
+    testthat::expect_identical(syntax, "")
+})
