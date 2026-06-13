@@ -146,6 +146,10 @@ scatClass <- if (requireNamespace("jmvcore", quietly = TRUE)) {
         ),
         public = list(
             asSource = function() {
+                if (is.null(self$options$x) || is.null(self$options$y)) {
+                    return("")
+                }
+
                 data_prep_code <- generateDataPrepCode(self$options, "scat")
                 call_list <- private$.getPlotCallList(
                     data = self$data,

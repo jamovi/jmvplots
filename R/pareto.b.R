@@ -138,6 +138,10 @@ paretoClass <- if (requireNamespace("jmvcore", quietly = TRUE)) {
         ),
         public = list(
             asSource = function() {
+                if (is.null(self$options$x)) {
+                    return("")
+                }
+
                 data_prep_code <- generateDataPrepCode(self$options, "pareto")
 
                 # Compute total sum for cumulative percentage formula

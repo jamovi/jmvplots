@@ -138,3 +138,16 @@ testthat::test_that("jmvhist syntax: grouping variable", {
     res <- scatr::jmvhist(data = ToothGrowth, var = "len", group = "supp")
     expect_plot_equivalent(res, ToothGrowth, ".histPlot")
 })
+
+testthat::test_that("jmvhist syntax: no error when required variables are missing", {
+    # GIVEN an analysis with no variables assigned (jamovi's pre-data state)
+    analysis <- scatr:::jmvhistClass$new(
+        options = scatr:::jmvhistOptions$new(),
+        data = ToothGrowth
+    )
+
+    # WHEN the R syntax is requested
+    # THEN it returns an empty string rather than erroring
+    testthat::expect_no_error(syntax <- analysis$asSource())
+    testthat::expect_identical(syntax, "")
+})

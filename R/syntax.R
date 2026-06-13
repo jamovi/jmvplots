@@ -461,12 +461,14 @@ generatePlotCode <- function(
             args <- call_spec[[2]]
         }
 
-        # Filter NULL and empty arguments
-        args <- args[sapply(args, function(x) !is.null(x))]
+        # Filter NULL and empty arguments. vapply (not sapply) so an empty
+        # args list yields logical(0) rather than an empty list, which would
+        # make `args[...]` raise "invalid subscript type 'list'".
+        args <- args[vapply(args, function(x) !is.null(x), logical(1))]
 
         if (name == "labs") {
             # filter empty title/labels in labs to keep it clean
-            args <- args[sapply(args, function(x) !is.null(x) && x != "")]
+            args <- args[vapply(args, function(x) !is.null(x) && x != "", logical(1))]
         }
 
         if (startsWith(name, "coord_") && name != "coord_flip") {

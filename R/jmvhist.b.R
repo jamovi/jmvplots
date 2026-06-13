@@ -221,6 +221,10 @@ jmvhistClass <- if (requireNamespace("jmvcore", quietly = TRUE)) {
         ),
         public = list(
             asSource = function() {
+                if (is.null(self$options$var)) {
+                    return("")
+                }
+
                 data_prep_code <- generateDataPrepCode(self$options, "hist")
 
                 var <- self$options$var

@@ -191,3 +191,16 @@ testthat::test_that("scat syntax: grouped", {
 
     expect_plot_equivalent(res, df, ".scatterPlot")
 })
+
+testthat::test_that("scat syntax: no error when required variables are missing", {
+    # GIVEN an analysis with no variables assigned (jamovi's pre-data state)
+    analysis <- scatr:::scatClass$new(
+        options = scatr:::scatOptions$new(),
+        data = ToothGrowth
+    )
+
+    # WHEN the R syntax is requested
+    # THEN it returns an empty string rather than erroring
+    testthat::expect_no_error(syntax <- analysis$asSource())
+    testthat::expect_identical(syntax, "")
+})
