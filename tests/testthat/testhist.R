@@ -123,52 +123,18 @@ testthat::test_that("jmvhist: custom font faces, sizes, and alignment", {
     vdiffr::expect_doppelganger("jmvhist-custom-styling", disp_hist_jmvplot)
 })
 
-#' Syntax mode verification tests
+#' Syntax mode verification tests (see helper-syntax-equivalence.R)
 testthat::test_that("jmvhist syntax: simple, no grouping", {
-    # GIVEN ToothGrowth data
     res <- scatr::jmvhist(data = ToothGrowth, var = "len", density = TRUE)
 
-    # WHEN we request the R syntax
     syntax <- res$.__enclos_env__$private$.parent$asSource()
-
-    # THEN it should generate a non-empty character string
     testthat::expect_type(syntax, "character")
-    testthat::expect_true(nchar(syntax) > 0)
     testthat::expect_true(grepl("geom_density", syntax, fixed = TRUE))
 
-    # AND when we evaluate the syntax in a clean environment
-    test_env <- new.env()
-    test_env$data <- ToothGrowth
-    testthat::expect_no_error(eval(parse(text = syntax), envir = test_env))
-
-    # THEN the plot and data objects should be generated correctly
-    testthat::expect_true(exists("p", envir = test_env))
-    testthat::expect_true(exists("plot_data", envir = test_env))
-    testthat::expect_s3_class(test_env$p, "ggplot")
-    
-    # AND the prepared plot data should match the analysis plot's state
-    testthat::expect_equal(test_env$plot_data$y, res$plot$state$y)
+    expect_plot_equivalent(res, ToothGrowth, ".histPlot")
 })
 
 testthat::test_that("jmvhist syntax: grouping variable", {
-    # GIVEN ToothGrowth data with group
     res <- scatr::jmvhist(data = ToothGrowth, var = "len", group = "supp")
-
-    # WHEN we request the R syntax
-    syntax <- res$.__enclos_env__$private$.parent$asSource()
-
-    # THEN it should contain references to grouping
-    testthat::expect_true(grepl("fill = group", syntax, fixed = TRUE))
-
-    # AND when we evaluate the syntax in a clean environment
-    test_env <- new.env()
-    test_env$data <- ToothGrowth
-    testthat::expect_no_error(eval(parse(text = syntax), envir = test_env))
-
-    # THEN the plot and data objects should be generated correctly
-    testthat::expect_true(exists("p", envir = test_env))
-    testthat::expect_s3_class(test_env$p, "ggplot")
-
-    # AND the prepared plot data should match the analysis plot's state
-    testthat::expect_equal(test_env$plot_data$y, res$plot$state$y)
+    expect_plot_equivalent(res, ToothGrowth, ".histPlot")
 })

@@ -163,40 +163,22 @@ testthat::test_that("scat: custom font faces, sizes, and alignment", {
     vdiffr::expect_doppelganger("scat-custom-styling", plot)
 })
 
-#' Syntax mode verification tests
+#' Syntax mode verification tests (see helper-syntax-equivalence.R)
 testthat::test_that("scat syntax: basic, no grouping, with regLine", {
-    # GIVEN simple dataset
     df <- data.frame(
         x = c(1, 2, 3, 4, 5),
         y = c(2, 4, 6, 8, 10)
     )
     res <- scatr::scat(data = df, x = "x", y = "y", regLine = TRUE)
 
-    # WHEN we request the R syntax
     syntax <- res$.__enclos_env__$private$.parent$asSource()
-
-    # THEN it should generate a non-empty character string
     testthat::expect_type(syntax, "character")
-    testthat::expect_true(nchar(syntax) > 0)
     testthat::expect_true(grepl("geom_smooth", syntax, fixed = TRUE))
 
-    # AND when we evaluate the syntax in a clean environment
-    test_env <- new.env()
-    test_env$data <- df
-    testthat::expect_no_error(eval(parse(text = syntax), envir = test_env))
-
-    # THEN the plot and data objects should be generated correctly
-    testthat::expect_true(exists("p", envir = test_env))
-    testthat::expect_true(exists("plot_data", envir = test_env))
-    testthat::expect_s3_class(test_env$p, "ggplot")
-    
-    # AND the prepared plot data should match the analysis plot's state
-    testthat::expect_equal(test_env$plot_data$x, res$plot$state$x)
-    testthat::expect_equal(test_env$plot_data$y, res$plot$state$y)
+    expect_plot_equivalent(res, df, ".scatterPlot")
 })
 
 testthat::test_that("scat syntax: grouped", {
-    # GIVEN grouped dataset
     df <- data.frame(
         x = c(1, 2, 3, 4, 5, 6),
         y = c(2, 4, 6, 8, 10, 12),
@@ -204,22 +186,8 @@ testthat::test_that("scat syntax: grouped", {
     )
     res <- scatr::scat(data = df, x = "x", y = "y", group = "grp")
 
-    # WHEN we request the R syntax
     syntax <- res$.__enclos_env__$private$.parent$asSource()
-
-    # THEN it should contain references to grouping
     testthat::expect_true(grepl("colour = group", syntax, fixed = TRUE))
 
-    # AND when we evaluate the syntax in a clean environment
-    test_env <- new.env()
-    test_env$data <- df
-    testthat::expect_no_error(eval(parse(text = syntax), envir = test_env))
-
-    # THEN the plot and data objects should be generated correctly
-    testthat::expect_true(exists("p", envir = test_env))
-    testthat::expect_s3_class(test_env$p, "ggplot")
-
-    # AND the prepared plot data should match the analysis plot's state
-    testthat::expect_equal(test_env$plot_data$x, res$plot$state$x)
-    testthat::expect_equal(test_env$plot_data$y, res$plot$state$y)
+    expect_plot_equivalent(res, df, ".scatterPlot")
 })
