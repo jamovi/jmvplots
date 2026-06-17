@@ -9,7 +9,7 @@ testthat::test_that("jmvbox: one variable", {
     plot <- scatr::jmvbox(data = df, var = "dep")
 
     # THEN the plot should match the snapshot
-    vdiffr::expect_doppelganger("jmvbox-simple", plot)
+    expect_plot_snapshot("jmvbox-simple", plot)
 })
 
 #' Box plot with one grouping variable
@@ -24,7 +24,7 @@ testthat::test_that("jmvbox: one variable, one group", {
     plot <- scatr::jmvbox(data = df, var = "dep", group1 = "grp")
 
     # THEN the plot should match the snapshot
-    vdiffr::expect_doppelganger("jmvbox-group1", plot)
+    expect_plot_snapshot("jmvbox-group1", plot)
 })
 
 #' Box plot with two grouping variables
@@ -40,7 +40,7 @@ testthat::test_that("jmvbox: one variable, two groups", {
     plot <- scatr::jmvbox(data = df, var = "dep", group1 = "grp1", group2 = "grp2")
 
     # THEN the plot should match the snapshot
-    vdiffr::expect_doppelganger("jmvbox-group1-group2", plot)
+    expect_plot_snapshot("jmvbox-group1-group2", plot)
 })
 
 #' Box plot with notch option enabled
@@ -55,7 +55,7 @@ testthat::test_that("jmvbox: option notch", {
     plot_notch <- scatr::jmvbox(data = df, var = "dep", group1 = "grp", notch = TRUE)
 
     # THEN the plot should display notches and match the snapshot
-    vdiffr::expect_doppelganger("jmvbox-notch", plot_notch)
+    expect_plot_snapshot("jmvbox-notch", plot_notch)
 })
 
 #' Box plot with outliers hidden
@@ -70,7 +70,7 @@ testthat::test_that("jmvbox: option no outliers", {
     plot_no_outliers <- scatr::jmvbox(data = df, var = "dep", group1 = "grp", outliers = FALSE)
 
     # THEN the outliers should be hidden and match the snapshot
-    vdiffr::expect_doppelganger("jmvbox-no-outliers", plot_no_outliers)
+    expect_plot_snapshot("jmvbox-no-outliers", plot_no_outliers)
 })
 
 #' Box plot with custom box width
@@ -85,7 +85,7 @@ testthat::test_that("jmvbox: option box width", {
     plot_width <- scatr::jmvbox(data = df, var = "dep", group1 = "grp", boxWidth = 0.2)
 
     # THEN the box width should be adjusted and match the snapshot
-    vdiffr::expect_doppelganger("jmvbox-width-0.2", plot_width)
+    expect_plot_snapshot("jmvbox-width-0.2", plot_width)
 })
 
 #' Box plot with manual Y-axis limits
@@ -105,7 +105,7 @@ testthat::test_that("jmvbox: manual limits", {
     )
 
     # THEN the Y-axis limits should be applied and match the snapshot
-    vdiffr::expect_doppelganger("jmvbox-manual-limits", plot_limits)
+    expect_plot_snapshot("jmvbox-manual-limits", plot_limits)
 })
 
 #' Box plot with flipped axes
@@ -119,7 +119,7 @@ testthat::test_that("jmvbox: flipped axes", {
     plot_flip <- scatr::jmvbox(data = df, var = "dep", flipAxes = TRUE)
 
     # THEN the axes should be flipped and match the snapshot
-    vdiffr::expect_doppelganger("jmvbox-flipped", plot_flip)
+    expect_plot_snapshot("jmvbox-flipped", plot_flip)
 })
 
 #' Box plot with flipped axes and manual limits
@@ -140,7 +140,7 @@ testthat::test_that("jmvbox: flipped axes with manual limits", {
     )
 
     # THEN the plot should have flipped axes, correct limits, and match the snapshot
-    vdiffr::expect_doppelganger("jmvbox-flipped-manual-limits", plot_flip_limits)
+    expect_plot_snapshot("jmvbox-flipped-manual-limits", plot_flip_limits)
 })
 
 #' Box plot with manual limits (zoom behavior)
@@ -164,7 +164,7 @@ testthat::test_that("jmvbox: limits do not alter box statistics", {
     )
 
     # THEN the box plot stats should reflect the full data (median=3)
-    vdiffr::expect_doppelganger("jmvbox-manual-limits-zoom", disp_box_zoom)
+    expect_plot_snapshot("jmvbox-manual-limits-zoom", disp_box_zoom)
 })
 
 #' Box plot with custom font faces
@@ -203,7 +203,7 @@ testthat::test_that("jmvbox: custom font faces, sizes, and alignment", {
     )
 
     # THEN the plot should match the snapshot
-    vdiffr::expect_doppelganger("jmvbox-custom-styling", plot)
+    expect_plot_snapshot("jmvbox-custom-styling", plot)
 })
 
 #' Box plot missing value exclusion
@@ -225,7 +225,7 @@ testthat::test_that("jmvbox: naOmit = TRUE", {
     )
 
     # THEN the plot should match the snapshot
-    vdiffr::expect_doppelganger("jmvbox-naOmit-true", disp_box)
+    expect_plot_snapshot("jmvbox-naOmit-true", disp_box)
 })
 
 #' Box plot missing value exclusion (naOmit=FALSE)
@@ -247,7 +247,7 @@ testthat::test_that("jmvbox: naOmit = FALSE", {
     )
 
     # THEN the plot should match the snapshot
-    vdiffr::expect_doppelganger("jmvbox-naOmit-false", disp_box)
+    expect_plot_snapshot("jmvbox-naOmit-false", disp_box)
 })
 
 #' Syntax mode verification tests (see helper-syntax-equivalence.R)

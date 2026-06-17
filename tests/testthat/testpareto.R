@@ -34,7 +34,7 @@ testthat::test_that("pareto: custom font faces, sizes, and alignment", {
     )
 
     # THEN the plot should match the snapshot
-    vdiffr::expect_doppelganger("pareto-custom-styling", plot)
+    expect_plot_snapshot("pareto-custom-styling", plot)
 })
 
 #' Syntax mode verification tests (see helper-syntax-equivalence.R)
