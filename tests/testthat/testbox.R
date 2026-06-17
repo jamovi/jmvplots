@@ -249,3 +249,84 @@ testthat::test_that("jmvbox: naOmit = FALSE", {
     # THEN the plot should match the snapshot
     vdiffr::expect_doppelganger("jmvbox-naOmit-false", disp_box)
 })
+
+#' Syntax mode verification tests
+testthat::test_that("jmvbox syntax: simple, no grouping", {
+    # GIVEN continuous data
+    df <- data.frame(
+        dep = c(1, 2, 3, 4, 5, 2, 3, 4, 5, 6)
+    )
+    res <- scatr::jmvbox(data = df, var = "dep")
+
+    # WHEN we request the R syntax
+    syntax <- res$.__enclos_env__$private$.parent$asSource()
+
+    # THEN it should generate a non-empty character string
+    testthat::expect_type(syntax, "character")
+    testthat::expect_true(nchar(syntax) > 0)
+    testthat::expect_true(grepl("library(ggplot2)", syntax, fixed = TRUE))
+
+    # AND when we evaluate the syntax in a clean environment
+    test_env <- new.env()
+    test_env$data <- df
+    testthat::expect_no_error(eval(parse(text = syntax), envir = test_env))
+
+    # THEN the plot and data objects should be generated correctly
+    testthat::expect_true(exists("p", envir = test_env))
+    testthat::expect_true(exists("plot_data", envir = test_env))
+    testthat::expect_s3_class(test_env$p, "ggplot")
+    
+    # AND the prepared plot data should match the analysis plot's state
+    testthat::expect_equal(test_env$plot_data$y, res$plot$state$y)
+})
+
+testthat::test_that("jmvbox syntax: two grouping variables", {
+    df <- data.frame(
+        dep = c(1, 2, 3, 4, 5, 2, 3, 4, 5, 6),
+        grp1 = factor(c("A", "A", "A", "A", "A", "B", "B", "B", "B", "B")),
+        grp2 = factor(c("X", "Y", "X", "Y", "X", "Y", "X", "Y", "X", "Y"))
+    )
+    res <- scatr::jmvbox(data = df, var = "dep", group1 = "grp1", group2 = "grp2")
+
+    # WHEN we request the R syntax
+    syntax <- res$.__enclos_env__$private$.parent$asSource()
+
+    # THEN it should contain references to grouping
+    testthat::expect_true(grepl("group = grp2", syntax, fixed = TRUE))
+
+    # AND when we evaluate the syntax in a clean environment
+    test_env <- new.env()
+    test_env$data <- df
+    testthat::expect_no_error(eval(parse(text = syntax), envir = test_env))
+
+    # THEN the plot and data objects should be generated correctly
+    testthat::expect_true(exists("p", envir = test_env))
+    testthat::expect_s3_class(test_env$p, "ggplot")
+
+    # AND the prepared plot data should match the analysis plot's state
+    testthat::expect_equal(test_env$plot_data$y, res$plot$state$y)
+})
+
+testthat::test_that("jmvbox syntax: flipAxes is included", {
+    df <- data.frame(
+        dep = c(1, 2, 3, 4, 5, 2, 3, 4, 5, 6),
+        grp = factor(c("A", "A", "A", "A", "A", "B", "B", "B", "B", "B"))
+    )
+    res <- scatr::jmvbox(data = df, var = "dep", group1 = "grp", flipAxes = TRUE)
+
+    # WHEN we request the R syntax
+    syntax <- res$.__enclos_env__$private$.parent$asSource()
+
+    # THEN it should contain coord_flip()
+    testthat::expect_true(grepl("coord_flip()", syntax, fixed = TRUE))
+
+    # AND when we evaluate the syntax in a clean environment
+    test_env <- new.env()
+    test_env$data <- df
+    testthat::expect_no_error(eval(parse(text = syntax), envir = test_env))
+
+    # THEN the plot and data objects should be generated correctly
+    testthat::expect_true(exists("p", envir = test_env))
+    testthat::expect_s3_class(test_env$p, "ggplot")
+})
+

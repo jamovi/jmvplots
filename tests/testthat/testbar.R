@@ -436,3 +436,133 @@ testthat::test_that("jmvbar: naOmit = FALSE (Continuous)", {
     # THEN the plot should match the snapshot
     vdiffr::expect_doppelganger("jmvbar-continuous-naOmit-false", disp_bar)
 })
+
+#' Syntax mode verification tests
+testthat::test_that("jmvbar syntax: categorical mode, no grouping", {
+    # GIVEN categorical data
+    res <- scatr::jmvbar(data = ToothGrowth, mode = "categorical", catvar = dose)
+
+    # WHEN we request the R syntax
+    syntax <- res$.__enclos_env__$private$.parent$asSource()
+
+    # THEN it should generate a non-empty character string
+    testthat::expect_type(syntax, "character")
+    testthat::expect_true(nchar(syntax) > 0)
+    testthat::expect_true(grepl("library(ggplot2)", syntax, fixed = TRUE))
+
+    # AND when we evaluate the syntax in a clean environment
+    test_env <- new.env()
+    test_env$data <- ToothGrowth
+    testthat::expect_no_error(eval(parse(text = syntax), envir = test_env))
+
+    # THEN the plot and data objects should be generated correctly
+    testthat::expect_true(exists("p", envir = test_env))
+    testthat::expect_true(exists("plot_data", envir = test_env))
+    testthat::expect_s3_class(test_env$p, "ggplot")
+    
+    # AND the prepared plot data should match the analysis plot's state
+    testthat::expect_equal(test_env$plot_data$y, res$plot$state$y)
+    testthat::expect_equal(as.character(test_env$plot_data$x), as.character(res$plot$state$x))
+})
+
+testthat::test_that("jmvbar syntax: continuous mode, grouped with error bars", {
+    # GIVEN continuous data with two grouping variables and CI error bars
+    res <- scatr::jmvbar(
+        data = ToothGrowth,
+        mode = "continuous",
+        convar = len,
+        congroup1 = dose,
+        congroup2 = supp,
+        errorBars = "ci",
+        ciWidth = 95
+    )
+
+    # WHEN we request the R syntax
+    syntax <- res$.__enclos_env__$private$.parent$asSource()
+
+    # THEN it should contain references to grouping and CI calculation
+    testthat::expect_true(grepl("group_by(dose, supp)", syntax, fixed = TRUE))
+    testthat::expect_true(grepl("ci = se * qt", syntax, fixed = TRUE))
+
+    # AND when we evaluate the syntax in a clean environment
+    test_env <- new.env()
+    test_env$data <- ToothGrowth
+    testthat::expect_no_error(eval(parse(text = syntax), envir = test_env))
+
+    # THEN the plot and data objects should be generated correctly
+    testthat::expect_true(exists("p", envir = test_env))
+    testthat::expect_s3_class(test_env$p, "ggplot")
+
+    # AND the prepared plot data should match the analysis plot's state
+    testthat::expect_equal(test_env$plot_data$y, res$plot$state$y)
+    testthat::expect_equal(test_env$plot_data$ci, res$plot$state$ci)
+})
+
+testthat::test_that("jmvbar syntax: counts mode, with labels and grouping", {
+    # GIVEN counts data
+    df <- data.frame(
+        counts = c(1, 2, 3, 4, 5, 6),
+        labels = factor(c("A", "A", "A", "B", "B", "B")),
+        group = factor(c("X", "Y", "Z", "X", "Y", "Z"))
+    )
+
+    res <- scatr::jmvbar(
+        data = df,
+        mode = "counts",
+        counts = counts,
+        countsLabels = labels,
+        countsgroup = group
+    )
+
+    # WHEN we request the R syntax
+    syntax <- res$.__enclos_env__$private$.parent$asSource()
+
+    # THEN it should contain counts preparation steps
+    testthat::expect_true(grepl("y_value = counts", syntax, fixed = TRUE))
+
+    # AND when we evaluate the syntax in a clean environment
+    test_env <- new.env()
+    test_env$data <- df
+    testthat::expect_no_error(eval(parse(text = syntax), envir = test_env))
+
+    # THEN the plot and data objects should be generated correctly
+    testthat::expect_true(exists("p", envir = test_env))
+    testthat::expect_s3_class(test_env$p, "ggplot")
+
+    # AND the prepared plot data should match the analysis plot's state
+    testthat::expect_equal(test_env$plot_data$y, res$plot$state$y)
+})
+
+testthat::test_that("jmvbar syntax: flipAxes is included", {
+    df <- data.frame(
+        counts = c(1, 2, 3, 4, 5, 6),
+        labels = factor(c("A", "A", "A", "B", "B", "B")),
+        group = factor(c("X", "Y", "Z", "X", "Y", "Z"))
+    )
+
+    res <- scatr::jmvbar(
+        data = df,
+        mode = "counts",
+        counts = counts,
+        countsLabels = labels,
+        countsgroup = group,
+        flipAxes = TRUE
+    )
+
+    # WHEN we request the R syntax
+    syntax <- res$.__enclos_env__$private$.parent$asSource()
+
+    # THEN it should contain coord_flip()
+    testthat::expect_true(grepl("coord_flip()", syntax, fixed = TRUE))
+
+    # AND when we evaluate the syntax in a clean environment
+    test_env <- new.env()
+    test_env$data <- df
+    testthat::expect_no_error(eval(parse(text = syntax), envir = test_env))
+
+    # THEN the plot and data objects should be generated correctly
+    testthat::expect_true(exists("p", envir = test_env))
+    testthat::expect_s3_class(test_env$p, "ggplot")
+})
+
+

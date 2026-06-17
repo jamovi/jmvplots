@@ -119,83 +119,99 @@ jmvlineClass <- if (requireNamespace("jmvcore", quietly = TRUE)) {
                     }
                 }
 
-                if (is.null(self$options$group)) {
-                    p <- ggplot(data, aes(x = x, y = y, group = 1))
+                plot_call_list <- private$.getPlotCallList(data, theme)
 
-                    if (self$options$line) {
-                        p <- p +
-                            ggplot2::geom_line(size = self$options$lineSize, color = theme$color[1])
-                    }
+                theme_call_list_args <- list()
+                if (!is.null(self$options$group)) {
+                    theme_call_list_args <- utils::modifyList(
+                        theme_call_list_args,
+                        getLegendThemeCallArgs(self$options)
+                    )
+                }
+                theme_call_list_args <- utils::modifyList(
+                    theme_call_list_args,
+                    getLabelsThemeCallArgs(self$options, self$options$flipAxes)
+                )
 
-                    if (self$options$point) {
-                        p <- p +
-                            ggplot2::geom_point(
-                                size = self$options$pointSize,
-                                color = theme$color[1]
-                            )
-                    }
+                p <- createPlotFromCallStack(plot_call_list) +
+                    ggtheme +
+                    do.call(ggplot2::theme, theme_call_list_args)
 
-                    p <- p + ggtheme
+                p <- autoscalePlotBreaks(p, image$width, image$height)
+                return(p)
+            },
+            .getPlotCallList = function(data, theme) {
+                group <- self$options$group
+                mapping <- aes(x = x, y = y)
+                if (is.null(group)) {
+                    mapping$group <- quote(1)
                 } else {
-                    p <- ggplot(data, aes(x = x, y = y, group = group))
-
+                    mapping$group <- quote(group)
                     if (self$options$groupColor) {
-                        p <- p + aes(color = group)
+                        mapping$colour <- quote(group)
                     }
-
                     if (self$options$groupPointType) {
-                        p <- p + aes(shape = group)
+                        mapping$shape <- quote(group)
                     }
+                }
 
-                    if (self$options$line) {
-                        p <- p +
-                            ggplot2::geom_line(
-                                if (self$options$groupLineType) aes(linetype = group),
-                                position = ggplot2::position_dodge(
-                                    width = self$options$groupPositionDodge
-                                ),
-                                size = self$options$lineSize
-                            )
+                plot_call_list <- list(
+                    "ggplot" = list(
+                        fun = ggplot2::ggplot,
+                        args = list(data = data, mapping = mapping)
+                    )
+                )
+
+                if (self$options$line) {
+                    line_args <- list(size = self$options$lineSize)
+                    if (is.null(group)) {
+                        line_args$color <- theme$color[1]
+                    } else {
+                        if (self$options$groupLineType) {
+                            line_args$mapping <- aes(linetype = group)
+                        }
+                        line_args$position <- ggplot2::position_dodge(
+                            width = self$options$groupPositionDodge
+                        )
                     }
+                    plot_call_list$geom_line <- list(
+                        fun = ggplot2::geom_line,
+                        args = line_args
+                    )
+                }
 
-                    if (self$options$point) {
-                        p <- p +
-                            ggplot2::geom_point(
-                                position = ggplot2::position_dodge(
-                                    width = self$options$groupPositionDodge
-                                ),
-                                size = self$options$pointSize
-                            )
+                if (self$options$point) {
+                    point_args <- list(size = self$options$pointSize)
+                    if (is.null(group)) {
+                        point_args$color <- theme$color[1]
+                    } else {
+                        point_args$position <- ggplot2::position_dodge(
+                            width = self$options$groupPositionDodge
+                        )
                     }
-
-                    p <- p + ggtheme + formatLegend(self$options)
+                    plot_call_list$geom_point <- list(
+                        fun = ggplot2::geom_point,
+                        args = point_args
+                    )
                 }
 
                 if (self$options$mode == "aggregate") {
                     errorBars <- self$options$errorBars
                     if (errorBars != "none") {
-                        p <- p +
-                            ggplot2::geom_errorbar(
-                                aes(ymin = y - !!sym(errorBars), ymax = y + !!sym(errorBars)),
-                                size = self$options$errorBarSize,
-                                position = ggplot2::position_dodge(
-                                    width = self$options$groupPositionDodge
-                                ),
-                                width = self$options$errorBarWidth,
-                                show.legend = FALSE
-                            )
+                        errorbar_args <- list(
+                            mapping = aes(ymin = y - !!sym(errorBars), ymax = y + !!sym(errorBars)),
+                            size = self$options$errorBarSize,
+                            position = ggplot2::position_dodge(
+                                width = self$options$groupPositionDodge
+                            ),
+                            width = self$options$errorBarWidth,
+                            show.legend = FALSE
+                        )
+                        plot_call_list$geom_errorbar <- list(
+                            fun = ggplot2::geom_errorbar,
+                            args = errorbar_args
+                        )
                     }
-                }
-
-                ylims <- NULL
-                if (self$options$yAxisRangeType == "manual") {
-                    ylims <- c(self$options$yAxisRangeMin, self$options$yAxisRangeMax)
-                }
-
-                if (self$options$flipAxes) {
-                    p <- p + ggplot2::coord_flip(ylim = ylims)
-                } else {
-                    p <- p + ggplot2::coord_cartesian(ylim = ylims)
                 }
 
                 labelDefaults <- list(
@@ -203,17 +219,46 @@ jmvlineClass <- if (requireNamespace("jmvcore", quietly = TRUE)) {
                     yLabel = self$options$y,
                     groupLabel = self$options$group
                 )
-                p <- p +
-                    setLabels(options = self$options, defaults = labelDefaults) +
-                    formatLabels(options = self$options, flipAxes = self$options$flipAxes)
+                plot_call_list$labs <- getLabsCallList(self$options, labelDefaults)
 
-                p <- autoscalePlotBreaks(p, image$width, image$height)
-                return(p)
+                ylims <- NULL
+                if (self$options$yAxisRangeType == "manual") {
+                    ylims <- c(self$options$yAxisRangeMin, self$options$yAxisRangeMax)
+                }
+
+                if (self$options$flipAxes) {
+                    plot_call_list$coord_flip <- list(
+                        fun = ggplot2::coord_flip,
+                        args = list(ylim = ylims)
+                    )
+                } else {
+                    plot_call_list$coord_cartesian <- list(
+                        fun = ggplot2::coord_cartesian,
+                        args = list(ylim = ylims)
+                    )
+                }
+
+                return(plot_call_list)
             }
         ),
         public = list(
             asSource = function() {
-                return(.("Syntax mode for plots is not yet available."))
+                data_prep_code <- generateDataPrepCode(self$options, "line")
+                call_list <- private$.getPlotCallList(
+                    data = self$data,
+                    theme = getSyntaxThemeColors(self$options$theme, self$options$palette)
+                )
+                # jamovi leaves the line x axis continuous when the variable is
+                # numeric, and discrete when it is a factor.
+                continuousX <- is.numeric(self$data[[self$options$x]])
+                return(finalizePlotSyntax(
+                    self$options,
+                    call_list,
+                    data_prep_code,
+                    hasLegend = !is.null(self$options$group),
+                    flipAxes = self$options$flipAxes,
+                    continuousX = continuousX
+                ))
             }
         )
     )

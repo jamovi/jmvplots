@@ -48,50 +48,130 @@ paretoClass <- if (requireNamespace("jmvcore", quietly = TRUE)) {
                 }
 
                 df <- image$state$df
-                labels <- image$state$labels
+                total <- sum(df$counts)
 
-                formula <- paste0("~./", sum(df$counts), "*100")
-                formula <- as.formula(formula)
+                plot_call_list <- private$.getPlotCallList(image$state, theme, total)
 
-                p <- ggplot2::ggplot(df, ggplot2::aes(x = x)) +
-                    ggplot2::geom_bar(
-                        ggplot2::aes(y = counts),
-                        width = self$options$barWidth,
-                        color = theme$color[1],
-                        fill = theme$fill[2],
-                        stat = "identity"
-                    ) +
-                    ggplot2::geom_point(
-                        ggplot2::aes(y = cum),
-                        size = 3,
-                        color = theme$color[1]
-                    ) +
-                    ggplot2::geom_path(
-                        ggplot2::aes(y = cum, group = 1),
-                        size = 1.1,
-                        lty = "dashed",
-                        color = theme$color[1]
-                    ) +
-                    ggplot2::scale_y_continuous(
-                        sec.axis = ggplot2::sec_axis(
-                            formula,
-                            name = .("Cumulative Percentage")
-                        )
-                    ) +
-                    ggtheme
+                # Evaluate nested sec.axis spec for rendering
+                sec_axis_spec <- plot_call_list$scale_y_continuous$args$sec.axis
+                if (is.list(sec_axis_spec) && !is.null(sec_axis_spec$fun)) {
+                    plot_call_list$scale_y_continuous$args$sec.axis <- do.call(
+                        sec_axis_spec$fun,
+                        sec_axis_spec$args
+                    )
+                }
 
-                labelDefaults <- list(xLabel = labels$x, yLabel = labels$y)
-                p <- p +
-                    setLabels(options = self$options, defaults = labelDefaults, legend = FALSE) +
-                    formatLabels(options = self$options, legend = FALSE)
+                theme_call_list_args <- list()
+                theme_call_list_args <- utils::modifyList(
+                    theme_call_list_args,
+                    getLabelsThemeCallArgs(self$options, legend = FALSE)
+                )
+
+                p <- createPlotFromCallStack(plot_call_list) +
+                    ggtheme +
+                    do.call(ggplot2::theme, theme_call_list_args)
 
                 p <- autoscalePlotBreaks(p, image$width, image$height)
                 return(p)
+            },
+            .getPlotCallList = function(state, theme, total) {
+                df <- state$df
+                labels <- state$labels
+
+                formula <- as.formula(paste0("~./", total, "*100"))
+
+                plot_call_list <- list(
+                    "ggplot" = list(
+                        fun = ggplot2::ggplot,
+                        args = list(
+                            data = df,
+                            mapping = aes(x = x)
+                        )
+                    ),
+                    "geom_bar" = list(
+                        fun = ggplot2::geom_bar,
+                        args = list(
+                            mapping = aes(y = counts),
+                            width = self$options$barWidth,
+                            color = theme$color[1],
+                            fill = theme$fill[2],
+                            stat = "identity"
+                        )
+                    ),
+                    "geom_point" = list(
+                        fun = ggplot2::geom_point,
+                        args = list(
+                            mapping = aes(y = cum),
+                            size = 3,
+                            color = theme$color[1]
+                        )
+                    ),
+                    "geom_path" = list(
+                        fun = ggplot2::geom_path,
+                        args = list(
+                            mapping = aes(y = cum, group = 1),
+                            size = 1.1,
+                            lty = "dashed",
+                            color = theme$color[1]
+                        )
+                    ),
+                    "scale_y_continuous" = list(
+                        fun = ggplot2::scale_y_continuous,
+                        args = list(
+                            sec.axis = list(
+                                fun = ggplot2::sec_axis,
+                                fun_name = "sec_axis",
+                                args = list(
+                                    formula,
+                                    name = .("Cumulative Percentage")
+                                )
+                            )
+                        )
+                    )
+                )
+
+                labelDefaults <- list(xLabel = labels$x, yLabel = labels$y)
+                plot_call_list$labs <- getLabsCallList(self$options, labelDefaults, legend = FALSE)
+
+                return(plot_call_list)
             }
         ),
         public = list(
             asSource = function() {
-                return(.("Syntax mode for plots is not yet available."))
+                data_prep_code <- generateDataPrepCode(self$options, "pareto")
+
+                # Compute total sum for cumulative percentage formula
+                x <- self$options$x
+                counts <- self$options$counts
+                if (!is.null(counts)) {
+                    total <- sum(jmvcore::toNumeric(self$data[[counts]]), na.rm = TRUE)
+                } else {
+                    total <- sum(!is.na(self$data[[x]]))
+                }
+
+                mock_df <- data.frame(
+                    x = factor(1:2),
+                    counts = c(total, 0),
+                    cum = c(total, total)
+                )
+                mock_labels <- list(
+                    x = self$options$x,
+                    y = if (!is.null(counts)) counts else .("Frequency (N)")
+                )
+                state <- list(df = mock_df, labels = mock_labels)
+
+                call_list <- private$.getPlotCallList(
+                    state = state,
+                    theme = getSyntaxThemeColors(self$options$theme, self$options$palette),
+                    total = total
+                )
+                return(finalizePlotSyntax(
+                    self$options,
+                    call_list,
+                    data_prep_code,
+                    hasLegend = FALSE,
+                    legend = FALSE
+                ))
             }
         )
     )
