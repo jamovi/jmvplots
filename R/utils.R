@@ -234,7 +234,7 @@ getLegendThemeCallArgs <- function(options) {
 #' @param flipAxes Whether the axes are flipped or not
 #' @return A list of legend specific theme arguments
 #' @keywords internal
-getLabelsThemeCallArgs <- function(options, flipAxes = FALSE) {
+getLabelsThemeCallArgs <- function(options, flipAxes = FALSE, legend = TRUE) {
     if (flipAxes) {
         xLabelFontSize <- options$yLabelFontSize
         xLabelAlign <- options$yLabelAlign
@@ -285,14 +285,17 @@ getLabelsThemeCallArgs <- function(options, flipAxes = FALSE) {
         angle = xAxisLabelRotation
     )
     args$axis.text.y <- ggplot2::element_text(size = yAxisLabelFontSize, angle = yAxisLabelRotation)
-    args$legend.title <- ggplot2::element_text(
-        size = options$legendTitleFontSize,
-        face = toGgplot(options$legendTitleFontFace)
-    )
-    args$legend.text <- ggplot2::element_text(
-        size = options$legendLabelFontSize,
-        face = toGgplot(options$legendLabelFontFace)
-    )
+
+    if (legend) {
+        args$legend.title <- ggplot2::element_text(
+            size = options$legendTitleFontSize,
+            face = toGgplot(options$legendTitleFontFace)
+        )
+        args$legend.text <- ggplot2::element_text(
+            size = options$legendLabelFontSize,
+            face = toGgplot(options$legendLabelFontFace)
+        )
+    }
 
     return(args)
 }
@@ -304,13 +307,18 @@ getLabelsThemeCallArgs <- function(options, flipAxes = FALSE) {
 #' @param defaults The default values for the labels
 #' @return A list containing the function and arguments to create the labels
 #' @keywords internal
-getLabsCallList <- function(options, defaults = list()) {
+getLabsCallList <- function(options, defaults = list(), legend = TRUE) {
     title <- options$title
     subtitle <- options$subtitle
     caption <- options$caption
     xLabel <- options$xLabel
     yLabel <- options$yLabel
-    groupLabel <- options$legendTitle
+
+    if (legend) {
+        groupLabel <- options$legendTitle
+    } else {
+        groupLabel <- ""
+    }
 
     if (title == "") {
         title <- defaults$title
@@ -370,6 +378,7 @@ createPlotFromCallStack <- function(callStack) {
 #' @param p The ggplot object
 #' @param width_px The width of the plot in pixels
 #' @param height_px The height of the plot in pixels
+#' @importFrom scales breaks_pretty
 #' @return A ggplot2::ggplot object
 #' @keywords internal
 autoscalePlotBreaks <- function(p, width_px, height_px) {

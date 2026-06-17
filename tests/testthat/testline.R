@@ -221,3 +221,77 @@ testthat::test_that("jmvline: naOmit = FALSE", {
     # THEN the plot should match the snapshot
     vdiffr::expect_doppelganger("jmvline-naOmit-false", disp_line)
 })
+
+#' Syntax mode verification tests
+testthat::test_that("jmvline syntax: individual mode, grouped", {
+    # GIVEN data with ordinal factor and group
+    df <- data.frame(
+        x = factor(c("A", "A", "B", "B", "C", "C")),
+        y = c(1, 2, 3, 4, 5, 6),
+        group = factor(c("X", "Y", "X", "Y", "X", "Y"))
+    )
+    res <- scatr::jmvline(data = df, x = "x", y = "y", group = "group", mode = "individual")
+
+    # WHEN we request the R syntax
+    syntax <- res$.__enclos_env__$private$.parent$asSource()
+
+    # THEN it should generate a non-empty character string
+    testthat::expect_type(syntax, "character")
+    testthat::expect_true(nchar(syntax) > 0)
+    testthat::expect_true(grepl("group = group", syntax, fixed = TRUE))
+
+    # AND when we evaluate the syntax in a clean environment
+    test_env <- new.env()
+    test_env$data <- df
+    testthat::expect_no_error(eval(parse(text = syntax), envir = test_env))
+
+    # THEN the plot and data objects should be generated correctly
+    testthat::expect_true(exists("p", envir = test_env))
+    testthat::expect_true(exists("plot_data", envir = test_env))
+    testthat::expect_s3_class(test_env$p, "ggplot")
+    
+    # AND the prepared plot data should match the analysis plot's state
+    testthat::expect_equal(test_env$plot_data$y, res$plot$state$y)
+})
+
+testthat::test_that("jmvline syntax: aggregate mode, grouped with error bars", {
+    # GIVEN ToothGrowth data
+    df <- ToothGrowth
+    df$dose <- factor(df$dose)
+    res <- scatr::jmvline(
+        data = df,
+        x = "dose",
+        y = "len",
+        group = "supp",
+        mode = "aggregate",
+        errorBars = "ci",
+        ciWidth = 95
+    )
+
+    # WHEN we request the R syntax
+    syntax <- res$.__enclos_env__$private$.parent$asSource()
+
+    # THEN it should contain references to grouping and CI calculation
+    testthat::expect_true(grepl("group_by(x, group)", syntax, fixed = TRUE))
+    testthat::expect_true(grepl("geom_errorbar", syntax, fixed = TRUE))
+
+    # AND when we evaluate the syntax in a clean environment
+    test_env <- new.env()
+    test_env$data <- df
+    testthat::expect_no_error(eval(parse(text = syntax), envir = test_env))
+
+    # THEN the plot and data objects should be generated correctly
+    testthat::expect_true(exists("p", envir = test_env))
+    testthat::expect_s3_class(test_env$p, "ggplot")
+
+    # AND the prepared plot data should match the analysis plot's state
+    # Sort keys for alignment check if orders differ slightly
+    testthat::expect_equal(
+        test_env$plot_data[order(test_env$plot_data$x, test_env$plot_data$group), "y"],
+        res$plot$state[order(res$plot$state$x, res$plot$state$group), "y"]
+    )
+    testthat::expect_equal(
+        test_env$plot_data[order(test_env$plot_data$x, test_env$plot_data$group), "ci"],
+        res$plot$state[order(res$plot$state$x, res$plot$state$group), "ci"]
+    )
+})

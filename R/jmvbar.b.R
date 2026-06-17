@@ -223,6 +223,28 @@ jmvbarClass <- if (requireNamespace("jmvcore", quietly = TRUE)) {
                     }
                 }
 
+                plot_call_list <- private$.getPlotCallList(data, theme)
+
+                theme_call_list_args <- list()
+                if (self$grouped) {
+                    theme_call_list_args <- utils::modifyList(
+                        theme_call_list_args,
+                        getLegendThemeCallArgs(self$options)
+                    )
+                }
+                theme_call_list_args <- utils::modifyList(
+                    theme_call_list_args,
+                    getLabelsThemeCallArgs(self$options, self$options$flipAxes)
+                )
+
+                p <- createPlotFromCallStack(plot_call_list) +
+                    ggtheme +
+                    do.call(ggplot2::theme, theme_call_list_args)
+
+                p <- autoscalePlotBreaks(p, image$width, image$height)
+                return(p)
+            },
+            .getPlotCallList = function(data, theme) {
                 plot_call_list <- list(
                     "ggplot" = private$.getInitPlotCallList(data),
                     "geom_bar" = private$.getGeomBarCallList(theme)
@@ -274,24 +296,10 @@ jmvbarClass <- if (requireNamespace("jmvcore", quietly = TRUE)) {
                     )
                 }
 
-                theme_call_list_args <- list()
-                if (self$grouped) {
-                    theme_call_list_args <- utils::modifyList(
-                        theme_call_list_args,
-                        getLegendThemeCallArgs(self$options)
-                    )
-                }
-                theme_call_list_args <- utils::modifyList(
-                    theme_call_list_args,
-                    getLabelsThemeCallArgs(self$options, self$options$flipAxes)
-                )
+                # Theme call list arguments are handled separately in rendering (.barPlot)
+                # to preserve addition order with ggtheme, but can be added in asSource()
 
-                p <- createPlotFromCallStack(plot_call_list) +
-                    ggtheme +
-                    do.call(ggplot2::theme, theme_call_list_args)
-
-                p <- autoscalePlotBreaks(p, image$width, image$height)
-                return(p)
+                return(plot_call_list)
             },
             #### Helper functions ----
             .getDefaultLabels = function() {
@@ -441,7 +449,18 @@ jmvbarClass <- if (requireNamespace("jmvcore", quietly = TRUE)) {
         ),
         public = list(
             asSource = function() {
-                return(.("Syntax mode for plots is not yet available."))
+                data_prep_code <- generateDataPrepCode(self$options)
+                call_list <- private$.getPlotCallList(
+                    data = self$data,
+                    theme = getSyntaxThemeColors(self$options$theme, self$options$palette)
+                )
+                return(finalizePlotSyntax(
+                    self$options,
+                    call_list,
+                    data_prep_code,
+                    hasLegend = self$grouped,
+                    flipAxes = self$options$flipAxes
+                ))
             }
         )
     )

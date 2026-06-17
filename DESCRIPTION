@@ -15,8 +15,9 @@ Imports:
     R6,
     ggplot2,
     dplyr,
-    rlang
+    rlang,
+    scales
 Suggests:
     testthat,
     vdiffr
-RoxygenNote: 7.3.2
+Config/roxygen2/version: 8.0.0
