@@ -41,6 +41,13 @@ jobs:
           curl -LO https://mac.r-project.org/bin/darwin20/arm64/libpng-1.6.38-darwin.20-arm64.tar.xz
           sudo tar -xvf libpng-1.6.38-darwin.20-arm64.tar.xz -C /
 
+      - name: Configure compiler flags for Homebrew dependencies (macOS)
+        if: runner.os == 'macOS'
+        run: |
+          mkdir -p ~/.R
+          echo "CPPFLAGS += -I/opt/homebrew/include -I/opt/homebrew/opt/gettext/include" >> ~/.R/Makevars
+          echo "LDFLAGS += -L/opt/homebrew/lib -L/opt/homebrew/opt/gettext/lib" >> ~/.R/Makevars
+
       - uses: r-lib/actions/setup-r-dependencies@v2
         with:
           extra-packages: any::rcmdcheck, any::roxygen2, github::jamovi/jamovi/jmvcore
