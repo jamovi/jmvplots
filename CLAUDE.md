@@ -81,7 +81,17 @@ behavior, not just a snapshot.
 
 ## Testing
 
-`vdiffr` snapshot tests call the public function (e.g. `scatr::jmvbar(...)`) and
-compare against SVGs in `tests/testthat/_snaps/`; run `vdiffr::manage_cases()`
-for new/changed plots. Syntax-mode behavior is covered by the equivalence helper
-above rather than snapshots.
+Two tiers:
+
+- **Deterministic (the CI gate):** `expect_plot_equivalent()`
+  (`helper-syntax-equivalence.R`) — compares the render against the generated
+  syntax at the `ggplot_build()` level *within each run*, so it's immune to
+  ggplot2-version / OS / font drift and is reliable across the whole CI matrix.
+  Add an equivalence assertion for any new plot behavior.
+- **Visual (local only):** `vdiffr` snapshots in `tests/testthat/_snaps/`,
+  invoked via the `expect_plot_snapshot()` wrapper (`helper-vdiffr.R`). Pixel
+  SVGs aren't reproducible across the macOS/Windows/Linux × ggplot2-version
+  matrix, so the wrapper **renders but does not compare on CI** (still catching
+  render-time errors everywhere) and runs the full visual diff only locally
+  (`CI` unset). Review/update them locally with `vdiffr::manage_cases()`; never
+  treat a snapshot mismatch as a CI gate.
