@@ -5,7 +5,7 @@ testthat::test_that("jmvbar: mode categorical, no grouping variable", {
     disp_bar_jmvplot <- scatr::jmvbar(data = ToothGrowth, mode = "categorical", catvar = dose)
 
     # THEN the plot should match the snapshot
-    vdiffr::expect_doppelganger("jmvbar-categorical-no-group", disp_bar_jmvplot)
+    expect_plot_snapshot("jmvbar-categorical-no-group", disp_bar_jmvplot)
 })
 
 #' Bar plot in categorical mode with grouping
@@ -20,7 +20,7 @@ testthat::test_that("jmvbar: mode categorical, grouping variable", {
     )
 
     # THEN the plot should show grouped bars and match the snapshot
-    vdiffr::expect_doppelganger("jmvbar-categorical-group", disp_bar_jmvplot)
+    expect_plot_snapshot("jmvbar-categorical-group", disp_bar_jmvplot)
 })
 
 #' Bar plot in continuous mode with no grouping
@@ -34,7 +34,7 @@ testthat::test_that("jmvbar: mode continuous, no grouping variable", {
     )
 
     # THEN the plot should match the snapshot
-    vdiffr::expect_doppelganger("jmvbar-continuous-no-group", disp_bar_jmvplot)
+    expect_plot_snapshot("jmvbar-continuous-no-group", disp_bar_jmvplot)
 })
 
 #' Bar plot in continuous mode with 1 grouping variable
@@ -49,7 +49,7 @@ testthat::test_that("jmvbar: mode continuous, 1 grouping variable", {
     )
 
     # THEN the plot should match the snapshot
-    vdiffr::expect_doppelganger("jmvbar-continuous-1-group", disp_bar_jmvplot)
+    expect_plot_snapshot("jmvbar-continuous-1-group", disp_bar_jmvplot)
 })
 
 #' Bar plot in continuous mode with 2 grouping variables
@@ -65,7 +65,7 @@ testthat::test_that("jmvbar: mode continuous, 2 grouping variable", {
     )
 
     # THEN the plot should match the snapshot
-    vdiffr::expect_doppelganger("jmvbar-continuous-2-group", disp_bar_jmvplot)
+    expect_plot_snapshot("jmvbar-continuous-2-group", disp_bar_jmvplot)
 })
 
 #' Bar plot in continuous mode with no grouping and error bars (CI)
@@ -81,7 +81,7 @@ testthat::test_that("jmvbar: mode continuous, no grouping variable, error bars",
     )
 
     # THEN the plot should display CI bars and match the snapshot
-    vdiffr::expect_doppelganger("jmvbar-continuous-no-group-ci", disp_bar_jmvplot)
+    expect_plot_snapshot("jmvbar-continuous-no-group-ci", disp_bar_jmvplot)
 })
 
 #' Bar plot in continuous mode with 1 grouping variable and error bars (CI)
@@ -98,7 +98,7 @@ testthat::test_that("jmvbar: mode continuous, 1 grouping variable, error bars", 
     )
 
     # THEN the plot should display CI bars on grouped data and match the snapshot
-    vdiffr::expect_doppelganger("jmvbar-continuous-1-group-ci", disp_bar_jmvplot)
+    expect_plot_snapshot("jmvbar-continuous-1-group-ci", disp_bar_jmvplot)
 })
 
 #' Bar plot in continuous mode with 2 grouping variables and error bars (CI)
@@ -116,7 +116,7 @@ testthat::test_that("jmvbar: mode continuous, 2 grouping variable, error bars", 
     )
 
     # THEN the plot should match the snapshot
-    vdiffr::expect_doppelganger("jmvbar-continuous-2-group-ci", disp_bar_jmvplot)
+    expect_plot_snapshot("jmvbar-continuous-2-group-ci", disp_bar_jmvplot)
 })
 
 #' Bar plot in counts mode with no labels
@@ -130,7 +130,7 @@ testthat::test_that("jmvbar: mode counts, no labels", {
     disp_bar_jmvplot <- scatr::jmvbar(data = df, mode = "counts", counts = counts)
 
     # THEN the plot should match the snapshot
-    vdiffr::expect_doppelganger("jmvbar-counts-no-labels", disp_bar_jmvplot)
+    expect_plot_snapshot("jmvbar-counts-no-labels", disp_bar_jmvplot)
 })
 
 #' Bar plot in counts mode with labels
@@ -150,7 +150,7 @@ testthat::test_that("jmvbar: mode counts, with labels", {
     )
 
     # THEN the plot should show labels and match the snapshot
-    vdiffr::expect_doppelganger("jmvbar-counts-with-labels", disp_bar_jmvplot)
+    expect_plot_snapshot("jmvbar-counts-with-labels", disp_bar_jmvplot)
 })
 
 #' Bar plot in counts mode with no labels and grouping
@@ -171,7 +171,7 @@ testthat::test_that("jmvbar: mode counts, no labels, grouping variable", {
     )
 
     # THEN the plot should show grouped bars and match the snapshot
-    vdiffr::expect_doppelganger("jmvbar-counts-no-labels-group", disp_bar_jmvplot)
+    expect_plot_snapshot("jmvbar-counts-no-labels-group", disp_bar_jmvplot)
 })
 
 #' Bar plot in counts mode with labels and grouping
@@ -193,7 +193,7 @@ testthat::test_that("jmvbar: mode counts, with labels, grouping variable", {
     )
 
     # THEN the plot should match the snapshot
-    vdiffr::expect_doppelganger("jmvbar-counts-with-labels-group", disp_bar_jmvplot)
+    expect_plot_snapshot("jmvbar-counts-with-labels-group", disp_bar_jmvplot)
 })
 
 #' Bar plot with manual limits
@@ -211,7 +211,7 @@ testthat::test_that("jmvbar: manual limits", {
     )
 
     # THEN the Y-axis should be constrained and match the snapshot
-    vdiffr::expect_doppelganger("jmvbar-manual-limits", disp_bar_limits)
+    expect_plot_snapshot("jmvbar-manual-limits", disp_bar_limits)
 })
 
 #' Bar plot with flipped axes
@@ -227,7 +227,7 @@ testthat::test_that("jmvbar: flipped axes", {
     )
 
     # THEN the axes should be flipped and match the snapshot
-    vdiffr::expect_doppelganger("jmvbar-flipped", disp_bar_flip)
+    expect_plot_snapshot("jmvbar-flipped", disp_bar_flip)
 })
 
 #' Bar plot with manual limits (zoom behavior)
@@ -250,7 +250,7 @@ testthat::test_that("jmvbar: manual limits do not remove bars", {
     )
 
     # THEN the bar should still be drawn (cropped)
-    vdiffr::expect_doppelganger("jmvbar-manual-limits-zoom", disp_bar_zoom)
+    expect_plot_snapshot("jmvbar-manual-limits-zoom", disp_bar_zoom)
 })
 
 #' Font Face Tests
@@ -284,7 +284,7 @@ testthat::test_that("jmvbar: custom font faces, sizes, and alignment", {
     )
 
     # THEN the plot should match the snapshot
-    vdiffr::expect_doppelganger("jmvbar-custom-styling", disp_bar_jmvplot)
+    expect_plot_snapshot("jmvbar-custom-styling", disp_bar_jmvplot)
 })
 
 #' Bar plot shows SEs
@@ -306,7 +306,7 @@ testthat::test_that("jmvbar: SEs are shown (regression test)", {
     )
 
     # THEN the plot should show SE bars and match the snapshot
-    vdiffr::expect_doppelganger("jmvbar-ses", disp_bar_ses)
+    expect_plot_snapshot("jmvbar-ses", disp_bar_ses)
 })
 
 #' Bar plot missing value exclusion (Categorical)
@@ -327,7 +327,7 @@ testthat::test_that("jmvbar: naOmit = TRUE (Categorical)", {
     )
 
     # THEN the plot should match the snapshot
-    vdiffr::expect_doppelganger("jmvbar-categorical-naOmit-true", disp_bar)
+    expect_plot_snapshot("jmvbar-categorical-naOmit-true", disp_bar)
 })
 
 #' Bar plot missing value exclusion (Categorical, naOmit=FALSE)
@@ -348,7 +348,7 @@ testthat::test_that("jmvbar: naOmit = FALSE (Categorical)", {
     )
 
     # THEN the plot should match the snapshot
-    vdiffr::expect_doppelganger("jmvbar-categorical-naOmit-false", disp_bar)
+    expect_plot_snapshot("jmvbar-categorical-naOmit-false", disp_bar)
 })
 
 #' Bar plot missing value exclusion (Continuous)
@@ -371,7 +371,7 @@ testthat::test_that("jmvbar: naOmit = TRUE (Continuous)", {
     )
 
     # THEN the plot should match the snapshot
-    vdiffr::expect_doppelganger("jmvbar-continuous-naOmit-true", disp_bar)
+    expect_plot_snapshot("jmvbar-continuous-naOmit-true", disp_bar)
 })
 
 #' Bar plot with reversed x-axis labels (categorical mode)
@@ -389,7 +389,7 @@ testthat::test_that("jmvbar: xAxisLabelFontSizeRevLabels reverses data and label
     )
 
     # THEN the tallest bar (C, count=3) should appear leftmost and carry the label "C"
-    vdiffr::expect_doppelganger("jmvbar-categorical-rev-labels", disp_bar_rev)
+    expect_plot_snapshot("jmvbar-categorical-rev-labels", disp_bar_rev)
 })
 
 #' Bar plot with reversed x-axis labels (counts mode with custom labels)
@@ -411,7 +411,7 @@ testthat::test_that("jmvbar: xAxisLabelFontSizeRevLabels reverses data and label
     )
 
     # THEN the tallest bar (height=3) should appear leftmost with label "C"
-    vdiffr::expect_doppelganger("jmvbar-counts-labels-rev", disp_bar_rev)
+    expect_plot_snapshot("jmvbar-counts-labels-rev", disp_bar_rev)
 })
 
 #' Bar plot missing value exclusion (Continuous, naOmit=FALSE)
@@ -434,5 +434,94 @@ testthat::test_that("jmvbar: naOmit = FALSE (Continuous)", {
     )
 
     # THEN the plot should match the snapshot
-    vdiffr::expect_doppelganger("jmvbar-continuous-naOmit-false", disp_bar)
+    expect_plot_snapshot("jmvbar-continuous-naOmit-false", disp_bar)
+})
+
+#' Syntax mode verification tests
+#'
+#' These assert that the emitted ggplot2 syntax reproduces the plot jamovi
+#' renders, by comparing both at the ggplot_build() level (see
+#' helper-syntax-equivalence.R).
+testthat::test_that("jmvbar syntax: categorical mode, no grouping", {
+    res <- scatr::jmvbar(data = ToothGrowth, mode = "categorical", catvar = dose)
+
+    # The generated string is valid, self-contained R code
+    syntax <- res$.__enclos_env__$private$.parent$asSource()
+    testthat::expect_type(syntax, "character")
+    testthat::expect_true(grepl("library(ggplot2)", syntax, fixed = TRUE))
+
+    # AND it reproduces the rendered plot
+    expect_plot_equivalent(res, ToothGrowth, ".barPlot")
+})
+
+testthat::test_that("jmvbar syntax: categorical mode, grouped", {
+    res <- scatr::jmvbar(
+        data = ToothGrowth,
+        mode = "categorical",
+        catvar = dose,
+        catgroup = supp
+    )
+    expect_plot_equivalent(res, ToothGrowth, ".barPlot")
+})
+
+testthat::test_that("jmvbar syntax: continuous mode, grouped with error bars", {
+    res <- scatr::jmvbar(
+        data = ToothGrowth,
+        mode = "continuous",
+        convar = len,
+        congroup1 = dose,
+        congroup2 = supp,
+        errorBars = "ci",
+        ciWidth = 95
+    )
+    expect_plot_equivalent(res, ToothGrowth, ".barPlot")
+})
+
+testthat::test_that("jmvbar syntax: counts mode, with labels and grouping", {
+    df <- data.frame(
+        counts = c(1, 2, 3, 4, 5, 6),
+        labels = factor(c("A", "A", "A", "B", "B", "B")),
+        group = factor(c("X", "Y", "Z", "X", "Y", "Z"))
+    )
+    res <- scatr::jmvbar(
+        data = df,
+        mode = "counts",
+        counts = counts,
+        countsLabels = labels,
+        countsgroup = group
+    )
+    expect_plot_equivalent(res, df, ".barPlot")
+})
+
+testthat::test_that("jmvbar syntax: flipAxes is reproduced", {
+    df <- data.frame(
+        counts = c(1, 2, 3, 4, 5, 6),
+        labels = factor(c("A", "A", "A", "B", "B", "B")),
+        group = factor(c("X", "Y", "Z", "X", "Y", "Z"))
+    )
+    res <- scatr::jmvbar(
+        data = df,
+        mode = "counts",
+        counts = counts,
+        countsLabels = labels,
+        countsgroup = group,
+        flipAxes = TRUE
+    )
+
+    syntax <- res$.__enclos_env__$private$.parent$asSource()
+    testthat::expect_true(grepl("coord_flip()", syntax, fixed = TRUE))
+
+    expect_plot_equivalent(res, df, ".barPlot")
+})
+testthat::test_that("jmvbar syntax: no error when required variables are missing", {
+    # GIVEN an analysis with no variables assigned (jamovi's pre-data state)
+    analysis <- scatr:::jmvbarClass$new(
+        options = scatr:::jmvbarOptions$new(),
+        data = ToothGrowth
+    )
+
+    # WHEN the R syntax is requested
+    # THEN it returns an empty string rather than erroring
+    testthat::expect_no_error(syntax <- analysis$asSource())
+    testthat::expect_identical(syntax, "")
 })

@@ -11,7 +11,7 @@ testthat::test_that("jmvline: ordinal grouping variable, individual points", {
     disp_line_jmvplot <- scatr::jmvline(data = data, x = "x", y = "y", group = "group")
 
     # THEN the plot should match the snapshot
-    vdiffr::expect_doppelganger("jmvline-ordinal-group-individual", disp_line_jmvplot)
+    expect_plot_snapshot("jmvline-ordinal-group-individual", disp_line_jmvplot)
 })
 
 #' Line plot with ordinal grouping variable (aggregated data)
@@ -33,7 +33,7 @@ testthat::test_that("jmvline: ordinal grouping variable, aggregated data", {
     )
 
     # THEN the plot should show aggregated lines and match the snapshot
-    vdiffr::expect_doppelganger("jmvline-ordinal-group-aggregated", disp_line_jmvplot)
+    expect_plot_snapshot("jmvline-ordinal-group-aggregated", disp_line_jmvplot)
 })
 
 #' Line plot with error bars (Confidence Interval)
@@ -53,7 +53,7 @@ testthat::test_that("jmvline: error bars CI", {
     )
 
     # THEN the plot should display CI bars and match the snapshot
-    vdiffr::expect_doppelganger("jmvline-ci", plot_ci)
+    expect_plot_snapshot("jmvline-ci", plot_ci)
 })
 
 #' Line plot with error bars (Standard Error)
@@ -73,7 +73,7 @@ testthat::test_that("jmvline: error bars SE", {
     )
 
     # THEN the plot should display SE bars and match the snapshot
-    vdiffr::expect_doppelganger("jmvline-se", plot_se)
+    expect_plot_snapshot("jmvline-se", plot_se)
 })
 
 #' Line plot with manual axis limits
@@ -95,7 +95,7 @@ testthat::test_that("jmvline: manual limits", {
     )
 
     # THEN the Y-axis should be limited and match the snapshot
-    vdiffr::expect_doppelganger("jmvline-manual-limits", plot_limits)
+    expect_plot_snapshot("jmvline-manual-limits", plot_limits)
 })
 
 #' Line plot with flipped axes
@@ -110,7 +110,7 @@ testthat::test_that("jmvline: flipped axes", {
     plot_flip <- scatr::jmvline(data = data, x = "x", y = "y", flipAxes = TRUE)
 
     # THEN the axes should be flipped and match the snapshot
-    vdiffr::expect_doppelganger("jmvline-flipped", plot_flip)
+    expect_plot_snapshot("jmvline-flipped", plot_flip)
 })
 
 #' Line plot with manual limits (zoom behavior)
@@ -134,7 +134,7 @@ testthat::test_that("jmvline: manual limits do not clip data (zoom)", {
     )
 
     # THEN the line should still be drawn towards the outlier (zoomed in)
-    vdiffr::expect_doppelganger("jmvline-manual-limits-zoom", disp_line_zoom)
+    expect_plot_snapshot("jmvline-manual-limits-zoom", disp_line_zoom)
 })
 
 #' Line plot with custom font faces
@@ -173,7 +173,7 @@ testthat::test_that("jmvline: custom font faces, sizes, and alignment", {
     )
 
     # THEN the plot should match the snapshot
-    vdiffr::expect_doppelganger("jmvline-custom-styling", plot)
+    expect_plot_snapshot("jmvline-custom-styling", plot)
 })
 
 #' Line plot missing value exclusion
@@ -196,7 +196,7 @@ testthat::test_that("jmvline: naOmit = TRUE", {
     )
 
     # THEN the plot should match the snapshot
-    vdiffr::expect_doppelganger("jmvline-naOmit-true", disp_line)
+    expect_plot_snapshot("jmvline-naOmit-true", disp_line)
 })
 
 #' Line plot missing value exclusion (naOmit=FALSE)
@@ -219,5 +219,54 @@ testthat::test_that("jmvline: naOmit = FALSE", {
     )
 
     # THEN the plot should match the snapshot
-    vdiffr::expect_doppelganger("jmvline-naOmit-false", disp_line)
+    expect_plot_snapshot("jmvline-naOmit-false", disp_line)
+})
+
+#' Syntax mode verification tests (see helper-syntax-equivalence.R)
+testthat::test_that("jmvline syntax: individual mode, grouped", {
+    df <- data.frame(
+        x = factor(c("A", "A", "B", "B", "C", "C")),
+        y = c(1, 2, 3, 4, 5, 6),
+        group = factor(c("X", "Y", "X", "Y", "X", "Y"))
+    )
+    res <- scatr::jmvline(data = df, x = "x", y = "y", group = "group", mode = "individual")
+
+    syntax <- res$.__enclos_env__$private$.parent$asSource()
+    testthat::expect_type(syntax, "character")
+    testthat::expect_true(grepl("group = group", syntax, fixed = TRUE))
+
+    expect_plot_equivalent(res, df, ".linePlot")
+})
+
+testthat::test_that("jmvline syntax: aggregate mode, grouped with error bars", {
+    df <- ToothGrowth
+    df$dose <- factor(df$dose)
+    res <- scatr::jmvline(
+        data = df,
+        x = "dose",
+        y = "len",
+        group = "supp",
+        mode = "aggregate",
+        errorBars = "ci",
+        ciWidth = 95
+    )
+
+    syntax <- res$.__enclos_env__$private$.parent$asSource()
+    testthat::expect_true(grepl("group_by(x, group)", syntax, fixed = TRUE))
+    testthat::expect_true(grepl("geom_errorbar", syntax, fixed = TRUE))
+
+    expect_plot_equivalent(res, df, ".linePlot")
+})
+
+testthat::test_that("jmvline syntax: no error when required variables are missing", {
+    # GIVEN an analysis with no variables assigned (jamovi's pre-data state)
+    analysis <- scatr:::jmvlineClass$new(
+        options = scatr:::jmvlineOptions$new(),
+        data = ToothGrowth
+    )
+
+    # WHEN the R syntax is requested
+    # THEN it returns an empty string rather than erroring
+    testthat::expect_no_error(syntax <- analysis$asSource())
+    testthat::expect_identical(syntax, "")
 })
