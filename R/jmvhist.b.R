@@ -100,7 +100,7 @@ jmvhistClass <- if (requireNamespace("jmvcore", quietly = TRUE)) {
                                 binwidth = binWidth,
                                 color = theme$color[1],
                                 fill = theme$fill[2],
-                                size = self$options$lineSize
+                                linewidth = self$options$lineSize
                             )
                         )
                     }
@@ -113,7 +113,7 @@ jmvhistClass <- if (requireNamespace("jmvcore", quietly = TRUE)) {
                                 color = theme$color[1],
                                 fill = theme$fill[2],
                                 alpha = self$options$densityOpacity,
-                                size = self$options$densityLineSize
+                                linewidth = self$options$densityLineSize
                             )
                         )
                     }
@@ -136,7 +136,7 @@ jmvhistClass <- if (requireNamespace("jmvcore", quietly = TRUE)) {
                             args = list(
                                 position = "identity",
                                 binwidth = binWidth,
-                                size = self$options$lineSize
+                                linewidth = self$options$lineSize
                             )
                         )
                     }
@@ -148,7 +148,7 @@ jmvhistClass <- if (requireNamespace("jmvcore", quietly = TRUE)) {
                                 mapping = eval(bquote(aes(y = after_stat(count) * .(binWidth)))),
                                 position = "identity",
                                 alpha = self$options$densityOpacity,
-                                size = self$options$densityLineSize
+                                linewidth = self$options$densityLineSize
                             )
                         )
                     }
