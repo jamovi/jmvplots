@@ -396,7 +396,7 @@ jmvbarClass <- if (requireNamespace("jmvcore", quietly = TRUE)) {
                 errorBars <- self$options$errorBars
 
                 args <- list(
-                    size = self$options$errorBarSize,
+                    linewidth = self$options$errorBarSize,
                     width = self$options$errorBarWidth,
                     show.legend = FALSE
                 )

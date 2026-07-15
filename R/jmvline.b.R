@@ -163,7 +163,7 @@ jmvlineClass <- if (requireNamespace("jmvcore", quietly = TRUE)) {
                 )
 
                 if (self$options$line) {
-                    line_args <- list(size = self$options$lineSize)
+                    line_args <- list(linewidth = self$options$lineSize)
                     if (is.null(group)) {
                         line_args$color <- theme$color[1]
                     } else {
@@ -200,7 +200,7 @@ jmvlineClass <- if (requireNamespace("jmvcore", quietly = TRUE)) {
                     if (errorBars != "none") {
                         errorbar_args <- list(
                             mapping = aes(ymin = y - !!sym(errorBars), ymax = y + !!sym(errorBars)),
-                            size = self$options$errorBarSize,
+                            linewidth = self$options$errorBarSize,
                             position = ggplot2::position_dodge(
                                 width = self$options$groupPositionDodge
                             ),

@@ -110,7 +110,7 @@ paretoClass <- if (requireNamespace("jmvcore", quietly = TRUE)) {
                         fun = ggplot2::geom_path,
                         args = list(
                             mapping = aes(y = cum, group = 1),
-                            size = 1.1,
+                            linewidth = 1.1,
                             lty = "dashed",
                             color = theme$color[1]
                         )
