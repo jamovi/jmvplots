@@ -1,7 +1,7 @@
 Package: scatr
 Type: Package
 Title: Create Elegant and Interactive Plots Built on 'ggplot2'
-Version: 2.8.0
+Version: 2.9.0
 Author: Ravi Selker
 Maintainer: Ravi Selker <selker.ravi@gmail.com>
 Description: Create elegant and interactive plots built on 'ggplot2'. The package
@@ -13,10 +13,11 @@ LazyData: true
 Imports:
     jmvcore (>= 2.4.2),
     R6,
-    ggplot2,
+    ggplot2 (>= 3.4.0),
     dplyr,
-    rlang
+    rlang,
+    scales
 Suggests:
     testthat,
     vdiffr
-RoxygenNote: 7.3.2
+Config/roxygen2/version: 8.0.0

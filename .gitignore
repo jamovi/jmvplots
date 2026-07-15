@@ -58,6 +58,9 @@ build*/
 # vdiffr test files
 tests/testthat/_snaps/**/*.new.svg
 
+# brainstorming / design docs (local only, never committed)
+docs/superpowers/
+
 # other files / folders
 temp/
 man/

@@ -34,5 +34,41 @@ testthat::test_that("pareto: custom font faces, sizes, and alignment", {
     )
 
     # THEN the plot should match the snapshot
-    vdiffr::expect_doppelganger("pareto-custom-styling", plot)
+    expect_plot_snapshot("pareto-custom-styling", plot)
+})
+
+#' Syntax mode verification tests (see helper-syntax-equivalence.R)
+testthat::test_that("pareto syntax: with counts", {
+    df <- data.frame(
+        x = factor(c("A", "B", "C", "A", "B")),
+        counts = c(10, 5, 2, 8, 3)
+    )
+    res <- scatr::pareto(data = df, x = "x", counts = "counts")
+
+    syntax <- res$.__enclos_env__$private$.parent$asSource()
+    testthat::expect_type(syntax, "character")
+    testthat::expect_true(grepl("sec_axis", syntax, fixed = TRUE))
+
+    expect_plot_equivalent(res, df, ".pareto")
+})
+
+testthat::test_that("pareto syntax: without counts", {
+    df <- data.frame(
+        x = factor(c("A", "B", "C", "A", "B", "A"))
+    )
+    res <- scatr::pareto(data = df, x = "x")
+    expect_plot_equivalent(res, df, ".pareto")
+})
+
+testthat::test_that("pareto syntax: no error when required variables are missing", {
+    # GIVEN an analysis with no variables assigned (jamovi's pre-data state)
+    analysis <- scatr:::paretoClass$new(
+        options = scatr:::paretoOptions$new(),
+        data = ToothGrowth
+    )
+
+    # WHEN the R syntax is requested
+    # THEN it returns an empty string rather than erroring
+    testthat::expect_no_error(syntax <- analysis$asSource())
+    testthat::expect_identical(syntax, "")
 })

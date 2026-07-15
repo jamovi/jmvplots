@@ -47,45 +47,77 @@ scatClass <- if (requireNamespace("jmvcore", quietly = TRUE)) {
                     return(FALSE)
                 }
 
+                plot_call_list <- private$.getPlotCallList(image$state, theme)
+
+                theme_call_list_args <- list()
+                if (!is.null(self$options$group)) {
+                    theme_call_list_args <- utils::modifyList(
+                        theme_call_list_args,
+                        getLegendThemeCallArgs(self$options)
+                    )
+                }
+                theme_call_list_args <- utils::modifyList(
+                    theme_call_list_args,
+                    getLabelsThemeCallArgs(self$options, self$options$flipAxes)
+                )
+
+                p <- createPlotFromCallStack(plot_call_list) +
+                    ggtheme +
+                    do.call(ggplot2::theme, theme_call_list_args)
+
+                p <- autoscalePlotBreaks(p, image$width, image$height)
+                return(p)
+            },
+            .getPlotCallList = function(data, theme) {
                 group <- self$options$group
                 line <- self$options$regLine
 
                 if (is.null(group)) {
-                    p <- ggplot(image$state, aes(x = x, y = y)) +
-                        ggplot2::geom_point(
-                            size = self$options$pointSize,
-                            color = theme$color[1],
-                            fill = theme$fill[2]
-                        ) +
-                        ggtheme
-
-                    if (line) {
-                        p <- p +
-                            ggplot2::geom_smooth(
-                                method = self$options$lineMethod,
-                                se = self$options$lineSE,
-                                formula = y ~ x,
-                                color = theme$color[1],
-                                fill = theme$fill[2]
-                            )
-                    }
+                    mapping <- aes(x = x, y = y)
                 } else {
-                    p <- ggplot(image$state, aes(x = x, y = y, color = group, fill = group)) +
-                        ggplot2::geom_point(
-                            size = self$options$pointSize,
-                        ) +
-                        ggtheme +
-                        formatLegend(self$options)
-
-                    if (line) {
-                        p <- p +
-                            ggplot2::geom_smooth(
-                                method = self$options$lineMethod,
-                                se = self$options$lineSE,
-                                formula = y ~ x,
-                            )
-                    }
+                    mapping <- aes(x = x, y = y, colour = group, fill = group)
                 }
+
+                plot_call_list <- list(
+                    "ggplot" = list(
+                        fun = ggplot2::ggplot,
+                        args = list(data = data, mapping = mapping)
+                    )
+                )
+
+                geom_point_args <- list(size = self$options$pointSize)
+                if (is.null(group)) {
+                    geom_point_args$color <- theme$color[1]
+                    geom_point_args$fill <- theme$fill[2]
+                }
+
+                plot_call_list$geom_point <- list(
+                    fun = ggplot2::geom_point,
+                    args = geom_point_args
+                )
+
+                if (line) {
+                    geom_smooth_args <- list(
+                        method = self$options$lineMethod,
+                        se = self$options$lineSE,
+                        formula = y ~ x
+                    )
+                    if (is.null(group)) {
+                        geom_smooth_args$color <- theme$color[1]
+                        geom_smooth_args$fill <- theme$fill[2]
+                    }
+                    plot_call_list$geom_smooth <- list(
+                        fun = ggplot2::geom_smooth,
+                        args = geom_smooth_args
+                    )
+                }
+
+                labelDefaults <- list(
+                    xLabel = self$options$x,
+                    yLabel = self$options$y,
+                    groupLabel = self$options$group
+                )
+                plot_call_list$labs <- getLabsCallList(self$options, labelDefaults)
 
                 ylims <- NULL
                 if (self$options$yAxisRangeType == "manual") {
@@ -98,28 +130,39 @@ scatClass <- if (requireNamespace("jmvcore", quietly = TRUE)) {
                 }
 
                 if (self$options$flipAxes) {
-                    p <- p + ggplot2::coord_flip(ylim = ylims, xlim = xlims)
+                    plot_call_list$coord_flip <- list(
+                        fun = ggplot2::coord_flip,
+                        args = list(ylim = ylims, xlim = xlims)
+                    )
                 } else {
-                    p <- p + ggplot2::coord_cartesian(ylim = ylims, xlim = xlims)
+                    plot_call_list$coord_cartesian <- list(
+                        fun = ggplot2::coord_cartesian,
+                        args = list(ylim = ylims, xlim = xlims)
+                    )
                 }
 
-                labelDefaults <- list(
-                    xLabel = self$options$x,
-                    yLabel = self$options$y,
-                    groupLabel = self$options$group
-                )
-                p <- p +
-                    setLabels(options = self$options, defaults = labelDefaults) +
-                    formatLabels(options = self$options, flipAxes = self$options$flipAxes)
-
-                p <- autoscalePlotBreaks(p, image$width, image$height)
-
-                return(p)
+                return(plot_call_list)
             }
         ),
         public = list(
             asSource = function() {
-                return(.("Syntax mode for plots is not yet available."))
+                if (is.null(self$options$x) || is.null(self$options$y)) {
+                    return("")
+                }
+
+                data_prep_code <- generateDataPrepCode(self$options, "scat")
+                call_list <- private$.getPlotCallList(
+                    data = self$data,
+                    theme = getSyntaxThemeColors(self$options$theme, self$options$palette)
+                )
+                return(finalizePlotSyntax(
+                    self$options,
+                    call_list,
+                    data_prep_code,
+                    hasLegend = !is.null(self$options$group),
+                    flipAxes = self$options$flipAxes,
+                    continuousX = TRUE
+                ))
             }
         )
     )

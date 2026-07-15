@@ -10,7 +10,7 @@ testthat::test_that("scat: basic usage", {
     plot <- scatr::scat(data = df, x = "x", y = "y")
 
     # THEN the plot should match the snapshot
-    vdiffr::expect_doppelganger("scat-simple", plot)
+    expect_plot_snapshot("scat-simple", plot)
 })
 
 #' Scatter plot with grouping variable
@@ -26,7 +26,7 @@ testthat::test_that("scat: with grouping", {
     plot <- scatr::scat(data = df, x = "x", y = "y", group = "grp")
 
     # THEN the plot should show grouped points and match the snapshot
-    vdiffr::expect_doppelganger("scat-group", plot)
+    expect_plot_snapshot("scat-group", plot)
 })
 
 #' Scatter plot with regression line and standard error
@@ -41,7 +41,7 @@ testthat::test_that("scat: regression line with SE", {
     plot_se <- scatr::scat(data = df, x = "x", y = "y", regLine = TRUE, lineSE = TRUE)
 
     # THEN the plot should show the regression line with SE shading and match the snapshot
-    vdiffr::expect_doppelganger("scat-regline-se", plot_se)
+    expect_plot_snapshot("scat-regline-se", plot_se)
 })
 
 #' Scatter plot with regression line without standard error
@@ -56,7 +56,7 @@ testthat::test_that("scat: regression line without SE", {
     plot_no_se <- scatr::scat(data = df, x = "x", y = "y", regLine = TRUE, lineSE = FALSE)
 
     # THEN the plot should show the regression line without shading and match the snapshot
-    vdiffr::expect_doppelganger("scat-regline-no-se", plot_no_se)
+    expect_plot_snapshot("scat-regline-no-se", plot_no_se)
 })
 
 #' Scatter plot with manual axis limits
@@ -81,7 +81,7 @@ testthat::test_that("scat: manual limits", {
     )
 
     # THEN the plot should respect the manual limits and match the snapshot
-    vdiffr::expect_doppelganger("scat-manual-limits", plot_limits)
+    expect_plot_snapshot("scat-manual-limits", plot_limits)
 })
 
 #' Scatter plot with flipped axes
@@ -96,7 +96,7 @@ testthat::test_that("scat: flipped axes", {
     plot_flip <- scatr::scat(data = df, x = "x", y = "y", flipAxes = TRUE)
 
     # THEN the axes should be flipped and match the snapshot
-    vdiffr::expect_doppelganger("scat-flipped", plot_flip)
+    expect_plot_snapshot("scat-flipped", plot_flip)
 })
 
 #' Scatter plot with manual limits (zoom behavior)
@@ -121,7 +121,7 @@ testthat::test_that("scat: smooth line calculated on full data (zoom)", {
     )
 
     # THEN the smooth line should reflect the influence of the outlier
-    vdiffr::expect_doppelganger("scat-manual-limits-zoom", disp_scat_zoom)
+    expect_plot_snapshot("scat-manual-limits-zoom", disp_scat_zoom)
 })
 
 #' Scatter plot with custom font faces
@@ -160,5 +160,47 @@ testthat::test_that("scat: custom font faces, sizes, and alignment", {
     )
 
     # THEN the plot should match the snapshot
-    vdiffr::expect_doppelganger("scat-custom-styling", plot)
+    expect_plot_snapshot("scat-custom-styling", plot)
+})
+
+#' Syntax mode verification tests (see helper-syntax-equivalence.R)
+testthat::test_that("scat syntax: basic, no grouping, with regLine", {
+    df <- data.frame(
+        x = c(1, 2, 3, 4, 5),
+        y = c(2, 4, 6, 8, 10)
+    )
+    res <- scatr::scat(data = df, x = "x", y = "y", regLine = TRUE)
+
+    syntax <- res$.__enclos_env__$private$.parent$asSource()
+    testthat::expect_type(syntax, "character")
+    testthat::expect_true(grepl("geom_smooth", syntax, fixed = TRUE))
+
+    expect_plot_equivalent(res, df, ".scatterPlot")
+})
+
+testthat::test_that("scat syntax: grouped", {
+    df <- data.frame(
+        x = c(1, 2, 3, 4, 5, 6),
+        y = c(2, 4, 6, 8, 10, 12),
+        grp = factor(c("A", "A", "A", "B", "B", "B"))
+    )
+    res <- scatr::scat(data = df, x = "x", y = "y", group = "grp")
+
+    syntax <- res$.__enclos_env__$private$.parent$asSource()
+    testthat::expect_true(grepl("colour = group", syntax, fixed = TRUE))
+
+    expect_plot_equivalent(res, df, ".scatterPlot")
+})
+
+testthat::test_that("scat syntax: no error when required variables are missing", {
+    # GIVEN an analysis with no variables assigned (jamovi's pre-data state)
+    analysis <- scatr:::scatClass$new(
+        options = scatr:::scatOptions$new(),
+        data = ToothGrowth
+    )
+
+    # WHEN the R syntax is requested
+    # THEN it returns an empty string rather than erroring
+    testthat::expect_no_error(syntax <- analysis$asSource())
+    testthat::expect_identical(syntax, "")
 })

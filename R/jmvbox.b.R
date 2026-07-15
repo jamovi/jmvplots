@@ -58,41 +58,71 @@ jmvboxClass <- if (requireNamespace("jmvcore", quietly = TRUE)) {
                     }
                 }
 
+                plot_call_list <- private$.getPlotCallList(data, theme)
+
+                theme_call_list_args <- list()
+                if (!is.null(self$options$group1) && !is.null(self$options$group2)) {
+                    theme_call_list_args <- utils::modifyList(
+                        theme_call_list_args,
+                        getLegendThemeCallArgs(self$options)
+                    )
+                }
+                theme_call_list_args <- utils::modifyList(
+                    theme_call_list_args,
+                    getLabelsThemeCallArgs(self$options, self$options$flipAxes)
+                )
+
+                p <- createPlotFromCallStack(plot_call_list) +
+                    ggtheme +
+                    do.call(ggplot2::theme, theme_call_list_args)
+
+                p <- autoscalePlotBreaks(p, image$width, image$height)
+                return(p)
+            },
+            .getPlotCallList = function(data, theme) {
                 if (is.null(self$options$group1) || is.null(self$options$group2)) {
-                    p <- ggplot(data, aes(x = x, y = y)) +
-                        ggplot2::geom_boxplot(
-                            notch = self$options$notch,
-                            width = self$options$boxWidth,
-                            outliers = self$options$outliers,
-                            color = theme$color[1],
-                            fill = theme$fill[2]
-                        ) +
-                        ggtheme
+                    mapping <- aes(x = x, y = y)
                 } else {
-                    p <- ggplot(data, aes(x = x, y = y, fill = group)) +
-                        ggplot2::geom_boxplot(
-                            notch = self$options$notch,
-                            width = self$options$boxWidth,
-                            outliers = self$options$outliers,
-                            color = theme$color[1],
-                            position = ggplot2::position_dodge2(
-                                width = self$options$boxWidth,
-                                preserve = "single",
-                                padding = 0.3
-                            )
-                        ) +
-                        ggtheme +
-                        formatLegend(self$options)
+                    mapping <- aes(x = x, y = y, fill = group)
                 }
 
+                plot_call_list <- list(
+                    "ggplot" = list(
+                        fun = ggplot2::ggplot,
+                        args = list(data = data, mapping = mapping)
+                    )
+                )
+
+                geom_args <- list(
+                    notch = self$options$notch,
+                    width = self$options$boxWidth,
+                    outliers = self$options$outliers,
+                    color = theme$color[1]
+                )
+                if (is.null(self$options$group1) || is.null(self$options$group2)) {
+                    geom_args$fill <- theme$fill[2]
+                } else {
+                    geom_args$position <- ggplot2::position_dodge2(
+                        width = self$options$boxWidth,
+                        preserve = "single",
+                        padding = 0.3
+                    )
+                }
+
+                plot_call_list$geom_boxplot <- list(
+                    fun = ggplot2::geom_boxplot,
+                    args = geom_args
+                )
+
                 if (self$options$xAxisLabelFontSizeRevLabels) {
-                    p <- p + ggplot2::scale_x_discrete(limits = rev)
+                    plot_call_list$scale_x_discrete <- list(
+                        fun = ggplot2::scale_x_discrete,
+                        args = list(limits = rev)
+                    )
                 }
 
                 labelDefaults <- private$.getDefaultLabels()
-                p <- p +
-                    setLabels(options = self$options, defaults = labelDefaults) +
-                    formatLabels(options = self$options, flipAxes = self$options$flipAxes)
+                plot_call_list$labs <- getLabsCallList(self$options, labelDefaults)
 
                 ylims <- NULL
                 if (self$options$yAxisRangeType == "manual") {
@@ -100,13 +130,18 @@ jmvboxClass <- if (requireNamespace("jmvcore", quietly = TRUE)) {
                 }
 
                 if (self$options$flipAxes) {
-                    p <- p + ggplot2::coord_flip(ylim = ylims)
+                    plot_call_list$coord_flip <- list(
+                        fun = ggplot2::coord_flip,
+                        args = list(ylim = ylims)
+                    )
                 } else {
-                    p <- p + ggplot2::coord_cartesian(ylim = ylims)
+                    plot_call_list$coord_cartesian <- list(
+                        fun = ggplot2::coord_cartesian,
+                        args = list(ylim = ylims)
+                    )
                 }
 
-                p <- autoscalePlotBreaks(p, image$width, image$height)
-                return(p)
+                return(plot_call_list)
             },
             #### Helper functions ----
             .getDefaultLabels = function() {
@@ -130,7 +165,22 @@ jmvboxClass <- if (requireNamespace("jmvcore", quietly = TRUE)) {
         ),
         public = list(
             asSource = function() {
-                return(.("Syntax mode for plots is not yet available."))
+                if (is.null(self$options$var)) {
+                    return("")
+                }
+
+                data_prep_code <- generateDataPrepCode(self$options, "box")
+                call_list <- private$.getPlotCallList(
+                    data = self$data,
+                    theme = getSyntaxThemeColors(self$options$theme, self$options$palette)
+                )
+                return(finalizePlotSyntax(
+                    self$options,
+                    call_list,
+                    data_prep_code,
+                    hasLegend = !is.null(self$options$group1) && !is.null(self$options$group2),
+                    flipAxes = self$options$flipAxes
+                ))
             }
         )
     )

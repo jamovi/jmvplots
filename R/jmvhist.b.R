@@ -1,4 +1,4 @@
-#' @importFrom ggplot2 ggplot aes
+#' @importFrom ggplot2 ggplot aes after_stat
 #' @importFrom rlang sym
 #' @importFrom jmvcore .
 jmvhistClass <- if (requireNamespace("jmvcore", quietly = TRUE)) {
@@ -38,85 +38,128 @@ jmvhistClass <- if (requireNamespace("jmvcore", quietly = TRUE)) {
                     return(FALSE)
                 }
 
-                group <- self$options$group
                 if (self$options$binWidthType == "manual") {
                     binWidth <- self$options$binWidth
                 } else {
                     binWidth <- private$.calculateBinWidth(image$state$y)
                 }
 
-                if (is.null(group)) {
-                    p <- ggplot(image$state, aes(x = y))
+                plot_call_list <- private$.getPlotCallList(image$state, theme, binWidth)
 
-                    if (self$options$bins) {
-                        p <- p +
-                            ggplot2::geom_histogram(
-                                binwidth = binWidth,
-                                color = theme$color[1],
-                                fill = theme$fill[2],
-                                alpha = self$options$binOpacity
-                            )
-                    }
-
-                    if (self$options$line) {
-                        p <- p +
-                            ggplot2::geom_freqpoly(
-                                binwidth = binWidth,
-                                color = theme$color[1],
-                                fill = theme$fill[2],
-                                size = self$options$lineSize
-                            )
-                    }
-
-                    if (self$options$density) {
-                        p <- p +
-                            ggplot2::geom_density(
-                                aes(y = ggplot2::after_stat(count) * binWidth),
-                                color = theme$color[1],
-                                fill = theme$fill[2],
-                                alpha = self$options$densityOpacity,
-                                size = self$options$densityLineSize
-                            )
-                    }
-
-                    p <- p + ggtheme
-                } else {
-                    p <- ggplot(
-                        image$state,
-                        aes(x = y, fill = group, color = group)
+                theme_call_list_args <- list()
+                if (!is.null(self$options$group)) {
+                    theme_call_list_args <- utils::modifyList(
+                        theme_call_list_args,
+                        getLegendThemeCallArgs(self$options)
                     )
+                }
+                theme_call_list_args <- utils::modifyList(
+                    theme_call_list_args,
+                    getLabelsThemeCallArgs(self$options, self$options$flipAxes)
+                )
 
+                p <- createPlotFromCallStack(plot_call_list) +
+                    ggtheme +
+                    do.call(ggplot2::theme, theme_call_list_args)
+
+                p <- autoscalePlotBreaks(p, image$width, image$height)
+                return(p)
+            },
+            .getPlotCallList = function(data, theme, binWidth) {
+                group <- self$options$group
+                if (is.null(group)) {
+                    mapping <- aes(x = y)
+                } else {
+                    mapping <- aes(x = y, fill = group, color = group)
+                }
+
+                plot_call_list <- list(
+                    "ggplot" = list(
+                        fun = ggplot2::ggplot,
+                        args = list(data = data, mapping = mapping)
+                    )
+                )
+
+                if (is.null(group)) {
                     if (self$options$bins) {
-                        p <- p +
-                            ggplot2::geom_histogram(
+                        plot_call_list$geom_histogram <- list(
+                            fun = ggplot2::geom_histogram,
+                            args = list(
+                                binwidth = binWidth,
+                                color = theme$color[1],
+                                fill = theme$fill[2],
+                                alpha = self$options$binOpacity
+                            )
+                        )
+                    }
+
+                    if (self$options$line) {
+                        plot_call_list$geom_freqpoly <- list(
+                            fun = ggplot2::geom_freqpoly,
+                            args = list(
+                                binwidth = binWidth,
+                                color = theme$color[1],
+                                fill = theme$fill[2],
+                                linewidth = self$options$lineSize
+                            )
+                        )
+                    }
+
+                    if (self$options$density) {
+                        plot_call_list$geom_density <- list(
+                            fun = ggplot2::geom_density,
+                            args = list(
+                                mapping = eval(bquote(aes(y = after_stat(count) * .(binWidth)))),
+                                color = theme$color[1],
+                                fill = theme$fill[2],
+                                alpha = self$options$densityOpacity,
+                                linewidth = self$options$densityLineSize
+                            )
+                        )
+                    }
+                } else {
+                    if (self$options$bins) {
+                        plot_call_list$geom_histogram <- list(
+                            fun = ggplot2::geom_histogram,
+                            args = list(
                                 position = "identity",
                                 binwidth = binWidth,
                                 color = theme$color[1],
                                 alpha = self$options$binOpacity
                             )
+                        )
                     }
 
                     if (self$options$line) {
-                        p <- p +
-                            ggplot2::geom_freqpoly(
+                        plot_call_list$geom_freqpoly <- list(
+                            fun = ggplot2::geom_freqpoly,
+                            args = list(
                                 position = "identity",
                                 binwidth = binWidth,
-                                size = self$options$lineSize
+                                linewidth = self$options$lineSize
                             )
+                        )
                     }
 
                     if (self$options$density) {
-                        p <- p +
-                            ggplot2::geom_density(
-                                aes(y = ggplot2::after_stat(count) * binWidth),
+                        plot_call_list$geom_density <- list(
+                            fun = ggplot2::geom_density,
+                            args = list(
+                                mapping = eval(bquote(aes(y = after_stat(count) * .(binWidth)))),
                                 position = "identity",
                                 alpha = self$options$densityOpacity,
-                                size = self$options$densityLineSize
+                                linewidth = self$options$densityLineSize
                             )
+                        )
                     }
-
-                    p <- p + ggtheme + formatLegend(self$options)
                 }
+
+                labelDefaults <- list(
+                    xLabel = self$options$var,
+                    yLabel = .("Frequency (N)"),
+                    groupLabel = self$options$group
+                )
+                plot_call_list$labs <- getLabsCallList(self$options, labelDefaults)
 
                 ylims <- NULL
                 if (self$options$yAxisRangeType == "manual") {
@@ -129,22 +172,18 @@ jmvhistClass <- if (requireNamespace("jmvcore", quietly = TRUE)) {
                 }
 
                 if (self$options$flipAxes) {
-                    p <- p + ggplot2::coord_flip(ylim = ylims, xlim = xlims)
+                    plot_call_list$coord_flip <- list(
+                        fun = ggplot2::coord_flip,
+                        args = list(ylim = ylims, xlim = xlims)
+                    )
                 } else {
-                    p <- p + ggplot2::coord_cartesian(ylim = ylims, xlim = xlims)
+                    plot_call_list$coord_cartesian <- list(
+                        fun = ggplot2::coord_cartesian,
+                        args = list(ylim = ylims, xlim = xlims)
+                    )
                 }
 
-                labelDefaults <- list(
-                    xLabel = self$options$var,
-                    yLabel = .("Frequency (N)"),
-                    groupLabel = self$options$group
-                )
-                p <- p +
-                    setLabels(options = self$options, defaults = labelDefaults) +
-                    formatLabels(options = self$options, flipAxes = self$options$flipAxes)
-
-                p <- autoscalePlotBreaks(p, image$width, image$height)
-                return(p)
+                return(plot_call_list)
             },
             # Calculates an optimal histogram bin width using the Freedman-Diaconis rule.
             # Provides a robust fallback to Scott's rule if the Interquartile Range (IQR) is zero.
@@ -182,7 +221,33 @@ jmvhistClass <- if (requireNamespace("jmvcore", quietly = TRUE)) {
         ),
         public = list(
             asSource = function() {
-                return(.("Syntax mode for plots is not yet available."))
+                if (is.null(self$options$var)) {
+                    return("")
+                }
+
+                data_prep_code <- generateDataPrepCode(self$options, "hist")
+
+                var <- self$options$var
+                y_vals <- jmvcore::toNumeric(self$data[[var]])
+                if (self$options$binWidthType == "manual") {
+                    binWidth <- self$options$binWidth
+                } else {
+                    binWidth <- private$.calculateBinWidth(y_vals)
+                }
+
+                call_list <- private$.getPlotCallList(
+                    data = self$data,
+                    theme = getSyntaxThemeColors(self$options$theme, self$options$palette),
+                    binWidth = binWidth
+                )
+                return(finalizePlotSyntax(
+                    self$options,
+                    call_list,
+                    data_prep_code,
+                    hasLegend = !is.null(self$options$group),
+                    flipAxes = self$options$flipAxes,
+                    continuousX = TRUE
+                ))
             }
         )
     )
