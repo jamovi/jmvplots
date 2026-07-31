@@ -658,15 +658,20 @@ finalizePlotSyntax <- function(
     # Mirror autoscalePlotBreaks(): at the 500px default plot size it targets
     # floor(500 / 80) = 6 breaks on the (always continuous) y axis, and
     # floor(500 / 120) = 4 on a continuous x axis. Merge into an existing scale
-    # (e.g. pareto's sec.axis y scale) rather than overwriting it.
+    # (e.g. pareto's sec.axis y scale) rather than overwriting it. Labels are
+    # set explicitly because scales::breaks_pretty() often lands on round
+    # powers of ten (e.g. 100000), which trips base R's format() into
+    # scientific notation for the whole axis.
     yBreaks <- list(fun_name = "scales::breaks_pretty", args = list(n = 6))
+    numberLabels <- list(fun_name = "scales::label_number", args = list(big.mark = ""))
     if (is.null(call_list$scale_y_continuous)) {
         call_list$scale_y_continuous <- list(
             fun = ggplot2::scale_y_continuous,
-            args = list(breaks = yBreaks)
+            args = list(breaks = yBreaks, labels = numberLabels)
         )
     } else {
         call_list$scale_y_continuous$args$breaks <- yBreaks
+        call_list$scale_y_continuous$args$labels <- numberLabels
     }
 
     if (continuousX) {
@@ -674,10 +679,11 @@ finalizePlotSyntax <- function(
         if (is.null(call_list$scale_x_continuous)) {
             call_list$scale_x_continuous <- list(
                 fun = ggplot2::scale_x_continuous,
-                args = list(breaks = xBreaks)
+                args = list(breaks = xBreaks, labels = numberLabels)
             )
         } else {
             call_list$scale_x_continuous$args$breaks <- xBreaks
+            call_list$scale_x_continuous$args$labels <- numberLabels
         }
     }
 

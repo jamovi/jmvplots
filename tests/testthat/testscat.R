@@ -192,6 +192,27 @@ testthat::test_that("scat syntax: grouped", {
     expect_plot_equivalent(res, df, ".scatterPlot")
 })
 
+testthat::test_that("scat syntax: large range avoids scientific notation axis labels", {
+    # GIVEN data whose x range produces round power-of-ten pretty breaks
+    # (github.com/jamovi/jamovi#1842: axis defaulted to scientific notation)
+    df <- data.frame(
+        x = c(631, 113000),
+        y = c(25.7, 78.1)
+    )
+    res <- scatr::scat(data = df, x = "x", y = "y")
+
+    # THEN the rendered plot's x-axis labels are plain numbers
+    jp <- jamoviGgplot(res, ".scatterPlot")
+    built <- suppressWarnings(ggplot2::ggplot_build(jp))
+    labels <- built$layout$panel_params[[1]]$x$get_labels()
+    labels <- labels[!is.na(labels)]
+    testthat::expect_true(length(labels) > 0)
+    testthat::expect_false(any(grepl("e[+-]", labels, ignore.case = TRUE)))
+
+    # AND the syntax mode output reproduces the same axis labels
+    expect_plot_equivalent(res, df, ".scatterPlot")
+})
+
 testthat::test_that("scat syntax: no error when required variables are missing", {
     # GIVEN an analysis with no variables assigned (jamovi's pre-data state)
     analysis <- scatr:::scatClass$new(

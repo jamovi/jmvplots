@@ -391,25 +391,32 @@ autoscalePlotBreaks <- function(p, width_px, height_px) {
     xBreaks <- scales::breaks_pretty(n = nX)
     yBreaks <- scales::breaks_pretty(n = nY)
 
+    # scales::breaks_pretty() often lands on round powers of ten (e.g.
+    # 100000), which trips base R's format() into scientific notation for
+    # the whole axis. Label explicitly to keep breaks as plain numbers.
+    numberLabels <- scales::label_number(big.mark = "")
+
     xScaleExplicit <- p$scales$get_scales("x")
     yScaleExplicit <- p$scales$get_scales("y")
 
     if (!is.null(xScaleExplicit) && inherits(xScaleExplicit, "ScaleContinuousPosition")) {
         # Mutate in-place to preserve limits, name, etc.
         xScaleExplicit$breaks <- xBreaks
+        xScaleExplicit$labels <- numberLabels
     } else if (is.null(xScaleExplicit)) {
         pb <- ggplot2::ggplot_build(p)
         if (inherits(pb$layout$panel_scales_x[[1]], "ScaleContinuousPosition")) {
-            p <- p + ggplot2::scale_x_continuous(breaks = xBreaks)
+            p <- p + ggplot2::scale_x_continuous(breaks = xBreaks, labels = numberLabels)
         }
     }
 
     if (!is.null(yScaleExplicit) && inherits(yScaleExplicit, "ScaleContinuousPosition")) {
         yScaleExplicit$breaks <- yBreaks
+        yScaleExplicit$labels <- numberLabels
     } else if (is.null(yScaleExplicit)) {
         pb <- ggplot2::ggplot_build(p)
         if (inherits(pb$layout$panel_scales_y[[1]], "ScaleContinuousPosition")) {
-            p <- p + ggplot2::scale_y_continuous(breaks = yBreaks)
+            p <- p + ggplot2::scale_y_continuous(breaks = yBreaks, labels = numberLabels)
         }
     }
 

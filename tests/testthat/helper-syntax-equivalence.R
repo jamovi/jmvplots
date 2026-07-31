@@ -59,6 +59,8 @@ expect_plot_equivalent <- function(res, data, renderFun) {
     pb <- bb$layout$panel_params[[1]]
     testthat::expect_equal(pb$x$breaks, pa$x$breaks, info = "x breaks")
     testthat::expect_equal(pb$y$breaks, pa$y$breaks, info = "y breaks")
+    testthat::expect_equal(pb$x$get_labels(), pa$x$get_labels(), info = "x labels")
+    testthat::expect_equal(pb$y$get_labels(), pa$y$get_labels(), info = "y labels")
 
     invisible(NULL)
 }
